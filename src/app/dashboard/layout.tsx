@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState, FC, useEffect } from "react";
+import { Fragment, useState, FC } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { joinClassNames } from "@/lib/utils";
 import {
@@ -14,7 +14,7 @@ import {
 import GroLogo from "@/components/Logo";
 import Link from "next/link";
 
-let navigation = [
+const navigation = [
   { name: "Dashboard", href: "/dashboard/", icon: HomeIcon, current: true },
   { name: "Foods", href: "/dashboard/foods", icon: FireIcon, current: false },
   {

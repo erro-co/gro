@@ -5,3 +5,5 @@ out
 
 # Ignore generated typescript declaration files
 *.d.ts
+
+.next

@@ -1,3 +1,3 @@
 export const joinClassNames = (...classes: string[]) => {
-    return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(" ");
 };

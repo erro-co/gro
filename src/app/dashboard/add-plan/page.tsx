@@ -1,8 +1,17 @@
 "use client";
 import { supabase } from "@/lib/supabase";
 import { FoodItem } from "@/lib/types";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import {
+  MagnifyingGlassIcon,
+  PencilSquareIcon,
+} from "@heroicons/react/24/outline";
+import {
+  CheckCircleIcon,
+  CheckIcon,
+  PlusCircleIcon,
+  PlusIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/solid";
 import { useState, useEffect, FC, ChangeEvent } from "react";
 import clsx from "clsx";
 import AddNewFoodTable from "./AddPlanFoodTable";
@@ -11,6 +20,7 @@ const AddMealPlanPage: FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<FoodItem[]>([]);
   const [foodTableData, setFoodTableData] = useState<FoodItem[]>([]);
+  const [editMealHeading, setEditMealHeading] = useState(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -46,17 +56,43 @@ const AddMealPlanPage: FC = () => {
 
   return (
     <div className="space-y-20">
-      <div className="shadow-lg w-full rounded-lg">
-        {/**  Add new plan */}
+      {/* <div className="shadow-lg w-full rounded-lg">
+        
         <h1 className="text-base py-24">Add new plan</h1>
         <button>
           <PlusCircleIcon className="w-20" />
         </button>
-      </div>
+      </div> */}
       <div>
-        <h2>Meal 1</h2>
+        {editMealHeading ? (
+          <div className="flex">
+            <input placeholder="Meal 1" />
+            <div className="">
+              <button onClick={() => setEditMealHeading(false)}>
+                <XCircleIcon className="w-6 text-red-500" />
+              </button>
+              <button>
+                <CheckCircleIcon className="w-6 text-green-500" />
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button className="flex" onClick={() => setEditMealHeading(true)}>
+            <h2>Meal 1</h2>
+            <PencilSquareIcon className="w-4 my-auto ml-1 text-gray-400" />
+          </button>
+        )}
+
         <div className="mb-24">
-          <AddNewFoodTable foods={foodTableData} />
+          <AddNewFoodTable
+            foods={foodTableData}
+            setFoodItems={setFoodTableData}
+          />
+          {foodTableData.length > 0 ? (
+            <button className="flex bg-[#F695A0] text-white p-2 rounded-lg my-4 ml-auto">
+              <PlusIcon className="w-4 my-auto" /> Meal
+            </button>
+          ) : null}
         </div>
 
         <div className="border border-gray-300 flex bg-white rounded-lg flex-col">
@@ -67,7 +103,9 @@ const AddMealPlanPage: FC = () => {
               value={searchTerm}
               onChange={handleChange}
               className={clsx(
-                searchTerm ? "rounded-tl-lg" : "rounded-l-lg",
+                searchTerm && searchResults.length > 0
+                  ? "rounded-tl-lg"
+                  : "rounded-l-lg",
                 "pl-2 py-2 border-none focus:outline-none border-transparent focus:border-transparent focus:ring-0 flex-grow",
               )}
             />
@@ -84,7 +122,10 @@ const AddMealPlanPage: FC = () => {
                   className="flex border-t border-gray-300 w-full"
                   onClick={() => addData(food)}
                 >
-                  <p className="my-auto ml-2">{food.name}</p>
+                  <p className="my-auto mx-2">{food.name}</p>
+                  <p className="my-auto text-light text-gray-400">
+                    {food.brand}
+                  </p>
                   <div
                     className="ml-auto mr-2 my-2"
                     onClick={() => addData(food)}

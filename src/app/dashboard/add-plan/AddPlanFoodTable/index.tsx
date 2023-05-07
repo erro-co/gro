@@ -1,12 +1,20 @@
 import { FoodItem } from "@/lib/types";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 
 export interface IAddNewFoodTable {
   foods?: FoodItem[];
+  setFoodItems?: Dispatch<SetStateAction<FoodItem[]>>;
 }
 
-const AddNewFoodTable: FC<IAddNewFoodTable> = ({ foods }) => {
+const AddNewFoodTable: FC<IAddNewFoodTable> = ({ foods, setFoodItems }) => {
+  const removeFoodItem = (index: number) => {
+    if (!setFoodItems || !foods) return;
+
+    const updatedFoods = foods.filter((_, idx) => idx !== index);
+    setFoodItems(updatedFoods);
+  };
+
   return (
     <div className="">
       <div className="mt-4 flow-root">
@@ -65,7 +73,9 @@ const AddNewFoodTable: FC<IAddNewFoodTable> = ({ foods }) => {
                     <tr key={`Meal-plan-new-row-${idx}`}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                         <p>{food.name}</p>
-                        <p className="text-xs font-extralight">{food.brand}</p>
+                        <p className="text-xs font-extralight text-gray-400">
+                          {food.brand}
+                        </p>
                       </td>
 
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -84,11 +94,12 @@ const AddNewFoodTable: FC<IAddNewFoodTable> = ({ foods }) => {
                         <p>Serving</p>
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                        <div className="flex space-x-2">
-                          <button className="bg-red-500 rounded-full p-1">
-                            <XMarkIcon className="w-4 text-white" />
-                          </button>
-                        </div>
+                        <button
+                          className="bg-red-500 rounded-full p-1"
+                          onClick={() => removeFoodItem(idx)}
+                        >
+                          <XMarkIcon className="w-4 text-white ml-auto" />
+                        </button>
                       </td>
                     </tr>
                   ))}

@@ -3,9 +3,10 @@ import { supabase } from "@/lib/supabase";
 import { FoodItem } from "@/lib/types";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
+import clsx from "clsx";
 
-const index = () => {
+const AddMealPlanPage: FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<FoodItem[]>([]);
 
@@ -51,7 +52,10 @@ const index = () => {
             placeholder="Search food..."
             value={searchTerm}
             onChange={handleChange}
-            className="pl-2 bg-red-500 border-none rounded-l-lg focus:outline-none border-transparent focus:border-transparent focus:ring-0 flex-grow"
+            className={clsx(
+              searchTerm ? "rounded-tl-lg" : "rounded-l-lg",
+              "pl-2 border-none focus:outline-none border-transparent focus:border-transparent focus:ring-0 flex-grow",
+            )}
           />
           <button onClick={search} className="px-2">
             <MagnifyingGlassIcon className="text-gray-500 w-6" />
@@ -90,4 +94,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default AddMealPlanPage;

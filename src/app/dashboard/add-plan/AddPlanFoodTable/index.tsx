@@ -32,7 +32,7 @@ const AddNewFoodTable: FC<IAddNewFoodTable> = ({ foods, setFoodItems }) => {
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 max-w-[100px]"
                     >
                       Protein
                     </th>
@@ -78,7 +78,7 @@ const AddNewFoodTable: FC<IAddNewFoodTable> = ({ foods, setFoodItems }) => {
                         </p>
                       </td>
 
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 max-w-[100px]">
                         <p>{food.protein}</p>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">

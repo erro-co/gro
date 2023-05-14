@@ -19,8 +19,8 @@ const AddPlanPage = () => {
         previousStep={prevFormStep}
         nextStep={nextFormStep}
       >
-        {formStep === 0 && <SelectClientForm nextStep={nextFormStep} />}
-        {formStep === 1 && <AddMealForm nextStep={nextFormStep} />}
+        {formStep === 0 && <AddMealForm nextStep={nextFormStep} />}
+        {formStep === 1 && <SelectClientForm nextStep={nextFormStep} />}
         {formStep === 2 && <div>Step 3</div>}
         {formStep === 3 && <div>Step 4</div>}
       </FormCardContainer>

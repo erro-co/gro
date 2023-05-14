@@ -1,11 +1,35 @@
-export type FoodItem = Database["public"]["Tables"]["food"]["Row"];
+export type FoodItem = {
+  brand: string | null;
+  calories: number;
+  carbs: number;
+  category: number | null;
+  created_at: string | null;
+  fats: number;
+  id: number;
+  name: string;
+  protein: number;
+};
 
-export type MealPlanFoodITem =
-  Database["public"]["Tables"]["meal_food_item"]["Row"];
+export type MealPlanFoodITem = {
+  foodItem: FoodItem;
+  quantity: number;
+};
 
-export type Meal = Database["public"]["Tables"]["meal"]["Row"];
+export type Meal = {
+  id: number;
+  name: string;
+  description: string;
+  foods: MealPlanFoodITem[];
+};
 
-export type MealPlan = Database["public"]["Tables"]["meal_plan"]["Row"];
+export type MealPlan = {
+  id: number;
+  trainer_id: number;
+  client_id: number;
+  name: string;
+  description: string;
+  meals: Meal[];
+};
 
 export type Json =
   | string

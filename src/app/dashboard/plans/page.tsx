@@ -1,7 +1,14 @@
-import React from "react";
+import Link from "next/link";
 
-const page = () => {
-  return <div>page</div>;
+const PlansIndexPage = () => {
+  return (
+    <div>
+      PlansIndexPage
+      <button className="bg-green-500 text-white p-2 rounded-md">
+        <Link href="/dashboard/plans/add">Add new Plan</Link>
+      </button>
+    </div>
+  );
 };
 
-export default page;
+export default PlansIndexPage;

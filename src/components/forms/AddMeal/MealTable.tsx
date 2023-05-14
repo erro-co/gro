@@ -91,7 +91,8 @@ const MealTable: FC<IMealTable> = ({ mealFoods, setMealFoods }) => {
             <td>{item.food.carbs}</td>
             <td>{item.food.calories}</td>
             <td>
-              {item.quantity} {item.quantityType}
+              <input type="text" value={item.quantity} />
+              {item.quantityType}
             </td>
             <td>
               <button

@@ -1,5 +1,4 @@
 "use client";
-
 import { Fragment, useState, FC } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { joinClassNames } from "@/lib/utils";
@@ -10,6 +9,7 @@ import {
   XMarkIcon,
   FireIcon,
   TableCellsIcon,
+  UsersIcon,
 } from "@heroicons/react/24/outline";
 import GroLogo from "@/components/Logo";
 import Link from "next/link";
@@ -21,6 +21,12 @@ const navigation = [
     name: "Plans",
     href: "/dashboard/plans",
     icon: TableCellsIcon,
+    current: false,
+  },
+  {
+    name: "Clients",
+    href: "/dashboard/clients",
+    icon: UsersIcon,
     current: false,
   },
   {

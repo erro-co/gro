@@ -2,10 +2,7 @@ import FoodSearchBar from "@/components/FoodSearchBar";
 import { FoodItem } from "@/lib/types";
 import { FC, useState } from "react";
 import MealTable from "./MealTable";
-
-export interface IAddMealForm {
-  nextStep: () => void;
-}
+import { useFormContext } from "react-hook-form";
 
 export interface FoodWithQuantity {
   food: FoodItem;
@@ -19,8 +16,10 @@ export interface FoodWithQuantity {
     | "units";
 }
 
-const AddMealForm: FC<IAddMealForm> = ({ nextStep }) => {
+const AddMealForm: FC = () => {
   const [mealFoods, setMealFoods] = useState<FoodWithQuantity[]>([]);
+
+  const { register } = useFormContext();
 
   return (
     <div className="w-full 2xl:w-2/3 mx-auto">

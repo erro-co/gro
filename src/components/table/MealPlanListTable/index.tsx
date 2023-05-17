@@ -1,21 +1,18 @@
-const plans = [
+export interface MealPlan {
+  id: number;
+  name: string;
+  client: string;
+  template: boolean;
+  meals: number;
+}
+
+const plans: MealPlan[] = [
   {
     id: 1,
-    name: "Hobby",
-    memory: "4 GB RAM",
-    cpu: "4 CPUs",
-    storage: "128 GB SSD disk",
-    price: "$40",
-    isCurrent: false,
-  },
-  {
-    id: 2,
-    name: "Startup",
-    memory: "8 GB RAM",
-    cpu: "6 CPUs",
-    storage: "256 GB SSD disk",
-    price: "$80",
-    isCurrent: true,
+    name: "Breakfast 1",
+    client: "Leslie Alexander",
+    template: false,
+    meals: 3,
   },
 ];
 
@@ -34,31 +31,25 @@ export default function MealPlanListTable() {
                 scope="col"
                 className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
               >
-                Plan
+                Name
               </th>
               <th
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
-                Memory
+                Client
               </th>
               <th
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
-                CPU
+                Template
               </th>
               <th
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
-                Storage
-              </th>
-              <th
-                scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-              >
-                Price
+                Meals
               </th>
               <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                 <span className="sr-only">Select</span>
@@ -74,24 +65,7 @@ export default function MealPlanListTable() {
                     "relative py-4 pl-4 pr-3 text-sm sm:pl-6",
                   )}
                 >
-                  <div className="font-medium text-gray-900">
-                    {plan.name}
-                    {plan.isCurrent ? (
-                      <span className="ml-1 text-indigo-600">
-                        (Current Plan)
-                      </span>
-                    ) : null}
-                  </div>
-                  <div className="mt-1 flex flex-col text-gray-500 sm:block lg:hidden">
-                    <span>
-                      {plan.memory} / {plan.cpu}
-                    </span>
-                    <span className="hidden sm:inline">·</span>
-                    <span>{plan.storage}</span>
-                  </div>
-                  {planIdx !== 0 ? (
-                    <div className="absolute -top-px left-6 right-0 h-px bg-gray-200" />
-                  ) : null}
+                  <div className="font-medium text-gray-900">{plan.name}</div>
                 </td>
                 <td
                   className={classNames(
@@ -99,7 +73,7 @@ export default function MealPlanListTable() {
                     "hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell",
                   )}
                 >
-                  {plan.memory}
+                  {plan.client}
                 </td>
                 <td
                   className={classNames(
@@ -107,7 +81,7 @@ export default function MealPlanListTable() {
                     "hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell",
                   )}
                 >
-                  {plan.cpu}
+                  {plan.template ? "Yes" : "No"}
                 </td>
                 <td
                   className={classNames(
@@ -115,17 +89,9 @@ export default function MealPlanListTable() {
                     "hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell",
                   )}
                 >
-                  {plan.storage}
+                  {plan.meals}
                 </td>
-                <td
-                  className={classNames(
-                    planIdx === 0 ? "" : "border-t border-gray-200",
-                    "px-3 py-3.5 text-sm text-gray-500",
-                  )}
-                >
-                  <div className="sm:hidden">{plan.price}/mo</div>
-                  <div className="hidden sm:block">{plan.price}/month</div>
-                </td>
+
                 <td
                   className={classNames(
                     planIdx === 0 ? "" : "border-t border-transparent",
@@ -135,7 +101,6 @@ export default function MealPlanListTable() {
                   <button
                     type="button"
                     className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-                    disabled={plan.isCurrent}
                   >
                     Select<span className="sr-only">, {plan.name}</span>
                   </button>

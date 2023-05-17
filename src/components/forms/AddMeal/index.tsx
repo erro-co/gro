@@ -1,8 +1,8 @@
 import FoodSearchBar from "@/components/FoodSearchBar";
 import { FoodItem } from "@/lib/types";
 import { FC, useState } from "react";
-import MealTable from "./MealTable";
 import { useFormContext } from "react-hook-form";
+import StickyTable from "@/components/StickyTable";
 
 export interface FoodWithQuantity {
   food: FoodItem;
@@ -22,18 +22,9 @@ const AddMealForm: FC = () => {
   const { register } = useFormContext();
 
   return (
-    <div className="w-full 2xl:w-2/3 mx-auto">
-      <h2 className="font-semibold text-3xl">Add a new meal</h2>
-      <MealTable mealFoods={mealFoods} setMealFoods={setMealFoods} />
-      {mealFoods.length > 0 ? (
-        <div className="w-full flex">
-          <button className="text-white p-2 bg-green-500 rounded-md my-4 ml-auto">
-            Another meal
-          </button>
-        </div>
-      ) : null}
-
-      <FoodSearchBar setMealFoods={setMealFoods} mealFoods={mealFoods} />
+    <div className="w-full bg-blue-300 rounded-t-lg mt-auto h-2/3">
+      <FoodSearchBar mealFoods={mealFoods} setMealFoods={setMealFoods} />
+      <StickyTable />
     </div>
   );
 };

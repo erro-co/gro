@@ -4,12 +4,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import { joinClassNames } from "@/lib/utils";
 import {
   Bars3Icon,
-  ChartBarIcon,
   HomeIcon,
   XMarkIcon,
   FireIcon,
   TableCellsIcon,
   UsersIcon,
+  CalendarIcon,
+  Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import GroLogo from "@/components/Logo";
 import Link from "next/link";
@@ -30,9 +31,15 @@ const navigation = [
     current: false,
   },
   {
+    name: "Schedule",
+    href: "/dashboard/schedule",
+    icon: CalendarIcon,
+    current: false,
+  },
+  {
     name: "Settings",
     href: "/dashboard/settings",
-    icon: ChartBarIcon,
+    icon: Cog6ToothIcon,
     current: false,
   },
 ];
@@ -223,8 +230,8 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
           </a>
         </div>
 
-        <main className="py-10 lg:pl-72">
-          <div className="px-4 sm:px-6 lg:px-8">{children}</div>
+        <main className="py-10 lg:pl-72 h-screen">
+          <div className="px-4 sm:px-6 lg:px-8 h-full">{children}</div>
         </main>
       </div>
     </>

@@ -15,16 +15,17 @@ const AddPlanPage = () => {
 
   return (
     <FormProvider {...methods}>
-      <FormCardContainer
-        currentStep={formStep}
-        previousStep={prevFormStep}
-        nextStep={nextFormStep}
-      >
+      <div id="test" className="flex flex-col h-full">
+        <FormCardContainer
+          currentStep={formStep}
+          previousStep={prevFormStep}
+          nextStep={nextFormStep}
+        ></FormCardContainer>
         {formStep === 0 && <AddMealForm />}
         {formStep === 1 && <SelectClientForm />}
         {formStep === 2 && <div>Step 3</div>}
         {formStep === 3 && <div>Step 4</div>}
-      </FormCardContainer>
+      </div>
     </FormProvider>
   );
 };

@@ -3,6 +3,7 @@ import { FoodItem } from "@/lib/types";
 import { FC, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import StickyTable from "@/components/StickyTable";
+import AddFood from "@/components/AddFood";
 
 export interface FoodWithQuantity {
   food: FoodItem;
@@ -22,10 +23,12 @@ const AddMealForm: FC = () => {
   const { register } = useFormContext();
 
   return (
-    <div className="w-full bg-blue-300 rounded-t-lg mt-auto h-2/3">
-      <FoodSearchBar mealFoods={mealFoods} setMealFoods={setMealFoods} />
-      <StickyTable />
-    </div>
+    <>
+      <div className="w-full bg-pink-100/50 rounded-t-lg mt-auto h-2/3">
+        <FoodSearchBar mealFoods={mealFoods} setMealFoods={setMealFoods} />
+        <StickyTable />
+      </div>
+    </>
   );
 };
 

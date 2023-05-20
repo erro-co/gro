@@ -1,9 +1,10 @@
 "use client";
 
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import AddNewFoodCard from "../addNewFoodCard";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import LoadingIcon from "../icons/LoadingIcon";
+import Link from "next/link";
 
 export type FoodItem = {
   brand: string | null;
@@ -47,6 +48,13 @@ export default function Table() {
     console.log(foods);
   }, [foods]);
 
+  if (!dataFetched)
+    return (
+      <div className="w-40 mx-auto mt-20">
+        <LoadingIcon />
+      </div>
+    );
+
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -56,23 +64,15 @@ export default function Table() {
           </h1>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button
-            type="button"
+          <Link
+            href="/dashboard/foods/add"
             className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={() => setShowAddFoodCard(!showAddFoodCard)}
           >
             Add food
-          </button>
+          </Link>
         </div>
       </div>
-      {showAddFoodCard ? (
-        <>
-          <h2 className="text-base leading-6 text-gray-900 mt-8">
-            Add new food:
-          </h2>
-          <AddNewFoodCard />
-        </>
-      ) : null}
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -173,63 +173,36 @@ export default function Table() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {!dataFetched
-                    ? // Here we can decide how many skeleton rows we want to display
-                      Array.from({ length: 15 }).map((_, index) => (
-                        <tr key={index}>
-                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                            <SkeletonLoader />
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <SkeletonLoader />
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <SkeletonLoader />
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <SkeletonLoader />
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <SkeletonLoader />
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <SkeletonLoader />
-                          </td>
-                          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <SkeletonLoader />
-                          </td>
-                        </tr>
-                      ))
-                    : foods.map((f) => (
-                        <tr key={f.id}>
-                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                            {f.name}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {f.brand}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {f.protein}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {f.fats}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {f.carbs}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {f.calories}
-                          </td>
-                          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <a
-                              href="#"
-                              className="text-indigo-600 hover:text-indigo-900"
-                            >
-                              Edit<span className="sr-only">, {f.name}</span>
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
+                  {foods.map((f) => (
+                    <tr key={f.id}>
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                        {f.name}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {f.brand}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {f.protein}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {f.fats}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {f.carbs}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {f.calories}
+                      </td>
+                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                        <a
+                          href="#"
+                          className="text-indigo-600 hover:text-indigo-900"
+                        >
+                          Edit<span className="sr-only">, {f.name}</span>
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

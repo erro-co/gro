@@ -1,41 +1,14 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import ServingTypeToggle from "./ServingTypeToggle";
-
-export interface INutritionFacts {}
-
-interface Nutrition {
-  servingsPerContainer: number;
-  servingSize: string;
-  calories: number;
-  nutrients: {
-    name: string;
-    quantity: string;
-    dailyValue: number;
-  }[];
-}
+import { useFormContext } from "react-hook-form";
+import clsx from "clsx";
 
 const NutritionFactsInput: FC = () => {
-  const [nutritionFacts, setNutritionFacts] = useState<Nutrition>({
-    servingsPerContainer: 8,
-    servingSize: "2/3 cup (55g)",
-    calories: 45,
-    nutrients: [
-      { name: "Total Fat", quantity: "8g", dailyValue: 10 },
-      { name: "Saturated Fat", quantity: "1g", dailyValue: 5 },
-      { name: "Trans Fat", quantity: "8g", dailyValue: 0 },
-      { name: "Cholesterol", quantity: "0mg", dailyValue: 0 },
-      { name: "Sodium", quantity: "160mg", dailyValue: 7 },
-      { name: "Total Carbohydrate", quantity: "37g", dailyValue: 13 },
-      { name: "Dietary Fiber", quantity: "4g", dailyValue: 14 },
-      { name: "Total Sugar", quantity: "12g", dailyValue: 0 },
-      { name: "Includes 10g Added Sugars", quantity: "", dailyValue: 20 },
-      { name: "Protein", quantity: "3g", dailyValue: 0 },
-      { name: "Vitamin D", quantity: "2mcg", dailyValue: 10 },
-      { name: "Calcium", quantity: "260mg", dailyValue: 20 },
-      { name: "Iron", quantity: "8mg", dailyValue: 45 },
-      { name: "Potassium", quantity: "240mg", dailyValue: 6 },
-    ],
-  });
+  const { register, watch } = useFormContext();
+  const servingGrams = watch("servings.0.grams");
+  const servingMeasure = watch("servings.0.measure");
+
+  // const values = watch();
 
   return (
     <div className="p-1 border-2 border-black font-sans w-72">
@@ -44,18 +17,24 @@ const NutritionFactsInput: FC = () => {
       </div>
       <div className="flex justify-between font-bold border-b-8 border-black">
         <div>Serving size</div>
-        <div>2/3 cup (55g)</div>
+        <div className={clsx(servingMeasure === "" ? "text-gray-400" : "")}>
+          1 {servingMeasure === "" ? "serving" : servingMeasure} (
+          {servingGrams || 0}g)
+        </div>
       </div>
       <div className="flex justify-between items-end font-extrabold">
         <div>
           <div className="font-bold">Amount per serving</div>
-          <div className="text-4xl">Calories</div>
+          <div className="text-4xl">
+            Calories<span className="text-red-500 font-bold">*</span>
+          </div>
         </div>
         <div className="text-5xl">
           <input
+            {...register("calories", { valueAsNumber: true })}
             id="nutrition-calories"
-            type="text"
-            className="w-16"
+            type="number"
+            className="w-24 text-right pr-8 focus:pr-0 focus:placeholder:opacity-0"
             placeholder={"-"}
           />
         </div>
@@ -67,7 +46,7 @@ const NutritionFactsInput: FC = () => {
           <div>
             <span className="font-bold">Total Fat</span>{" "}
             <input
-              type="text"
+              type="number"
               id="nutrition-total-fat"
               className="w-8 text-right pr-1"
               placeholder={"-"}
@@ -79,11 +58,12 @@ const NutritionFactsInput: FC = () => {
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
-            Saturated Fat{" "}
+            Saturated Fat<span className="text-red-500 font-bold">*</span>{" "}
             <input
-              type="text"
+              {...register("saturatedFat", { valueAsNumber: true })}
+              type="number"
               id="nutrition-saturated-fat"
-              className="w-8 text-right pr-1"
+              className="w-8 text-right pr-1 focus:placeholder:opacity-0"
               placeholder={"-"}
             />
             g
@@ -92,11 +72,14 @@ const NutritionFactsInput: FC = () => {
         </div>
         <hr className="border-gray-500" />
         <div>
-          <span className="italic">Trans Fat</span>{" "}
+          <span className="italic">
+            Trans Fat<span className="text-red-500 font-bold">*</span>
+          </span>{" "}
           <input
-            type="text"
+            {...register("transFat", { valueAsNumber: true })}
+            type="number"
             id="nutrition-trans-fat"
-            className="w-8 text-right pr-1"
+            className="w-8 text-right pr-1 focus:placeholder:opacity-0"
             placeholder={"-"}
           />
           g
@@ -104,11 +87,14 @@ const NutritionFactsInput: FC = () => {
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
-            <span className="font-bold">Cholesterol</span>{" "}
+            <span className="font-bold">
+              Cholesterol<span className="text-red-500 font-bold">*</span>
+            </span>{" "}
             <input
-              type="text"
+              {...register("cholesterol", { valueAsNumber: true })}
+              type="number"
               id="nutrition-cholesterol"
-              className="w-8 text-right pr-1"
+              className="w-8 text-right pr-1 focus:placeholder:opacity-0"
               placeholder={"-"}
             />
             mg
@@ -118,11 +104,14 @@ const NutritionFactsInput: FC = () => {
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
-            <span className="font-bold">Sodium</span>{" "}
+            <span className="font-bold">
+              Sodium<span className="text-red-500 font-bold">*</span>
+            </span>{" "}
             <input
-              type="text"
+              {...register("sodium", { valueAsNumber: true })}
+              type="number"
               id="nutrition-sodium"
-              className="w-8 text-right pr-1"
+              className="w-8 text-right pr-1 focus:placeholder:opacity-0"
               placeholder={"-"}
             />
             mg
@@ -134,9 +123,9 @@ const NutritionFactsInput: FC = () => {
           <div>
             <span className="font-bold">Total Carbohydrate</span>{" "}
             <input
-              type="text"
+              type="number"
               id="nutrition-total-carbohydrate"
-              className="w-8 text-right pr-1"
+              className="w-8 text-right pr-1 focus:placeholder:opacity-0"
               placeholder={"-"}
             />
             g
@@ -146,9 +135,10 @@ const NutritionFactsInput: FC = () => {
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div className="pl-4">
-            Dietary Fiber{" "}
+            Fiber<span className="text-red-500 font-bold">*</span>{" "}
             <input
-              type="text"
+              {...register("fiber", { valueAsNumber: true })}
+              type="number"
               id="nutrition-dietary-fiber"
               className="w-8 text-right pr-1"
               placeholder={"-"}
@@ -159,9 +149,10 @@ const NutritionFactsInput: FC = () => {
         </div>
         <hr className="border-gray-500" />
         <div className="pl-4">
-          Total Sugar{" "}
+          Sugar<span className="text-red-500 font-bold">*</span>{" "}
           <input
-            type="text"
+            {...register("sugar", { valueAsNumber: true })}
+            type="number"
             id="nutrition-total-sugar"
             className="w-8 text-right pr-1"
             placeholder={"-"}
@@ -170,9 +161,12 @@ const NutritionFactsInput: FC = () => {
         </div>
         <hr className="border-gray-500" />
         <div>
-          <span className="font-bold">Protein</span>{" "}
+          <span className="font-bold">
+            Protein<span className="text-red-500 font-bold">*</span>
+          </span>{" "}
           <input
-            type="text"
+            {...register("protein", { valueAsNumber: true })}
+            type="number"
             id="nutrition-protein"
             className="w-8 text-right pr-1"
             placeholder={"-"}
@@ -185,7 +179,8 @@ const NutritionFactsInput: FC = () => {
           <div>
             Vitamin D{" "}
             <input
-              type="text"
+              {...register("vitaminD", { valueAsNumber: true })}
+              type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
             />
@@ -198,7 +193,8 @@ const NutritionFactsInput: FC = () => {
           <div>
             Calcium{" "}
             <input
-              type="text"
+              {...register("calcium", { valueAsNumber: true })}
+              type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
             />
@@ -211,7 +207,8 @@ const NutritionFactsInput: FC = () => {
           <div>
             Iron{" "}
             <input
-              type="text"
+              {...register("iron", { valueAsNumber: true })}
+              type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
             />
@@ -224,7 +221,8 @@ const NutritionFactsInput: FC = () => {
           <div>
             Potassium{" "}
             <input
-              type="text"
+              {...register("potassium", { valueAsNumber: true })}
+              type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
             />

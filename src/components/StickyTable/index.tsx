@@ -22,8 +22,8 @@ const StickyTable: FC<IStickyTable> = ({ foods }) => {
   return (
     <div className="w-11/12 mx-auto">
       <div className="flex space-x-6 mt-8 mb-4 ml-8">
-        {categories.map((category) => (
-          <div>
+        {categories.map((category, idx) => (
+          <div key={idx}>
             <button
               className={clsx(
                 category === selectedCategory

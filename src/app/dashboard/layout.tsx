@@ -17,7 +17,12 @@ import Link from "next/link";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard/", icon: HomeIcon, current: true },
-  { name: "Foods", href: "/dashboard/foods", icon: FireIcon, current: false },
+  {
+    name: "Foods",
+    href: "/dashboard/foods",
+    icon: FireIcon,
+    current: false,
+  },
   {
     name: "Plans",
     href: "/dashboard/plans",

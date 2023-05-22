@@ -20,7 +20,7 @@ const AddNewFoodForm: FC = () => {
     useState<FoodCategory | null>(null);
 
   const fetchFoodCategories = async () => {
-    let { data: food_category, error } = await supabase
+    const { data: food_category, error } = await supabase
       .from("food_category")
       .select("*");
 

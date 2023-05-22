@@ -1,5 +1,5 @@
 import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/20/solid";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { isValueEmpty } from "@/lib/utils";
 

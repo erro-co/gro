@@ -3,7 +3,6 @@ import { FoodItem } from "@/lib/types";
 import { FC, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import StickyTable from "@/components/StickyTable";
-import AddFood from "@/components/AddFood";
 
 export interface FoodWithQuantity {
   food: FoodItem;

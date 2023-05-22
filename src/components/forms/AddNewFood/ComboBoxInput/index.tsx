@@ -33,7 +33,7 @@ const ComboboxInput: FC<IComboboxInput> = ({
       value={selectedCategory}
       onChange={(value) => {
         setSelectedFoodCategory(value);
-        setValue("foodCategory", value?.name);
+        setValue("foodCategory", value);
       }}
     >
       <div className="relative w-3/5">

@@ -7,15 +7,20 @@ import { FoodCategory } from "@/lib/types";
 import ComboboxInput from "./ComboBoxInput";
 import { useFormContext } from "react-hook-form";
 import AddServingInput from "./AddServingInput";
+import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodModal";
 
 const AddNewFoodForm: FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    formState,
+    reset,
   } = useFormContext();
   const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([]);
   const [dataFetched, setDataFetched] = useState(false);
+  const [showSuccessfulAddNewFoodModal, setShowSuccessfulAddNewFoodModal] =
+    useState(false);
   const [selectedFoodCategory, setSelectedFoodCategory] =
     useState<FoodCategory | null>(null);
 
@@ -37,6 +42,7 @@ const AddNewFoodForm: FC = () => {
 
   const onSubmit = async (data: any) => {
     console.log({ data });
+    reset();
   };
   console.log({ errors });
   if (!dataFetched) {
@@ -130,7 +136,7 @@ const AddNewFoodForm: FC = () => {
           </div>
         </div>
       </div>
-      <div className="mt-6 flex items-center justify-end gap-x-6">
+      <div className="mt-6 flex items-center justify-end gap-x-6 pb-12">
         <button
           type="button"
           className="text-sm font-semibold leading-6 text-gray-900"
@@ -140,6 +146,7 @@ const AddNewFoodForm: FC = () => {
         <button
           type="submit"
           onClick={() => {
+            setShowSuccessfulAddNewFoodModal(true);
             console.log("test");
           }}
           className="disabled:bg-gray-500 inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -147,6 +154,10 @@ const AddNewFoodForm: FC = () => {
           Add
         </button>
       </div>
+      <SuccessfulAddNewFoodModal
+        isOpen={showSuccessfulAddNewFoodModal}
+        setIsOpen={setShowSuccessfulAddNewFoodModal}
+      />
     </form>
   );
 };

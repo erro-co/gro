@@ -1,5 +1,7 @@
+import MonthViewCalendar from "@/components/Calendars/MonthViewCalendar";
+
 const SchedulePage = () => {
-  return <div>SchedulePage</div>;
+  return <MonthViewCalendar />;
 };
 
 export default SchedulePage;

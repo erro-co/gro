@@ -12,13 +12,6 @@ const AddNewFoodPage: FC = () => {
     resolver: zodResolver(newFoodSchema),
     defaultValues: {
       servings: [{ measure: "", grams: undefined }],
-      nutrition: {
-        sodium: 0,
-        potassium: 0,
-        fiber: 0,
-        vitaminD: 0,
-        calcium: 0,
-      },
     },
   });
   return (

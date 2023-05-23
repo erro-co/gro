@@ -8,6 +8,6 @@ pre-commit:
     # test:
     #   run: npm run test
     lint:
-      run: npm run lint
+      run: npm run lint:all
     format:
-      run: npm run format
+      run: npm run format:all

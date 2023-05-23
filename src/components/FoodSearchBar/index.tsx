@@ -54,7 +54,7 @@ const FoodSearchBar: FC<IFoodSearchBar> = ({ mealFoods, setMealFoods }) => {
     search();
   }, [searchTerm]);
   return (
-    <div className="border border-gray-300 flex bg-white rounded-lg flex-col">
+    <div className="border border-gray-300 flex bg-white rounded-lg flex-col w-11/12 mx-auto mt-4">
       <div className="flex">
         <input
           type="text"
@@ -65,7 +65,7 @@ const FoodSearchBar: FC<IFoodSearchBar> = ({ mealFoods, setMealFoods }) => {
             searchTerm && searchResults.length > 0
               ? "rounded-tl-lg"
               : "rounded-l-lg",
-            "pl-2 py-2 border-none focus:outline-none border-transparent focus:border-transparent focus:ring-0 flex-grow",
+            "pl-2 py-4 border-none focus:outline-none border-transparent focus:border-transparent focus:ring-0 flex-grow",
           )}
         />
         <button onClick={search} className="px-2">

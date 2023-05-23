@@ -1,10 +1,6 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { FC } from "react";
 
-export interface ISelectClientForm {
-  nextStep: () => void;
-}
-
 const people = [
   {
     name: "Leslie Alexander",
@@ -32,7 +28,7 @@ const people = [
   },
 ];
 
-const SelectClientForm: FC<ISelectClientForm> = () => {
+const SelectClientForm: FC = () => {
   return (
     <ul
       role="list"

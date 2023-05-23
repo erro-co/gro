@@ -16,11 +16,7 @@ const FormCardContainer: FC<IFormCardContainer> = ({
   totalSteps,
 }) => {
   return (
-    <div className="shadow-lg p-2 rounded-lg">
-      {/* <span>
-        Step {currentStep + 1} of {totalSteps}
-      </span> */}
-      {children}
+    <div className="w-full">
       <div
         className={clsx(currentStep > 0 ? "justify-between" : "", "flex my-2")}
       >
@@ -43,6 +39,7 @@ const FormCardContainer: FC<IFormCardContainer> = ({
         >
           Next
         </button>
+        {children}
       </div>
     </div>
   );

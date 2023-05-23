@@ -1,9 +1,10 @@
 "use client";
 
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import AddNewFoodCard from "../addNewFoodCard";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import LoadingIcon from "../icons/LoadingIcon";
+import Link from "next/link";
 
 export type FoodItem = {
   brand: string | null;
@@ -16,6 +17,13 @@ export type FoodItem = {
   name: string;
   protein: number;
 };
+export const SkeletonLoader = () => (
+  <div className="animate-pulse flex space-x-4">
+    <div className="flex-1 space-y-4 py-1">
+      <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+    </div>
+  </div>
+);
 
 export default function Table() {
   const [showAddFoodCard, setShowAddFoodCard] = useState(false);
@@ -40,6 +48,13 @@ export default function Table() {
     console.log(foods);
   }, [foods]);
 
+  if (!dataFetched)
+    return (
+      <div className="w-40 mx-auto mt-20">
+        <LoadingIcon />
+      </div>
+    );
+
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -49,23 +64,15 @@ export default function Table() {
           </h1>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button
-            type="button"
+          <Link
+            href="/dashboard/foods/add"
             className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={() => setShowAddFoodCard(!showAddFoodCard)}
           >
             Add food
-          </button>
+          </Link>
         </div>
       </div>
-      {showAddFoodCard ? (
-        <>
-          <h2 className="text-base leading-6 text-gray-900 mt-8">
-            Add new food:
-          </h2>
-          <AddNewFoodCard />
-        </>
-      ) : null}
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">

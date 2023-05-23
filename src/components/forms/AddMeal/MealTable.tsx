@@ -120,10 +120,6 @@ const MealTable: FC<IMealTable> = ({ mealFoods, setMealFoods }) => {
                   {item.food.brand}
                 </p>
               </td>
-              <td>{item.food.protein}</td>
-              <td>{item.food.fats}</td>
-              <td>{item.food.carbs}</td>
-              <td>{item.food.calories}</td>
               <td>
                 <input type="text" value={item.quantity} />
                 {item.quantityType}

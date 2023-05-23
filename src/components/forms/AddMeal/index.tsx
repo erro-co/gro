@@ -22,10 +22,12 @@ const AddMealForm: FC = () => {
   const { register } = useFormContext();
 
   return (
-    <div className="w-full bg-blue-300 rounded-t-lg mt-auto h-2/3">
-      <FoodSearchBar mealFoods={mealFoods} setMealFoods={setMealFoods} />
-      <StickyTable />
-    </div>
+    <>
+      <div className="w-full bg-pink-100/50 rounded-t-lg mt-auto h-2/3">
+        <FoodSearchBar mealFoods={mealFoods} setMealFoods={setMealFoods} />
+        <StickyTable />
+      </div>
+    </>
   );
 };
 

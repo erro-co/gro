@@ -1,7 +1,7 @@
 "use client";
 import { Fragment, useState, FC } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { joinClassNames } from "@/lib/utils";
+import clsx from "clsx";
 import {
   Bars3Icon,
   HomeIcon,
@@ -12,12 +12,17 @@ import {
   CalendarIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
-import GroLogo from "@/components/Logo";
+import GroLogo from "@/components/icons/Logo";
 import Link from "next/link";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard/", icon: HomeIcon, current: true },
-  { name: "Foods", href: "/dashboard/foods", icon: FireIcon, current: false },
+  {
+    name: "Foods",
+    href: "/dashboard/foods",
+    icon: FireIcon,
+    current: false,
+  },
   {
     name: "Plans",
     href: "/dashboard/plans",
@@ -121,7 +126,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                               <li key={item.name}>
                                 <Link
                                   href={item.href}
-                                  className={joinClassNames(
+                                  className={clsx(
                                     item.current
                                       ? "bg-gray-50 text-indigo-600"
                                       : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
@@ -129,7 +134,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                                   )}
                                 >
                                   <item.icon
-                                    className={joinClassNames(
+                                    className={clsx(
                                       item.current
                                         ? "text-indigo-600"
                                         : "text-gray-400 group-hover:text-indigo-600",
@@ -167,7 +172,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                       <li key={item.name}>
                         <a
                           href={item.href}
-                          className={joinClassNames(
+                          className={clsx(
                             item.current
                               ? "bg-gray-50 text-indigo-600"
                               : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
@@ -175,7 +180,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                           )}
                         >
                           <item.icon
-                            className={joinClassNames(
+                            className={clsx(
                               item.current
                                 ? "text-indigo-600"
                                 : "text-gray-400 group-hover:text-indigo-600",

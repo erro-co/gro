@@ -8,13 +8,13 @@ import ComboboxInput from "./ComboBoxInput";
 import { useFormContext } from "react-hook-form";
 import AddServingInput from "./AddServingInput";
 import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodModal";
+import { Serving } from "@/lib/schemas";
 
 const AddNewFoodForm: FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    formState,
     reset,
   } = useFormContext();
   const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([]);
@@ -40,9 +40,60 @@ const AddNewFoodForm: FC = () => {
     fetchFoodCategories();
   }, []);
 
+  //TODO: Add delete on error, base 100 values, and serving type toggle
+
   const onSubmit = async (data: any) => {
-    console.log({ data });
+    const { data: new_food, error } = await supabase
+      .from("food")
+      .insert([
+        {
+          name: data.foodName,
+          brand: data.foodBrand,
+          food_category: data.foodCategory.id,
+        },
+      ])
+      .select();
+    if (error) {
+      console.error("Error inserting food:", error);
+      return;
+    }
+    const { error: food_serving_error } = await supabase.from("serving").insert(
+      data.servings.map((serving: Serving) => ({
+        food: new_food[0].id,
+        name: serving.measure,
+        weight: serving.grams,
+      })),
+    );
+
+    if (food_serving_error) {
+      console.error("Error inserting food_serving:", food_serving_error);
+      return;
+    }
+
+    const { error: nutrients_error } = await supabase.from("nutrients").insert([
+      {
+        calories: data.nutrition.calories,
+        protein: data.nutrition.protein,
+        saturated_fat: data.nutrition.saturatedFat,
+        trans_fat: data.nutrition.transFat,
+        fiber: data.nutrition.fiber,
+        sugar: data.nutrition.sugar,
+        sodium: data.nutrition.sodium,
+        cholesterol: data.nutrition.cholesterol,
+        food_id: new_food[0].id,
+        calcium: data.nutrition.calcium,
+        iron: data.nutrition.iron,
+        potassium: data.nutrition.potassium,
+        vitamin_d: data.nutrition.vitaminD,
+      },
+    ]);
+
+    if (nutrients_error) {
+      console.error("Error inserting nutrients:", nutrients_error);
+      return;
+    }
     reset();
+    setShowSuccessfulAddNewFoodModal(true);
   };
   console.log({ errors });
   if (!dataFetched) {
@@ -145,10 +196,6 @@ const AddNewFoodForm: FC = () => {
         </button>
         <button
           type="submit"
-          onClick={() => {
-            setShowSuccessfulAddNewFoodModal(true);
-            console.log("test");
-          }}
           className="disabled:bg-gray-500 inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Add

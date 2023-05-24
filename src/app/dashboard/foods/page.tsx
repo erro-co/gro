@@ -1,11 +1,7 @@
 import Table from "@/components/table";
 
 const FoodsPage = () => {
-  return (
-    <div>
-      <Table />
-    </div>
-  );
+  return <Table />;
 };
 
 export default FoodsPage;

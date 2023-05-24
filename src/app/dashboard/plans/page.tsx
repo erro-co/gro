@@ -7,13 +7,14 @@ import Link from "next/link";
 const PlansIndexPage = () => {
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-24">My plans</h1>
-      <MealPlanListTable />
-      <button className="bg-pink-500 text-white p-2 my-10 rounded-md">
-        <Link href="/dashboard/plans/add">
+      <h1 className="text-2xl font-semibold mb-12">My plans</h1>
+      <Link href="/dashboard/plans/add">
+        <div className="bg-pink-500 text-white ml-8 p-2 my-10 rounded-md w-fit flex">
           <PlusIcon className="w-10" />
-        </Link>
-      </button>
+          <p className="my-auto">Add Plan</p>
+        </div>
+      </Link>
+      <MealPlanListTable />
     </div>
   );
 };

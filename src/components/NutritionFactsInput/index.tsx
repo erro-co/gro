@@ -49,6 +49,7 @@ const NutritionFactsInput: FC = () => {
             type="number"
             className="w-24 text-right pr-8 focus:pr-0 focus:placeholder:opacity-0"
             placeholder={"-"}
+            step={0.1}
           />
         </div>
       </div>
@@ -71,6 +72,7 @@ const NutritionFactsInput: FC = () => {
               id="nutrition-saturated-fat"
               className="w-8 text-right pr-1 focus:placeholder:opacity-0"
               placeholder={"-"}
+              step={0.1}
             />
             g
           </div>
@@ -87,6 +89,7 @@ const NutritionFactsInput: FC = () => {
             id="nutrition-trans-fat"
             className="w-8 text-right pr-1 focus:placeholder:opacity-0"
             placeholder={"-"}
+            step={0.1}
           />
           g
         </div>
@@ -102,6 +105,7 @@ const NutritionFactsInput: FC = () => {
               id="nutrition-cholesterol"
               className="w-8 text-right pr-1 focus:placeholder:opacity-0"
               placeholder={"-"}
+              step={0.1}
             />
             mg
           </div>
@@ -119,6 +123,7 @@ const NutritionFactsInput: FC = () => {
               id="nutrition-sodium"
               className="w-8 text-right pr-1 focus:placeholder:opacity-0"
               placeholder={"-"}
+              step={0.1}
             />
             mg
           </div>
@@ -141,6 +146,7 @@ const NutritionFactsInput: FC = () => {
               id="nutrition-dietary-fiber"
               className="w-8 text-right pr-1"
               placeholder={"-"}
+              step={0.1}
             />
             g
           </div>
@@ -155,6 +161,7 @@ const NutritionFactsInput: FC = () => {
             id="nutrition-total-sugar"
             className="w-8 text-right pr-1"
             placeholder={"-"}
+            step={0.1}
           />
           g
         </div>
@@ -169,6 +176,7 @@ const NutritionFactsInput: FC = () => {
             id="nutrition-protein"
             className="w-8 text-right pr-1"
             placeholder={"-"}
+            step={0.1}
           />
           g
         </div>
@@ -182,6 +190,7 @@ const NutritionFactsInput: FC = () => {
               type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
+              step={0.1}
             />
             mcg
           </div>
@@ -196,6 +205,7 @@ const NutritionFactsInput: FC = () => {
               type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
+              step={0.1}
             />
             mg
           </div>
@@ -210,6 +220,7 @@ const NutritionFactsInput: FC = () => {
               type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
+              step={0.1}
             />
             mg
           </div>
@@ -224,6 +235,7 @@ const NutritionFactsInput: FC = () => {
               type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
+              step={0.1}
             />
             mg
           </div>

@@ -3,10 +3,19 @@
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import LoadingIcon from "../icons/LoadingIcon";
+import LoadingIcon from "@/components/icons/LoadingIcon";
 
-import Link from "next/link";
-
+export type FoodItem = {
+  brand: string | null;
+  calories: number;
+  carbs: number;
+  category: number | null;
+  created_at: string | null;
+  fats: number;
+  id: number;
+  name: string;
+  protein: number;
+};
 export const SkeletonLoader = () => (
   <div className="animate-pulse flex space-x-4">
     <div className="flex-1 space-y-4 py-1">
@@ -15,21 +24,17 @@ export const SkeletonLoader = () => (
   </div>
 );
 
-export default function Table() {
-  const [showAddFoodCard, setShowAddFoodCard] = useState(false);
-  const [foods, setFoods] = useState<any[] | null>([]);
+export default function AddMealTable() {
+  const [foods, setFoods] = useState<FoodItem[]>([]);
   const [dataFetched, setDataFetched] = useState(false);
 
   const getAllFoods = async () => {
-    const { data, error } = await supabase
-      .from("food")
-      .select(`*, nutrients(*, food_id)`);
+    const { data, error } = await supabase.from("food").select("*");
 
     if (error) {
       console.log("Failed to fetch error:", error);
     }
-    console.log(data);
-    setFoods(data);
+    setFoods((data as FoodItem[]) || []);
     setDataFetched(true);
   };
 
@@ -50,22 +55,7 @@ export default function Table() {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Foods
-          </h1>
-        </div>
-        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <Link
-            href="/dashboard/foods/add"
-            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            onClick={() => setShowAddFoodCard(!showAddFoodCard)}
-          >
-            Add food
-          </Link>
-        </div>
-      </div>
+      <h2>Meal 1</h2>
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -166,7 +156,7 @@ export default function Table() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {foods?.map((f) => (
+                  {foods.map((f) => (
                     <tr key={f.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                         {f.name}
@@ -175,24 +165,21 @@ export default function Table() {
                         {f.brand}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.nutrients?.protein}
+                        {f.protein}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.nutrients?.saturated_fat + f.nutrients?.trans_fat}
+                        {f.fats}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.nutrients?.fiber + f.nutrients?.sugar}
+                        {f.carbs}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.nutrients?.calories}
+                        {f.calories}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                        <a
-                          href="#"
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          Edit<span className="sr-only">, {f.name}</span>
-                        </a>
+                        <button className="text-white p-2 bg-red-500 rounded-md hover:text-indigo-900">
+                          Remove<span className="sr-only">, {f.name}</span>
+                        </button>
                       </td>
                     </tr>
                   ))}

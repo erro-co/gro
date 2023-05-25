@@ -56,6 +56,7 @@ const AddNewMealPlan: FC = () => {
         </div>
         {fields.map((meal, idx) => (
           <AddMealTable
+            foods={foods}
             key={meal.id}
             id={idx}
             setShowFoodSearchModal={setShowFoodSearchModal}
@@ -63,7 +64,7 @@ const AddNewMealPlan: FC = () => {
         ))}
         <div className="mb-4">
           <button
-            onClick={() => append({ name: "" })}
+            onClick={() => append({ name: `Meal ${fields.length + 1}` })}
             className="bg-pink-400 text-white flex ml-auto mr-8 mt-4 p-2 rounded-md"
           >
             <PlusCircleIcon className="w-6 mr-2" />

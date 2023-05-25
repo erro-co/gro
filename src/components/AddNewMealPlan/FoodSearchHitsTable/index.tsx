@@ -11,6 +11,13 @@ export interface IFoodSearchHitsTable {
   setSelectedCategory: Dispatch<SetStateAction<FoodCategory | null>>;
 }
 
+const categories = [
+  "All",
+  "Fruits & Vegetables",
+  "Carbs",
+  "Protein",
+  "Supplements",
+];
 const FoodSearchHitsTable: FC<IFoodSearchHitsTable> = ({
   foods,
   selectedFood,
@@ -20,27 +27,27 @@ const FoodSearchHitsTable: FC<IFoodSearchHitsTable> = ({
   setSelectedCategory,
 }) => {
   return (
-    <div className="w-11/12 mx-auto">
+    <div className="w-full">
       <div className="flex space-x-6 mt-8 mb-4 ml-8">
-        {foodCategories?.map((category, idx) => (
+        {categories?.map((category, idx) => (
           <div key={idx}>
             <button
               className={clsx(
                 "border-b-4",
-                category.name === selectedCategory?.name
+                category === selectedCategory?.name
                   ? "border-indigo-500"
                   : "border-transparent",
               )}
-              onClick={() => setSelectedCategory(category)}
+              // onClick={() => setSelectedCategory(category)}
             >
-              {category.name}
+              {category}
             </button>
           </div>
         ))}
       </div>
       <div className="flow-root">
         <div className="">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <div className="inline-block min-w-full py-2 align-middle">
             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
                 <thead className="bg-gray-50">

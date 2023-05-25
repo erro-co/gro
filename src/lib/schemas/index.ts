@@ -55,7 +55,11 @@ export const newMealPlanSchema = z.object({
   meals: z.array(newMealSchema),
 });
 
+export type FoodWithServing = z.infer<typeof newMealPlanFoodSchema>;
+export type Meal = z.infer<typeof newMealSchema>;
+export type MealPlan = z.infer<typeof newMealPlanSchema>;
+
 export type Serving = z.infer<typeof servingSchema>;
 export type Categories = z.infer<typeof categoriesSchema>;
 export type Nutrition = z.infer<typeof nutrientsSchema>;
-export type NewFood = z.infer<typeof newFoodSchema>;
+export type FoodWithNutrients = z.infer<typeof newFoodSchema>;

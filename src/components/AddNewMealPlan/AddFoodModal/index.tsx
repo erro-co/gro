@@ -13,6 +13,7 @@ import FoodSearchHitsTable from "../FoodSearchHitsTable";
 import { supabase } from "@/lib/supabase";
 import { FoodCategory, FoodItem } from "@/lib/types";
 import AddFoodMetaDataForm from "../AddFoodMetaDataForm";
+import { useFormContext } from "react-hook-form";
 
 export interface IAddFoodModal {
   open: boolean;
@@ -30,6 +31,10 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
   const [selectedCategory, setSelectedCategory] = useState<FoodCategory | null>(
     null,
   );
+  const { register, watch } = useFormContext();
+
+  const meals = watch("meals");
+  console.log("meals: ", meals);
 
   const fetchAllFoods = async () => {
     let query = supabase
@@ -86,7 +91,7 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
           <div className="fixed z-100 inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
-        <div className="fixed inset-24 z-50 overflow-y-auto">
+        <div className="fixed inset-2 lg:inset-24 z-50 overflow-y-auto rounded-lg">
           <div className="flex min-h-full">
             <Transition.Child
               as={Fragment}
@@ -97,7 +102,7 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white pb-4 pt-5 text-left shadow-xl transition-all w-full mx-8">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white pb-4 pt-5 text-left shadow-xl transition-all w-full px-8">
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"
@@ -108,7 +113,7 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
-                <h2 className="text-xl font-semibold ml-4">Add food to meal</h2>
+                <h2 className="text-xl font-semibold">Add food to meal</h2>
                 <FoodSearchBar
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
@@ -124,7 +129,12 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
                   />
                 ) : null}
                 {selectedFood ? (
-                  <AddFoodMetaDataForm selectedFood={selectedFood} />
+                  <AddFoodMetaDataForm
+                    selectedFood={selectedFood}
+                    meals={meals}
+                    setOpen={setOpen}
+                    setSelectedFood={setSelectedFood}
+                  />
                 ) : null}
               </Dialog.Panel>
             </Transition.Child>

@@ -38,10 +38,10 @@ const FoodNutrientsPieChart: FC<IFoodNutrientsPieChart> = ({ nutrients }) => {
         innerRadius={60}
         outerRadius={80}
         fill="#8884d8"
-        paddingAngle={5}
+        paddingAngle={2}
         dataKey="value"
       >
-        {data.map((entry, index) => (
+        {data.map((_, index) => (
           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
       </Pie>

@@ -13,7 +13,7 @@ const FoodSearchBar: FC<IFoodSearchBar> = ({ searchTerm, setSearchTerm }) => {
   };
 
   return (
-    <div className="border border-gray-300 flex bg-white rounded-lg flex-col w-11/12 mx-auto mt-4">
+    <div className="border border-gray-300 flex bg-white rounded-lg flex-col mx-auto mt-4">
       <div className="flex">
         <input
           type="text"

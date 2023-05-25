@@ -13,7 +13,8 @@ const AddPlanPage = () => {
   const methods = useForm<FormSchemaType>({
     resolver: zodResolver(newMealPlanSchema),
     defaultValues: {
-      meals: [{ foods: [] }],
+      name: "Meal Plan 1",
+      meals: [{ name: "Meal 1", foods: [] }],
     },
   });
 

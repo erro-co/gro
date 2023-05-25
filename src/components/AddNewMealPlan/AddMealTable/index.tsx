@@ -1,26 +1,22 @@
 "use client";
 
-import { FoodItem } from "@/lib/types";
+import { FoodWithServing, Meal } from "@/lib/schemas";
 import { PencilIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Dispatch, FC, SetStateAction, useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 export interface IAddMealTable {
-  foods?: FoodItem[];
   id: number;
   setShowFoodSearchModal: Dispatch<SetStateAction<boolean>>;
+  setSelectedMeal: Dispatch<SetStateAction<Meal>>;
 }
-const AddMealTable: FC<IAddMealTable> = ({
-  foods,
-  id,
-  setShowFoodSearchModal,
-}) => {
+const AddMealTable: FC<IAddMealTable> = ({ id, setShowFoodSearchModal }) => {
   const { control, watch } = useFormContext();
 
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, remove } = useFieldArray({
     control,
-    name: `meals[${id}].foods`,
+    name: `meals.${id}.foods`,
   });
 
   const foodList = watch(`meals[${id}].foods`);
@@ -142,13 +138,25 @@ const AddMealTable: FC<IAddMealTable> = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {foodList?.map((f: any) => (
-                    <tr key={f.id}>
+                  {foodList?.map((f: FoodWithServing, idx: number) => (
+                    <tr key={idx}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                         {f.name}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {f.brand}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {f.nutrients.protein}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {f.nutrients.saturated_fat + f.nutrients.trans_fat}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {f.nutrients.sugar + f.nutrients.fiber}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {f.nutrients.calories}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <button className="text-white p-2 bg-red-500 rounded-md hover:text-indigo-900">

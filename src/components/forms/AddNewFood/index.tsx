@@ -8,7 +8,7 @@ import ComboboxInput from "./ComboBoxInput";
 import { useFormContext } from "react-hook-form";
 import AddServingInput from "./AddServingInput";
 import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodModal";
-import { Serving } from "@/lib/schemas";
+import { Serving, newFoodSchema } from "@/lib/schemas";
 
 const AddNewFoodForm: FC = () => {
   const {
@@ -43,13 +43,17 @@ const AddNewFoodForm: FC = () => {
   //TODO: Add delete on error, base 100 values, and serving type toggle
 
   const onSubmit = async (data: any) => {
+    if (validateForm(data) === false) {
+      return;
+    }
+
     const { data: new_food, error } = await supabase
       .from("food")
       .insert([
         {
-          name: data.foodName,
-          brand: data.foodBrand,
-          food_category: data.foodCategory.id,
+          name: data.name,
+          brand: data.brand,
+          food_category: data.food_category.id,
         },
       ])
       .select();
@@ -60,8 +64,8 @@ const AddNewFoodForm: FC = () => {
     const { error: food_serving_error } = await supabase.from("serving").insert(
       data.servings.map((serving: Serving) => ({
         food: new_food[0].id,
-        name: serving.measure,
-        weight: serving.grams,
+        name: serving.name,
+        weight: serving.weight,
       })),
     );
 
@@ -72,19 +76,19 @@ const AddNewFoodForm: FC = () => {
 
     const { error: nutrients_error } = await supabase.from("nutrients").insert([
       {
-        calories: data.nutrition.calories,
-        protein: data.nutrition.protein,
-        saturated_fat: data.nutrition.saturatedFat,
-        trans_fat: data.nutrition.transFat,
-        fiber: data.nutrition.fiber,
-        sugar: data.nutrition.sugar,
-        sodium: data.nutrition.sodium,
-        cholesterol: data.nutrition.cholesterol,
+        calories: data.nutrients.calories,
+        protein: data.nutrients.protein,
+        saturated_fat: data.nutrients.saturated_fat,
+        trans_fat: data.nutrients.trans_fat,
+        fiber: data.nutrients.fiber,
+        sugar: data.nutrients.sugar,
+        sodium: data.nutrients.sodium,
+        cholesterol: data.nutrients.cholesterol,
         food_id: new_food[0].id,
-        calcium: data.nutrition.calcium,
-        iron: data.nutrition.iron,
-        potassium: data.nutrition.potassium,
-        vitamin_d: data.nutrition.vitaminD,
+        calcium: data.nutrients.calcium,
+        iron: data.nutrients.iron,
+        potassium: data.nutrients.potassium,
+        vitamin_d: data.nutrients.vitamin_d,
       },
     ]);
 
@@ -95,6 +99,17 @@ const AddNewFoodForm: FC = () => {
     reset();
     setShowSuccessfulAddNewFoodModal(true);
   };
+
+  const validateForm = (data: any) => {
+    try {
+      newFoodSchema.parse(data);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   console.log({ errors });
   if (!dataFetched) {
     return (
@@ -123,9 +138,9 @@ const AddNewFoodForm: FC = () => {
               </label>
               <div className="mt-2 sm:col-span-2 sm:mt-0">
                 <input
-                  {...register("foodName")}
+                  {...register("name")}
                   type="text"
-                  name="foodName"
+                  name="name"
                   placeholder="e.g. Chicken breast"
                   className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 />
@@ -140,7 +155,7 @@ const AddNewFoodForm: FC = () => {
               </label>
               <div className="mt-2 sm:col-span-2 sm:mt-0">
                 <input
-                  {...register("foodBrand")}
+                  {...register("brand")}
                   type="text"
                   name="foodBrand"
                   placeholder="e.g. Coles"

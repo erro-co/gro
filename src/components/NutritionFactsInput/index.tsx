@@ -8,10 +8,10 @@ const NutritionFactsInput: FC = () => {
 
   const [totalFat, setTotalFat] = useState<number>(0);
   const [totalCarbs, setTotalCarbs] = useState<number>(0);
-  const servingGrams = watch("servings.0.grams");
-  const servingMeasure = watch("servings.0.measure");
-  const saturatedFat = watch("nutrition.saturatedFat");
-  const transFat = watch("nutrition.transFat");
+  const servingWeight = watch("servings.0.weight");
+  const servingName = watch("servings.0.name");
+  const saturatedFat = watch("nutrition.saturated_fat");
+  const transFat = watch("nutrition.trans_fat");
   const fiber = watch("nutrition.fiber");
   const sugar = watch("nutrition.sugar");
 
@@ -30,9 +30,9 @@ const NutritionFactsInput: FC = () => {
       </div>
       <div className="flex justify-between font-bold border-b-8 border-black">
         <div>Serving size</div>
-        <div className={clsx(servingMeasure === "" ? "text-gray-400" : "")}>
-          1 {servingMeasure === "" ? "serving" : servingMeasure} (
-          {servingGrams || 0}g)
+        <div className={clsx(servingName === "" ? "text-gray-400" : "")}>
+          1 {servingName === "" ? "serving" : servingName} ({servingWeight || 0}
+          g)
         </div>
       </div>
       <div className="flex justify-between items-end font-extrabold">
@@ -44,37 +44,36 @@ const NutritionFactsInput: FC = () => {
         </div>
         <div className="text-5xl">
           <input
-            {...register("nutrition.calories", { valueAsNumber: true })}
+            {...register("nutrients.calories", { valueAsNumber: true })}
             id="nutrition-calories"
             type="number"
             className="w-24 text-right pr-8 focus:pr-0 focus:placeholder:opacity-0"
             placeholder={"-"}
+            step={0.1}
           />
         </div>
       </div>
       <div className="border-t-4 border-black text-sm pb-1">
-        {/* <div className="text-right font-bold pt-1 pb-1">% Daily value*</div> */}
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
             <span className="font-bold">Total Fat</span> {totalFat} g
           </div>
-          {/* <div className="font-bold">10%</div> */}
         </div>
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
             Saturated Fat<span className="text-red-500 font-bold">*</span>{" "}
             <input
-              {...register("nutrition.saturatedFat", { valueAsNumber: true })}
+              {...register("nutrients.saturated_fat", { valueAsNumber: true })}
               type="number"
               id="nutrition-saturated-fat"
               className="w-8 text-right pr-1 focus:placeholder:opacity-0"
               placeholder={"-"}
+              step={0.1}
             />
             g
           </div>
-          {/* <div className="font-bold">5%</div> */}
         </div>
         <hr className="border-gray-500" />
         <div>
@@ -82,11 +81,12 @@ const NutritionFactsInput: FC = () => {
             Trans Fat<span className="text-red-500 font-bold">*</span>
           </span>{" "}
           <input
-            {...register("nutrition.transFat", { valueAsNumber: true })}
+            {...register("nutrients.trans_fat", { valueAsNumber: true })}
             type="number"
             id="nutrition-trans-fat"
             className="w-8 text-right pr-1 focus:placeholder:opacity-0"
             placeholder={"-"}
+            step={0.1}
           />
           g
         </div>
@@ -97,15 +97,15 @@ const NutritionFactsInput: FC = () => {
               Cholesterol<span className="text-red-500 font-bold">*</span>
             </span>{" "}
             <input
-              {...register("nutrition.cholesterol", { valueAsNumber: true })}
+              {...register("nutrients.cholesterol", { valueAsNumber: true })}
               type="number"
               id="nutrition-cholesterol"
               className="w-8 text-right pr-1 focus:placeholder:opacity-0"
               placeholder={"-"}
+              step={0.1}
             />
             mg
           </div>
-          {/* <div className="font-bold">0%</div> */}
         </div>
         <hr className="border-gray-500" />
         <div className="flex justify-between">
@@ -114,47 +114,47 @@ const NutritionFactsInput: FC = () => {
               Sodium<span className="text-red-500 font-bold">*</span>
             </span>{" "}
             <input
-              {...register("nutrition.sodium", { valueAsNumber: true })}
+              {...register("nutrients.sodium", { valueAsNumber: true })}
               type="number"
               id="nutrition-sodium"
               className="w-8 text-right pr-1 focus:placeholder:opacity-0"
               placeholder={"-"}
+              step={0.1}
             />
             mg
           </div>
-          {/* <div className="font-bold">7%</div> */}
         </div>
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
             <span className="font-bold">Total Carbohydrate</span> {totalCarbs} g
           </div>
-          {/* <div className="font-bold">13%</div> */}
         </div>
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div className="pl-4">
             Fiber<span className="text-red-500 font-bold">*</span>{" "}
             <input
-              {...register("nutrition.fiber", { valueAsNumber: true })}
+              {...register("nutrients.fiber", { valueAsNumber: true })}
               type="number"
               id="nutrition-dietary-fiber"
               className="w-8 text-right pr-1"
               placeholder={"-"}
+              step={0.1}
             />
             g
           </div>
-          {/* <div className="font-bold">14%</div> */}
         </div>
         <hr className="border-gray-500" />
         <div className="pl-4">
           Sugar<span className="text-red-500 font-bold">*</span>{" "}
           <input
-            {...register("nutrition.sugar", { valueAsNumber: true })}
+            {...register("nutrients.sugar", { valueAsNumber: true })}
             type="number"
             id="nutrition-total-sugar"
             className="w-8 text-right pr-1"
             placeholder={"-"}
+            step={0.1}
           />
           g
         </div>
@@ -164,11 +164,12 @@ const NutritionFactsInput: FC = () => {
             Protein<span className="text-red-500 font-bold">*</span>
           </span>{" "}
           <input
-            {...register("nutrition.protein", { valueAsNumber: true })}
+            {...register("nutrients.protein", { valueAsNumber: true })}
             type="number"
             id="nutrition-protein"
             className="w-8 text-right pr-1"
             placeholder={"-"}
+            step={0.1}
           />
           g
         </div>
@@ -178,65 +179,58 @@ const NutritionFactsInput: FC = () => {
           <div>
             Vitamin D{" "}
             <input
-              {...register("nutrition.vitaminD", { valueAsNumber: true })}
+              {...register("nutrients.vitamin_d", { valueAsNumber: true })}
               type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
+              step={0.1}
             />
             mcg
           </div>
-          {/* <div>10%</div> */}
         </div>
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
             Calcium{" "}
             <input
-              {...register("nutrition.calcium", { valueAsNumber: true })}
+              {...register("nutrients.calcium", { valueAsNumber: true })}
               type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
+              step={0.1}
             />
             mg
           </div>
-          {/* <div>20%</div> */}
         </div>
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
             Iron{" "}
             <input
-              {...register("nutrition.iron", { valueAsNumber: true })}
+              {...register("nutrients.iron", { valueAsNumber: true })}
               type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
+              step={0.1}
             />
             mg
           </div>
-          {/* <div>45%</div> */}
         </div>
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
             Potassium{" "}
             <input
-              {...register("nutrition.potassium", { valueAsNumber: true })}
+              {...register("nutrients.potassium", { valueAsNumber: true })}
               type="number"
               className="w-8 text-right pr-1"
               placeholder={"-"}
+              step={0.1}
             />
             mg
           </div>
-          {/* <div>6%</div> */}
         </div>
-        <div className="border-t-4 border-black flex leading-none text-xs pt-2 pb-1">
-          {/* <div className="pr-1">*</div> */}
-          {/* <div>
-            The % Daily Value (DV) tells you how much a nutrient in a serving of
-            food contributes to a daily diet. 2,000 calories a day is used for
-            general nutrition advice.
-          </div> */}
-        </div>
+        <div className="border-t-4 border-black flex leading-none text-xs pt-2 pb-1"></div>
       </div>
 
       <div className="flex w-full">

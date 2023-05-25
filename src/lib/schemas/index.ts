@@ -1,51 +1,66 @@
 import { z } from "zod";
 
 export const servingSchema = z.object({
-  measure: z.string().nonempty({ message: "Serving measure name is required" }),
-  grams: z
+  name: z.string().nonempty({ message: "Serving measure name is required" }),
+  weight: z
     .number()
     .min(1, { message: "Serving grams must be a positive number" }),
 });
 
 export const categoriesSchema = z.object({
-  id: z.number().min(0, { message: "Category ID is required" }),
+  id: z.number().nonnegative(),
   name: z.string().nonempty({ message: "Category name is required" }),
 });
 
-export const nutritionSchema = z.object({
-  calories: z
-    .number()
-    .min(0, { message: "Calories must be a positive number" }),
-  saturatedFat: z
-    .number()
-    .min(0, { message: "Saturated fat must be a positive number" }),
-  transFat: z.number().min(0),
-  cholesterol: z
-    .number()
-    .min(0, { message: "Cholesterol must be a positive number" }),
-  sodium: z.number().min(0, { message: "Sodium must be a positive number" }),
-  fiber: z.number().min(0, { message: "Fiber must be a positive number" }),
-  sugar: z.number().min(0, { message: "Sugar must be a positive number" }),
-  protein: z.number().min(0, { message: "Protein must be a positive number" }),
-  vitaminD: z
-    .number()
-    .min(0, { message: "Vitamin D must be a positive number" }),
-  calcium: z.number().min(0, { message: "Calcium must be a positive number" }),
-  iron: z.number().min(0, { message: "Iron must be a positive number" }),
-  potassium: z
-    .number()
-    .min(0, { message: "Potassium must be a positive number" }),
+export const nutrientsSchema = z.object({
+  calories: z.number().nonnegative(),
+  saturated_fat: z.number().nonnegative(),
+  trans_fat: z.number().nonnegative(),
+  cholesterol: z.number().nonnegative(),
+  sodium: z.number().nonnegative(),
+  fiber: z.number().nonnegative(),
+  sugar: z.number().nonnegative(),
+  protein: z.number().nonnegative(),
+  vitamin_d: z.number().nonnegative(),
+  calcium: z.number().nonnegative(),
+  iron: z.number().nonnegative(),
+  potassium: z.number().nonnegative(),
 });
 
 export const newFoodSchema = z.object({
-  foodName: z.string().nonempty({ message: "Food name is required" }),
-  foodBrand: z.string().optional(),
-  foodCategory: categoriesSchema,
-  servings: z.array(servingSchema),
-  nutrition: nutritionSchema,
+  name: z.string().nonempty(),
+  brand: z.string().optional(),
+  food_category: categoriesSchema,
+  servings: z.array(servingSchema).min(1),
+  nutrients: nutrientsSchema,
 });
+
+export const newMealPlanFoodSchema = z.object({
+  food: newFoodSchema.extend({ id: z.number().nonnegative() }),
+  serving: servingSchema,
+  serving_id: z.number().nonnegative(),
+  serving_quantity: z.number().min(1).nonnegative(),
+  nutrients: nutrientsSchema,
+});
+
+export const newMealSchema = z.object({
+  name: z.string().nonempty(),
+  notes: z.string().optional(),
+  foods: z.array(newMealPlanFoodSchema).min(1),
+});
+
+export const newMealPlanSchema = z.object({
+  name: z.string().nonempty(),
+  notes: z.string().optional(),
+  meals: z.array(newMealSchema).min(1),
+});
+
+export type Food = z.infer<typeof newFoodSchema>;
+export type MealPlanFoodItem = z.infer<typeof newMealPlanFoodSchema>;
+export type Meal = z.infer<typeof newMealSchema>;
+export type MealPlan = z.infer<typeof newMealPlanSchema>;
 
 export type Serving = z.infer<typeof servingSchema>;
 export type Categories = z.infer<typeof categoriesSchema>;
-export type Nutrition = z.infer<typeof nutritionSchema>;
-export type NewFood = z.infer<typeof newFoodSchema>;
+export type Nutrition = z.infer<typeof nutrientsSchema>;
+export type FoodWithNutrients = z.infer<typeof newFoodSchema>;

@@ -4,19 +4,9 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import LoadingIcon from "../icons/LoadingIcon";
+
 import Link from "next/link";
 
-export type FoodItem = {
-  brand: string | null;
-  calories: number;
-  carbs: number;
-  category: number | null;
-  created_at: string | null;
-  fats: number;
-  id: number;
-  name: string;
-  protein: number;
-};
 export const SkeletonLoader = () => (
   <div className="animate-pulse flex space-x-4">
     <div className="flex-1 space-y-4 py-1">
@@ -27,26 +17,25 @@ export const SkeletonLoader = () => (
 
 export default function Table() {
   const [showAddFoodCard, setShowAddFoodCard] = useState(false);
-  const [foods, setFoods] = useState<FoodItem[]>([]);
+  const [foods, setFoods] = useState<any[] | null>([]);
   const [dataFetched, setDataFetched] = useState(false);
 
   const getAllFoods = async () => {
-    const { data, error } = await supabase.from("food").select("*");
+    const { data, error } = await supabase
+      .from("food")
+      .select(`*, nutrients(*, food_id)`);
 
     if (error) {
       console.log("Failed to fetch error:", error);
     }
-    setFoods((data as FoodItem[]) || []);
+
+    setFoods(data);
     setDataFetched(true);
   };
 
   useEffect(() => {
     getAllFoods();
   }, []);
-
-  useEffect(() => {
-    console.log(foods);
-  }, [foods]);
 
   if (!dataFetched)
     return (
@@ -173,7 +162,7 @@ export default function Table() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {foods.map((f) => (
+                  {foods?.map((f) => (
                     <tr key={f.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                         {f.name}
@@ -182,16 +171,16 @@ export default function Table() {
                         {f.brand}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.protein}
+                        {f.nutrients?.protein}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.fats}
+                        {f.nutrients?.saturated_fat + f.nutrients?.trans_fat}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.carbs}
+                        {f.nutrients?.fiber + f.nutrients?.sugar}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.calories}
+                        {f.nutrients?.calories}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <a

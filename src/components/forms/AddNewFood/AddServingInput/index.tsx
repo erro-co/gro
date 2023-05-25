@@ -12,13 +12,13 @@ const AddServingInput: FC = () => {
   });
 
   const checkIfServingEmpty = (index: number, type: "and" | "or") => {
-    const grams = watch(`servings.${index}.measure`);
-    const measure = watch(`servings.${index}.grams`);
-    if (type === "and" && !isValueEmpty(grams) && !isValueEmpty(measure)) {
+    const weight: number = watch(`servings.${index}.name`);
+    const name: string = watch(`servings.${index}.weight`);
+    if (type === "and" && !isValueEmpty(weight) && !isValueEmpty(name)) {
       return true;
     } else if (
       type === "or" &&
-      (!isValueEmpty(grams) || !isValueEmpty(measure))
+      (!isValueEmpty(weight) || !isValueEmpty(name))
     ) {
       return true;
     } else {
@@ -28,7 +28,7 @@ const AddServingInput: FC = () => {
 
   const handleClear = (index: number) => {
     if (index === 0) {
-      update(index, { measure: "", grams: undefined });
+      update(index, { name: "", weight: undefined });
     } else {
       remove(index);
     }
@@ -71,8 +71,8 @@ const AddServingInput: FC = () => {
                 </td>
                 <td className="px-3 py-2.5 whitespace-nowrap text-sm text-gray-500">
                   <input
-                    id="serving-measure"
-                    {...register(`servings.${index}.measure`)}
+                    id="serving-name"
+                    {...register(`servings.${index}.name`)}
                     className="py-1 pl-2"
                     type="text"
                     placeholder="Serving"
@@ -80,13 +80,13 @@ const AddServingInput: FC = () => {
                 </td>
                 <td className="py-2.5 whitespace-nowrap text-sm text-gray-500">
                   <input
-                    {...register(`servings.${index}.grams`, {
+                    {...register(`servings.${index}.weight`, {
                       valueAsNumber: true,
                     })}
                     className="py-1 pl-2"
                     type="number"
                     placeholder="n/a"
-                    id="serving-grams"
+                    id="serving-weight"
                   />
                 </td>
                 {checkIfServingEmpty(index, "or") ? (
@@ -104,7 +104,7 @@ const AddServingInput: FC = () => {
           <div className="w-full flex border-t">
             <button
               className="py-2 mx-auto"
-              onClick={() => append({ measure: undefined, grams: undefined })}
+              onClick={() => append({ name: undefined, weight: undefined })}
             >
               <PlusCircleIcon className="text-green-500 w-10" />
             </button>

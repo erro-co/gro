@@ -36,7 +36,7 @@ export const newFoodSchema = z.object({
 });
 
 export const newMealPlanFoodSchema = z.object({
-  food: newFoodSchema.extend({id: z.number().nonnegative()}),
+  food: newFoodSchema.extend({ id: z.number().nonnegative() }),
   serving: servingSchema,
   serving_id: z.number().nonnegative(),
   serving_quantity: z.number().min(1).nonnegative(),
@@ -54,7 +54,6 @@ export const newMealPlanSchema = z.object({
   notes: z.string().optional(),
   meals: z.array(newMealSchema).min(1),
 });
-
 
 export type Food = z.infer<typeof newFoodSchema>;
 export type MealPlanFoodItem = z.infer<typeof newMealPlanFoodSchema>;

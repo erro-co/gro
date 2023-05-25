@@ -12,8 +12,8 @@ const AddServingInput: FC = () => {
   });
 
   const checkIfServingEmpty = (index: number, type: "and" | "or") => {
-    const weight = watch(`servings.${index}.name`);
-    const name = watch(`servings.${index}.weight`);
+    const weight: number = watch(`servings.${index}.name`);
+    const name: string = watch(`servings.${index}.weight`);
     if (type === "and" && !isValueEmpty(weight) && !isValueEmpty(name)) {
       return true;
     } else if (

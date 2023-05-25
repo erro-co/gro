@@ -14,7 +14,7 @@ export interface IAddFoodMetaDataForm {
   setSelectedFood: Dispatch<SetStateAction<FoodItem | null>>;
 }
 
-export type ServingWithQuantity = Serving & { quantity: number };
+export type ServingWithId = Serving & { id: number };
 
 const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
   selectedFood,
@@ -24,7 +24,7 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
 }) => {
   const [nutrients, setNutrients] = useState<Nutrition | null>(null);
   const [servings, setServings] = useState<Serving[]>([]);
-  const [selectedServing, setSelectedServing] = useState<Serving>();
+  const [selectedServing, setSelectedServing] = useState<ServingWithId>();
   const [loaded, setLoaded] = useState(false);
   const { control } = useFormContext();
   const [selectedMeal, setSelectedMeal] = useState<Meal>(meals[0]);
@@ -61,7 +61,7 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
         return;
       }
       setServings(servings as Serving[]);
-      setSelectedServing(servings[0] as Serving);
+      setSelectedServing(servings[0] as ServingWithId);
     }
     setLoaded(true);
   };
@@ -72,10 +72,9 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
 
   const handleAddfood = () => {
     append({
-      name: selectedFood?.name,
-      brand: selectedFood?.brand,
-      food_category: selectedFood?.food_category,
+      food: selectedFood,
       serving: selectedServing,
+      serving_id: selectedServing?.id,
       serving_quantity: servingQuantity,
       nutrients: nutrients,
     });

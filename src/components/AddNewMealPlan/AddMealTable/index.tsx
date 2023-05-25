@@ -1,7 +1,8 @@
 "use client";
 
-import { FoodWithServing } from "@/lib/schemas";
+import { MealPlanFoodItem } from "@/lib/schemas";
 import { PencilIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
+import clsx from "clsx";
 import { Dispatch, FC, SetStateAction } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
@@ -13,6 +14,7 @@ export interface IAddMealTable {
 const AddMealTable: FC<IAddMealTable> = ({
   mealIndex,
   setShowFoodSearchModal,
+  removeMeal,
 }) => {
   const { control, watch, register } = useFormContext();
 
@@ -82,20 +84,28 @@ const AddMealTable: FC<IAddMealTable> = ({
                     </th>
                     <th
                       scope="col"
-                      className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                      className={clsx(
+                        mealIndex > 0 ? "" : "hidden",
+                        "relative py-3.5 pr-4 sm:pr-6 flex",
+                      )}
                     >
-                      <button></button>
+                      <button
+                        onClick={() => removeMeal(mealIndex)}
+                        className="p-2 bg-gray-500 ml-auto text-white rounded-md"
+                      >
+                        Delete Meal
+                      </button>
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {foodList?.map((f: FoodWithServing, idx: number) => (
+                  {foodList?.map((f: MealPlanFoodItem, idx: number) => (
                     <tr key={idx}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                        {f.name}
+                        {f.food.name}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.brand}
+                        {f.food.brand}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {f.nutrients.protein}
@@ -109,12 +119,12 @@ const AddMealTable: FC<IAddMealTable> = ({
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {f.nutrients.calories}
                       </td>
-                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                      <td className="relative whitespace-nowrap py-4 p-6 text-right text-sm font-medium">
                         <button
                           onClick={() => remove(idx)}
                           className="text-white p-2 bg-red-500 rounded-md"
                         >
-                          Remove<span className="sr-only">, {f.name}</span>
+                          Remove<span className="sr-only">, {f.food.name}</span>
                         </button>
                       </td>
                     </tr>

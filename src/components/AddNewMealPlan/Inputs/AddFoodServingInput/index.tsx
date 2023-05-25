@@ -3,11 +3,12 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { Serving } from "@/lib/schemas";
+import { ServingWithId } from "../../AddFoodMetaDataForm";
 
 export interface IAddFoodServingInput {
   servings: Serving[];
-  selectedServing: Serving | undefined;
-  setSelectedServing: Dispatch<SetStateAction<Serving | undefined>>;
+  selectedServing: ServingWithId | undefined;
+  setSelectedServing: Dispatch<SetStateAction<ServingWithId | undefined>>;
 }
 
 const AddFoodServingInput: FC<IAddFoodServingInput> = ({

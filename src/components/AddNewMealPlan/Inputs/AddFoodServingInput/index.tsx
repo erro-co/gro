@@ -1,21 +1,25 @@
-import { FC, Fragment, useState } from "react";
+import { Dispatch, FC, Fragment, SetStateAction } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { Serving } from "@/lib/schemas";
 
-export interface IDropdownInput {
+export interface IAddFoodServingInput {
   servings: Serving[];
+  selectedServing: Serving | undefined;
+  setSelectedServing: Dispatch<SetStateAction<Serving | undefined>>;
 }
 
-const AddFoodServingInput: FC<IDropdownInput> = ({ servings }) => {
-  const [selectedItem, setSelectedItem] = useState<Serving>();
+const AddFoodServingInput: FC<IAddFoodServingInput> = ({
+  servings,
+  selectedServing,
+  setSelectedServing,
+}) => {
   return (
     <Listbox
-      value={selectedItem}
+      value={selectedServing}
       onChange={(value) => {
-        setSelectedItem(value);
-        // setValue("food_category", value);
+        setSelectedServing(value);
       }}
     >
       {({ open }) => (

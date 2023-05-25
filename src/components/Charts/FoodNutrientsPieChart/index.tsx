@@ -9,7 +9,6 @@ export interface IFoodNutrientsPieChart {
 }
 
 const FoodNutrientsPieChart: FC<IFoodNutrientsPieChart> = ({ nutrients }) => {
-  console.log({ nutrients });
   if (!nutrients) {
     return null;
   }

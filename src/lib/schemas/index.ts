@@ -31,7 +31,7 @@ export const newFoodSchema = z.object({
   name: z.string().nonempty(),
   brand: z.string().optional(),
   food_category: categoriesSchema,
-  servings: z.array(servingSchema),
+  servings: z.array(servingSchema).min(1),
   nutrients: nutrientsSchema,
 });
 
@@ -39,20 +39,21 @@ export const newMealPlanFoodSchema = z.object({
   name: z.string().nonempty(),
   brand: z.string().optional(),
   food_category: categoriesSchema,
-  servings: servingSchema,
+  serving: servingSchema,
+  serving_quantity: z.number().min(1).nonnegative(),
   nutrients: nutrientsSchema,
 });
 
 export const newMealSchema = z.object({
   name: z.string().nonempty(),
   description: z.string().optional(),
-  foods: z.array(newMealPlanFoodSchema),
+  foods: z.array(newMealPlanFoodSchema).min(1),
 });
 
 export const newMealPlanSchema = z.object({
   name: z.string().nonempty(),
   description: z.string().optional(),
-  meals: z.array(newMealSchema),
+  meals: z.array(newMealSchema).min(1),
 });
 
 export type FoodWithServing = z.infer<typeof newMealPlanFoodSchema>;

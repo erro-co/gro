@@ -28,7 +28,7 @@ export default function Table() {
     if (error) {
       console.log("Failed to fetch error:", error);
     }
-    console.log(data);
+
     setFoods(data);
     setDataFetched(true);
   };
@@ -36,10 +36,6 @@ export default function Table() {
   useEffect(() => {
     getAllFoods();
   }, []);
-
-  useEffect(() => {
-    console.log(foods);
-  }, [foods]);
 
   if (!dataFetched)
     return (

@@ -1,38 +1,37 @@
 "use client";
 
-import { FoodWithServing, Meal } from "@/lib/schemas";
+import { FoodWithServing } from "@/lib/schemas";
 import { PencilIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { Dispatch, FC, SetStateAction, useEffect } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 export interface IAddMealTable {
-  id: number;
+  mealIndex: number;
   setShowFoodSearchModal: Dispatch<SetStateAction<boolean>>;
-  setSelectedMeal: Dispatch<SetStateAction<Meal>>;
+  removeMeal: (id: number) => void;
 }
-const AddMealTable: FC<IAddMealTable> = ({ id, setShowFoodSearchModal }) => {
-  const { control, watch } = useFormContext();
+const AddMealTable: FC<IAddMealTable> = ({
+  mealIndex,
+  setShowFoodSearchModal,
+}) => {
+  const { control, watch, register } = useFormContext();
 
-  const { fields, remove } = useFieldArray({
+  const { remove } = useFieldArray({
     control,
-    name: `meals.${id}.foods`,
+    name: `meals[${mealIndex}].foods`,
   });
 
-  const foodList = watch(`meals[${id}].foods`);
-
-  useEffect(() => {
-    console.log("fields", fields);
-  }, [fields]);
+  const foodList = watch(`meals[${mealIndex}].foods`);
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 my-4">
       <div className="w-full flex mt-6">
-        <div className="rounded-md flex border-2 p-1">
+        <div className="rounded-md flex border-2 p-1 focus-within:border-indigo-500">
           <input
             type="text"
-            defaultValue={`Meal ${id + 1}`}
-            className="focus:ring-0"
+            defaultValue={`Meal ${mealIndex + 1}`}
+            {...register(`meals[${mealIndex}].name`)}
+            className="focus:outline-none"
           />
           <PencilIcon className="w-6 ml-2 text-gray-400" />
         </div>
@@ -49,91 +48,43 @@ const AddMealTable: FC<IAddMealTable> = ({ id, setShowFoodSearchModal }) => {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      <a href="#" className="group inline-flex">
-                        Food Name
-                        <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                          <ChevronDownIcon
-                            className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </a>
+                      Food Name
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      <a href="#" className="group inline-flex">
-                        Brand
-                        <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                          <ChevronDownIcon
-                            className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </a>
+                      Brand
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      <a href="#" className="group inline-flex">
-                        Protein
-                        <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                          <ChevronDownIcon
-                            className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </a>
+                      Protein
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      <a href="#" className="group inline-flex">
-                        Fats
-                        <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                          <ChevronDownIcon
-                            className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </a>
+                      Fats
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      <a href="#" className="group inline-flex">
-                        Carbs
-                        <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                          <ChevronDownIcon
-                            className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </a>
+                      Carbs
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      <a href="#" className="group inline-flex">
-                        Calories
-                        <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                          <ChevronDownIcon
-                            className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </a>
+                      Calories
                     </th>
                     <th
                       scope="col"
                       className="relative py-3.5 pl-3 pr-4 sm:pr-6"
                     >
-                      <span className="sr-only">Edit</span>
+                      <button></button>
                     </th>
                   </tr>
                 </thead>
@@ -159,7 +110,10 @@ const AddMealTable: FC<IAddMealTable> = ({ id, setShowFoodSearchModal }) => {
                         {f.nutrients.calories}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                        <button className="text-white p-2 bg-red-500 rounded-md hover:text-indigo-900">
+                        <button
+                          onClick={() => remove(idx)}
+                          className="text-white p-2 bg-red-500 rounded-md"
+                        >
                           Remove<span className="sr-only">, {f.name}</span>
                         </button>
                       </td>

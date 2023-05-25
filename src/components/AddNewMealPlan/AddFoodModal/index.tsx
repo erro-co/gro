@@ -34,7 +34,6 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
   const { register, watch } = useFormContext();
 
   const meals = watch("meals");
-  console.log("meals: ", meals);
 
   const fetchAllFoods = async () => {
     let query = supabase

@@ -1,41 +1,28 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import SearchBarButton from "./SearchBarButton";
 import AddFoodModal from "./AddFoodModal";
 import AddMealTable from "./AddMealTable";
-import { supabase } from "@/lib/supabase";
-import { FoodItem } from "@/lib/types";
+
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { PencilIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
+import {
+  ChevronRightIcon,
+  PencilIcon,
+  PlusCircleIcon,
+} from "@heroicons/react/20/solid";
+import clsx from "clsx";
 
 const AddNewMealPlan: FC = () => {
   const [showFoodSearchModal, setShowFoodSearchModal] =
     useState<boolean>(false);
-
-  const [foods, setFoods] = useState<FoodItem[]>([]);
-  const [dataFetched, setDataFetched] = useState<boolean>(false);
   const { control, watch, register } = useFormContext();
 
   const mealPlan = watch();
-  console.log(mealPlan);
+  console.log("MP", mealPlan);
 
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: "meals",
   });
-
-  const fetchAllFoods = async () => {
-    const { data: all_foods } = await supabase.from("food").select("*");
-    setFoods(all_foods as FoodItem[]);
-    setDataFetched(true);
-  };
-
-  useEffect(() => {
-    fetchAllFoods();
-  }, []);
-
-  if (!dataFetched) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <>
@@ -45,21 +32,25 @@ const AddNewMealPlan: FC = () => {
       />
       <div className="flex flex-col h-full">
         <div className="w-full flex">
-          <div className="mx-auto rounded-md border-2 flex p-2">
+          <div className="mx-auto rounded-md border-2 flex p-2 focus-within:border-indigo-500">
             <input
               type="text"
-              defaultValue={"Meal Plan"}
-              className="text-2xl font-semibold focus:ring-0"
+              {...register("name")}
+              className="text-2xl font-semibold focus:outline-none"
             />
             <PencilIcon className="w-6 ml-2 text-gray-400" />
           </div>
+          <button className="inline-flex border px-2 rounded-md">
+            <p className="my-auto font-bold">Create Meal Plan </p>
+            <ChevronRightIcon className="w-8 my-auto" />
+          </button>
         </div>
         {fields.map((meal, idx) => (
           <AddMealTable
-            foods={foods}
             key={meal.id}
-            id={idx}
+            mealIndex={idx}
             setShowFoodSearchModal={setShowFoodSearchModal}
+            removeMeal={remove}
           />
         ))}
         <div className="mb-4">
@@ -73,7 +64,10 @@ const AddNewMealPlan: FC = () => {
         </div>
 
         <button
-          className="mt-auto cursor-pointer"
+          className={clsx(
+            fields.length > 2 ? "py-8" : "",
+            "mt-auto cursor-pointer",
+          )}
           onClick={() => setShowFoodSearchModal(true)}
         >
           <SearchBarButton />

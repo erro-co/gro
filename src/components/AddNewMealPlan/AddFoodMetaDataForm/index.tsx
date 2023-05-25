@@ -14,6 +14,8 @@ export interface IAddFoodMetaDataForm {
   setSelectedFood: Dispatch<SetStateAction<FoodItem | null>>;
 }
 
+export type ServingWithQuantity = Serving & { quantity: number };
+
 const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
   selectedFood,
   meals,
@@ -22,12 +24,14 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
 }) => {
   const [nutrients, setNutrients] = useState<Nutrition | null>(null);
   const [servings, setServings] = useState<Serving[]>([]);
+  const [selectedServing, setSelectedServing] = useState<Serving>();
   const [loaded, setLoaded] = useState(false);
-  const { watch, control } = useFormContext();
+  const { control } = useFormContext();
   const [selectedMeal, setSelectedMeal] = useState<Meal>(meals[0]);
+  const [servingQuantity, setServingQuantity] = useState(1);
   const index = meals.findIndex((meal: Meal) => meal === selectedMeal);
 
-  const { fields, append, remove } = useFieldArray({
+  const { append } = useFieldArray({
     name: `meals.${index}.foods`,
     control,
   });
@@ -57,6 +61,7 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
         return;
       }
       setServings(servings as Serving[]);
+      setSelectedServing(servings[0] as Serving);
     }
     setLoaded(true);
   };
@@ -70,7 +75,8 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
       name: selectedFood?.name,
       brand: selectedFood?.brand,
       food_category: selectedFood?.food_category,
-      servings: { name: "serving", weight: 100 },
+      serving: selectedServing,
+      serving_quantity: servingQuantity,
       nutrients: nutrients,
     });
     setSelectedFood(null);
@@ -98,14 +104,20 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
 
           <div className="flex space-x-2 mt-4">
             <p className="my-auto">Serving Size:</p>
+            {/* serving amount */}
             <input
               type="number"
               step={0.1}
               className="border border-gray-300 rounded-lg  w-12 lg:w-24 text-right pr-2 my-auto py-1"
-              defaultValue={1}
+              value={servingQuantity}
+              onChange={(e) => setServingQuantity(parseFloat(e.target.value))}
             />
-
-            <AddFoodServingInput servings={servings} />
+            {/* Serving */}
+            <AddFoodServingInput
+              servings={servings}
+              selectedServing={selectedServing}
+              setSelectedServing={setSelectedServing}
+            />
           </div>
           <div className="flex space-x-2 mt-4">
             <p className="my-auto">Meal:</p>

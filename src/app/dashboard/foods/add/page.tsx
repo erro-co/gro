@@ -11,7 +11,7 @@ const AddNewFoodPage: FC = () => {
   const methods = useForm<FormSchemaType>({
     resolver: zodResolver(newFoodSchema),
     defaultValues: {
-      servings: [{ measure: "", grams: undefined }],
+      servings: [{ name: "", weight: undefined }],
     },
   });
   return (

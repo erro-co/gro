@@ -1,62 +1,48 @@
 "use client";
 
+import { FoodItem } from "@/lib/types";
+import { PencilIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-import LoadingIcon from "@/components/icons/LoadingIcon";
+import { Dispatch, FC, SetStateAction, useEffect } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 
-export type FoodItem = {
-  brand: string | null;
-  calories: number;
-  carbs: number;
-  category: number | null;
-  created_at: string | null;
-  fats: number;
+export interface IAddMealTable {
+  foods?: FoodItem[];
   id: number;
-  name: string;
-  protein: number;
-};
-export const SkeletonLoader = () => (
-  <div className="animate-pulse flex space-x-4">
-    <div className="flex-1 space-y-4 py-1">
-      <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-    </div>
-  </div>
-);
+  setShowFoodSearchModal: Dispatch<SetStateAction<boolean>>;
+}
+const AddMealTable: FC<IAddMealTable> = ({
+  foods,
+  id,
+  setShowFoodSearchModal,
+}) => {
+  const { control, watch } = useFormContext();
 
-export default function AddMealTable() {
-  const [foods, setFoods] = useState<FoodItem[]>([]);
-  const [dataFetched, setDataFetched] = useState(false);
+  const { fields, append, remove, update } = useFieldArray({
+    control,
+    name: `meals[${id}].foods`,
+  });
 
-  const getAllFoods = async () => {
-    const { data, error } = await supabase.from("food").select("*");
-
-    if (error) {
-      console.log("Failed to fetch error:", error);
-    }
-    setFoods((data as FoodItem[]) || []);
-    setDataFetched(true);
-  };
+  const foodList = watch(`meals[${id}].foods`);
 
   useEffect(() => {
-    getAllFoods();
-  }, []);
-
-  useEffect(() => {
-    console.log(foods);
-  }, [foods]);
-
-  if (!dataFetched)
-    return (
-      <div className="w-40 mx-auto mt-20">
-        <LoadingIcon />
-      </div>
-    );
+    console.log("fields", fields);
+  }, [fields]);
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <h2>Meal 1</h2>
-      <div className="mt-8 flow-root">
+    <div className="px-4 sm:px-6 lg:px-8 my-4">
+      <div className="w-full flex mt-6">
+        <div className="rounded-md flex border-2 p-1">
+          <input
+            type="text"
+            defaultValue={`Meal ${id + 1}`}
+            className="focus:ring-0"
+          />
+          <PencilIcon className="w-6 ml-2 text-gray-400" />
+        </div>
+      </div>
+
+      <div className="mt-2 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
@@ -156,25 +142,13 @@ export default function AddMealTable() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {foods.map((f) => (
+                  {foodList?.map((f: any) => (
                     <tr key={f.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                         {f.name}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {f.brand}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.protein}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.fats}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.carbs}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.calories}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <button className="text-white p-2 bg-red-500 rounded-md hover:text-indigo-900">
@@ -183,6 +157,23 @@ export default function AddMealTable() {
                       </td>
                     </tr>
                   ))}
+                  <tr>
+                    <td colSpan={7} className="py-4 text-center">
+                      <div className="text-center">
+                        <button
+                          type="button"
+                          className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          onClick={() => setShowFoodSearchModal(true)}
+                        >
+                          <PlusCircleIcon
+                            className="-ml-1 mr-2 h-5 w-5"
+                            aria-hidden="true"
+                          />
+                          Add Food
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -191,4 +182,6 @@ export default function AddMealTable() {
       </div>
     </div>
   );
-}
+};
+
+export default AddMealTable;

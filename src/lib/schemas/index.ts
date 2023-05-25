@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const servingSchema = z.object({
-  measure: z.string().nonempty({ message: "Serving measure name is required" }),
-  grams: z
+  name: z.string().nonempty({ message: "Serving measure name is required" }),
+  weight: z
     .number()
     .min(1, { message: "Serving grams must be a positive number" }),
 });
@@ -12,30 +12,50 @@ export const categoriesSchema = z.object({
   name: z.string().nonempty({ message: "Category name is required" }),
 });
 
-export const nutritionSchema = z.object({
+export const nutrientsSchema = z.object({
   calories: z.number().nonnegative(),
-  saturatedFat: z.number().nonnegative(),
-  transFat: z.number().nonnegative(),
+  saturated_fat: z.number().nonnegative(),
+  trans_fat: z.number().nonnegative(),
   cholesterol: z.number().nonnegative(),
   sodium: z.number().nonnegative(),
   fiber: z.number().nonnegative(),
   sugar: z.number().nonnegative(),
   protein: z.number().nonnegative(),
-  vitaminD: z.number().nonnegative(),
+  vitamin_d: z.number().nonnegative(),
   calcium: z.number().nonnegative(),
   iron: z.number().nonnegative(),
   potassium: z.number().nonnegative(),
 });
 
 export const newFoodSchema = z.object({
-  foodName: z.string().nonempty({ message: "Food name is required" }),
-  foodBrand: z.string().optional(),
-  foodCategory: categoriesSchema,
+  name: z.string().nonempty(),
+  brand: z.string().optional(),
+  food_category: categoriesSchema,
   servings: z.array(servingSchema),
-  nutrition: nutritionSchema,
+  nutrients: nutrientsSchema,
+});
+
+export const newMealPlanFoodSchema = z.object({
+  name: z.string().nonempty(),
+  brand: z.string().optional(),
+  food_category: categoriesSchema,
+  servings: servingSchema,
+  nutrients: nutrientsSchema,
+});
+
+export const newMealSchema = z.object({
+  name: z.string().nonempty(),
+  description: z.string().optional(),
+  foods: z.array(newMealPlanFoodSchema),
+});
+
+export const newMealPlanSchema = z.object({
+  name: z.string().nonempty(),
+  description: z.string().optional(),
+  meals: z.array(newMealSchema),
 });
 
 export type Serving = z.infer<typeof servingSchema>;
 export type Categories = z.infer<typeof categoriesSchema>;
-export type Nutrition = z.infer<typeof nutritionSchema>;
+export type Nutrition = z.infer<typeof nutrientsSchema>;
 export type NewFood = z.infer<typeof newFoodSchema>;

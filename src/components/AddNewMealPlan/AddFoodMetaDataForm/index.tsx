@@ -6,6 +6,7 @@ import { Meal, Nutrition, Serving } from "@/lib/schemas";
 import AddFoodServingInput from "../Inputs/AddFoodServingInput";
 import SelectMealInput from "../Inputs/SelectMealInput";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContex";
 
 export interface IAddFoodMetaDataForm {
   selectedFood: FoodItem | null;
@@ -27,12 +28,11 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
   const [selectedServing, setSelectedServing] = useState<ServingWithId>();
   const [loaded, setLoaded] = useState(false);
   const { control } = useFormContext();
-  const [selectedMeal, setSelectedMeal] = useState<Meal>(meals[0]);
   const [servingQuantity, setServingQuantity] = useState(1);
-  const index = meals.findIndex((meal: Meal) => meal === selectedMeal);
-
+  const { value: selectedMealIndex, updateValue: setSelectMealIndex } =
+    useMealIndexContext();
   const { append } = useFieldArray({
-    name: `meals.${index}.foods`,
+    name: `meals.${selectedMealIndex}.foods`,
     control,
   });
 
@@ -129,11 +129,7 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
           </div>
           <div className="flex space-x-2 mt-4">
             <p className="my-auto">Meal:</p>
-            <SelectMealInput
-              meals={meals}
-              selectedMeal={selectedMeal}
-              setSelectedMeal={setSelectedMeal}
-            />
+            <SelectMealInput meals={meals} />
           </div>
         </div>
         <div className="w-full flex">

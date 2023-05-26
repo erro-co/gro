@@ -11,6 +11,7 @@ import {
 import clsx from "clsx";
 import { supabase } from "@/lib/supabase";
 import { Meal, newMealPlanSchema } from "@/lib/schemas";
+import { MealIndexProvider } from "@/lib/context/SelectedMealIndexContex";
 
 const AddNewMealPlan: FC = () => {
   const [showFoodSearchModal, setShowFoodSearchModal] =
@@ -113,55 +114,57 @@ const AddNewMealPlan: FC = () => {
 
   return (
     <form className="flex flex-col h-full" onSubmit={handleSubmit(onSubmit)}>
-      <AddFoodModal
-        open={showFoodSearchModal}
-        setOpen={setShowFoodSearchModal}
-      />
-      <div className="w-full flex">
-        <div className="mx-auto rounded-md border-2 flex p-2 focus-within:border-indigo-500">
-          <input
-            type="text"
-            {...register("name")}
-            className="text-2xl font-semibold focus:outline-none"
-          />
-          <PencilIcon className="w-6 ml-2 text-gray-400" />
-        </div>
-        <button
-          onClick={() => console.log("clicked")}
-          type="submit"
-          className={clsx("inline-flex border px-2 rounded-md")}
-        >
-          <p className="my-auto font-bold">Create Meal Plan </p>
-          <ChevronRightIcon className="w-8 my-auto" />
-        </button>
-      </div>
-      {fields.map((meal, idx) => (
-        <AddMealTable
-          key={meal.id}
-          mealIndex={idx}
-          setShowFoodSearchModal={setShowFoodSearchModal}
-          removeMeal={remove}
+      <MealIndexProvider>
+        <AddFoodModal
+          open={showFoodSearchModal}
+          setOpen={setShowFoodSearchModal}
         />
-      ))}
-      <div className="mb-4">
-        <button
-          onClick={() => append({ name: `Meal ${fields.length + 1}` })}
-          className="bg-gro-indigo text-white flex ml-auto mr-8 mt-4 p-2 rounded-md"
-        >
-          <PlusCircleIcon className="w-6 mr-2" />
-          <p className="my-auto">Add Meal</p>
-        </button>
-      </div>
+        <div className="w-full flex">
+          <div className="mx-auto rounded-md border-2 flex p-2 focus-within:border-indigo-500">
+            <input
+              type="text"
+              {...register("name")}
+              className="text-2xl font-semibold focus:outline-none"
+            />
+            <PencilIcon className="w-6 ml-2 text-gray-400" />
+          </div>
+          <button
+            onClick={() => console.log("clicked")}
+            type="submit"
+            className={clsx("inline-flex border px-2 rounded-md")}
+          >
+            <p className="my-auto font-bold">Create Meal Plan </p>
+            <ChevronRightIcon className="w-8 my-auto" />
+          </button>
+        </div>
+        {fields.map((meal, idx) => (
+          <AddMealTable
+            key={meal.id}
+            mealIndex={idx}
+            setShowFoodSearchModal={setShowFoodSearchModal}
+            removeMeal={remove}
+          />
+        ))}
+        <div className="mb-4">
+          <button
+            onClick={() => append({ name: `Meal ${fields.length + 1}` })}
+            className="bg-gro-indigo text-white flex ml-auto mr-8 mt-4 p-2 rounded-md"
+          >
+            <PlusCircleIcon className="w-6 mr-2" />
+            <p className="my-auto">Add Meal</p>
+          </button>
+        </div>
 
-      <button
-        className={clsx(
-          fields.length > 2 ? "py-8" : "",
-          "mt-auto cursor-pointer",
-        )}
-        onClick={() => setShowFoodSearchModal(true)}
-      >
-        <SearchBarButton />
-      </button>
+        <button
+          className={clsx(
+            fields.length > 2 ? "py-8" : "",
+            "mt-auto cursor-pointer",
+          )}
+          onClick={() => setShowFoodSearchModal(true)}
+        >
+          <SearchBarButton />
+        </button>
+      </MealIndexProvider>
     </form>
   );
 };

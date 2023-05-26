@@ -1,5 +1,6 @@
 "use client";
 
+import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContex";
 import { MealPlanFoodItem } from "@/lib/schemas";
 import { PencilIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
@@ -17,6 +18,8 @@ const AddMealTable: FC<IAddMealTable> = ({
   removeMeal,
 }) => {
   const { control, watch, register } = useFormContext();
+  const { value: selectedMealIndex, updateValue: setSelectMealIndex } =
+    useMealIndexContext();
 
   const { remove } = useFieldArray({
     control,
@@ -107,7 +110,7 @@ const AddMealTable: FC<IAddMealTable> = ({
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {f.food.brand}
                       </td>
-                      {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {f.nutrients.protein * f.serving_quantity}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -118,7 +121,7 @@ const AddMealTable: FC<IAddMealTable> = ({
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {f.nutrients.calories * f.serving_quantity}
-                      </td> */}
+                      </td>
                       <td className="relative whitespace-nowrap py-4 p-6 text-right text-sm font-medium">
                         <button
                           onClick={() => remove(idx)}
@@ -135,7 +138,10 @@ const AddMealTable: FC<IAddMealTable> = ({
                         <button
                           type="button"
                           className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gro-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          onClick={() => setShowFoodSearchModal(true)}
+                          onClick={() => {
+                            setSelectMealIndex(mealIndex);
+                            setShowFoodSearchModal(true);
+                          }}
                         >
                           <PlusCircleIcon
                             className="-ml-1 mr-2 h-5 w-5"

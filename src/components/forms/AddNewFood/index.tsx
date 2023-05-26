@@ -17,6 +17,7 @@ const AddNewFoodForm: FC = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useFormContext();
   const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([]);
   const [dataFetched, setDataFetched] = useState(false);
@@ -148,7 +149,7 @@ const AddNewFoodForm: FC = () => {
                 <input
                   {...register("brand")}
                   type="text"
-                  name="foodBrand"
+                  name="brand"
                   placeholder="e.g. Coles"
                   className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 />

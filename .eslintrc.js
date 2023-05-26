@@ -12,5 +12,6 @@ module.exports = {
     "prettier/prettier": "error",
     "comma-dangle": [2, "always-multiline"],
     "unused-imports/no-unused-imports": "error",
+    "@typescript-eslint/no-empty-function": "warn",
   },
 };

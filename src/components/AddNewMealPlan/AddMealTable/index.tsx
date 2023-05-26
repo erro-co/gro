@@ -62,36 +62,36 @@ const AddMealTable: FC<IAddMealTable> = ({
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Protein
+                      Net Protein
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Fats
+                      Net Total Fats
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Carbs
+                      Net Total Carbs
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Calories
+                      Net Calories
                     </th>
                     <th
                       scope="col"
-                      className={clsx(
-                        mealIndex > 0 ? "" : "hidden",
-                        "relative py-3.5 pr-4 sm:pr-6 flex",
-                      )}
+                      className="relative py-3.5 pr-4 sm:pr-6 flex"
                     >
                       <button
                         onClick={() => removeMeal(mealIndex)}
-                        className="p-2 bg-gray-500 ml-auto text-white rounded-md"
+                        className={clsx(
+                          mealIndex === 0 && "hidden",
+                          "p-2 bg-gray-500 ml-auto text-white rounded-md",
+                        )}
                       >
                         Delete Meal
                       </button>
@@ -107,18 +107,18 @@ const AddMealTable: FC<IAddMealTable> = ({
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {f.food.brand}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.nutrients.protein}
+                      {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {f.nutrients.protein * f.serving_quantity}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.nutrients.saturated_fat + f.nutrients.trans_fat}
+                        {f.nutrients.total_fat * f.serving_quantity}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.nutrients.sugar + f.nutrients.fiber}
+                        {f.nutrients.total_carbs * f.serving_quantity}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {f.nutrients.calories}
-                      </td>
+                        {f.nutrients.calories * f.serving_quantity}
+                      </td> */}
                       <td className="relative whitespace-nowrap py-4 p-6 text-right text-sm font-medium">
                         <button
                           onClick={() => remove(idx)}
@@ -134,7 +134,7 @@ const AddMealTable: FC<IAddMealTable> = ({
                       <div className="text-center">
                         <button
                           type="button"
-                          className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gro-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                           onClick={() => setShowFoodSearchModal(true)}
                         >
                           <PlusCircleIcon

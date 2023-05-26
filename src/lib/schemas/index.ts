@@ -7,6 +7,10 @@ export const servingSchema = z.object({
     .min(1, { message: "Serving grams must be a positive number" }),
 });
 
+export const servingWithIdSchema = servingSchema.extend({
+  id: z.number().nonnegative(),
+});
+
 export const categoriesSchema = z.object({
   id: z.number().nonnegative(),
   name: z.string().nonempty({ message: "Category name is required" }),
@@ -25,20 +29,24 @@ export const nutrientsSchema = z.object({
   calcium: z.number().nonnegative(),
   iron: z.number().nonnegative(),
   potassium: z.number().nonnegative(),
+  total_fat: z.number().nonnegative(),
+  total_carbs: z.number().nonnegative(),
 });
 
-export const newFoodSchema = z.object({
+export const FoodSchema = z.object({
   name: z.string().nonempty(),
   brand: z.string().optional(),
-  food_category: categoriesSchema,
-  servings: z.array(servingSchema).min(1),
+  food_category: z.number().nonnegative(),
+});
+
+export const FoodWithNutrientsAndServingSchema = FoodSchema.extend({
   nutrients: nutrientsSchema,
+  servings: z.array(servingSchema).min(1),
 });
 
 export const newMealPlanFoodSchema = z.object({
-  food: newFoodSchema.extend({ id: z.number().nonnegative() }),
-  serving: servingSchema,
-  serving_id: z.number().nonnegative(),
+  food: FoodSchema.extend({ id: z.number().nonnegative() }),
+  serving: servingWithIdSchema,
   serving_quantity: z.number().min(1).nonnegative(),
   nutrients: nutrientsSchema,
 });
@@ -55,12 +63,14 @@ export const newMealPlanSchema = z.object({
   meals: z.array(newMealSchema).min(1),
 });
 
-export type Food = z.infer<typeof newFoodSchema>;
+export type ServingWithId = z.infer<typeof servingWithIdSchema>;
+export type Food = z.infer<typeof FoodSchema>;
 export type MealPlanFoodItem = z.infer<typeof newMealPlanFoodSchema>;
 export type Meal = z.infer<typeof newMealSchema>;
 export type MealPlan = z.infer<typeof newMealPlanSchema>;
-
 export type Serving = z.infer<typeof servingSchema>;
 export type Categories = z.infer<typeof categoriesSchema>;
 export type Nutrition = z.infer<typeof nutrientsSchema>;
-export type FoodWithNutrients = z.infer<typeof newFoodSchema>;
+export type FoodWithNutrientsAndServing = z.infer<
+  typeof FoodWithNutrientsAndServingSchema
+>;

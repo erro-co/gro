@@ -1,30 +1,12 @@
-import { supabase } from "@/lib/supabase";
+import { Meal, MealPlanFoodItem } from "@/lib/schemas";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { FC } from "react";
 
-export type MealPlan = {
-  id: number;
-  name: string;
-};
+export interface IDisplayMealPlanTable {
+  meal: Meal;
+}
 
-export default function MealPlanListTable() {
-  const [mealPlans, setMealPlans] = useState<MealPlan[]>();
-
-  const getAllMealPlans = async () => {
-    const { data: meal_plans, error } = await supabase
-      .from("meal_plan")
-      .select("*");
-
-    if (error) {
-      console.log("Error getting meal plans:", error);
-      return;
-    }
-    setMealPlans(meal_plans as MealPlan[]);
-  };
-
-  useEffect(() => {
-    getAllMealPlans();
-  }, []);
+const DisplayMealPlanTable: FC<IDisplayMealPlanTable> = ({ meal }) => {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg">
@@ -35,25 +17,37 @@ export default function MealPlanListTable() {
                 scope="col"
                 className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
               >
-                Name
+                Food
               </th>
               <th
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
-                Client
+                Brand
               </th>
               <th
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
-                Template
+                Protein
               </th>
               <th
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
-                Meals
+                Fats
+              </th>
+              <th
+                scope="col"
+                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+              >
+                Carbs
+              </th>
+              <th
+                scope="col"
+                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+              >
+                Serving
               </th>
               <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                 <span className="sr-only">Select</span>
@@ -61,42 +55,54 @@ export default function MealPlanListTable() {
             </tr>
           </thead>
           <tbody>
-            {mealPlans?.map((plan: MealPlan, planIdx) => (
-              <tr key={plan.id}>
+            {meal?.foods?.map((food: MealPlanFoodItem, idx) => (
+              <tr key={idx}>
                 <td
                   className={clsx(
-                    planIdx === 0 ? "" : "border-t border-transparent",
+                    idx === 0 ? "" : "border-t border-transparent",
                     "relative py-4 pl-4 pr-3 text-sm sm:pl-6",
                   )}
                 >
-                  <div className="font-medium text-gray-900">{plan.name}</div>
+                  <div className="font-medium text-gray-900">
+                    {food.food.name}
+                  </div>
                 </td>
                 <td
                   className={clsx(
-                    planIdx === 0 ? "" : "border-t border-gray-200",
+                    idx === 0 ? "" : "border-t border-gray-200",
                     "hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell",
                   )}
                 >
-                  {plan.name}
+                  {food.food.brand}
                 </td>
                 <td
                   className={clsx(
-                    planIdx === 0 ? "" : "border-t border-gray-200",
+                    idx === 0 ? "" : "border-t border-gray-200",
                     "hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell",
                   )}
                 >
-                  {/* {plan.template ? "Yes" : "No"} */}
+                  {food.nutrients.protein}
                 </td>
                 <td
                   className={clsx(
-                    planIdx === 0 ? "" : "border-t border-gray-200",
+                    idx === 0 ? "" : "border-t border-gray-200",
                     "hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell",
                   )}
-                ></td>
+                >
+                  {food.nutrients.total_fat}
+                </td>
+                <td
+                  className={clsx(
+                    idx === 0 ? "" : "border-t border-gray-200",
+                    "hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell",
+                  )}
+                >
+                  {food.nutrients.total_carbs}
+                </td>
 
                 <td
                   className={clsx(
-                    planIdx === 0 ? "" : "border-t border-transparent",
+                    idx === 0 ? "" : "border-t border-transparent",
                     "relative py-3.5 pl-3 pr-4 text-right text-sm font-medium sm:pr-6",
                   )}
                 >
@@ -104,9 +110,9 @@ export default function MealPlanListTable() {
                     type="button"
                     className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                   >
-                    Select<span className="sr-only">, {plan.name}</span>
+                    Select<span className="sr-only">, {food.food.name}</span>
                   </button>
-                  {planIdx !== 0 ? (
+                  {idx !== 0 ? (
                     <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
                   ) : null}
                 </td>
@@ -117,4 +123,6 @@ export default function MealPlanListTable() {
       </div>
     </div>
   );
-}
+};
+
+export default DisplayMealPlanTable;

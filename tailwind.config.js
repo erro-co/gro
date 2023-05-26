@@ -7,6 +7,13 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        gro: {
+          pink: "#F695A0",
+          purple: "#DC7CDE",
+          indigo: "#A351FA",
+        },
+      },
       keyframes: {
         spin: {
           "0%": { transform: "rotate(0deg)" },

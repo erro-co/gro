@@ -74,7 +74,6 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
     append({
       food: selectedFood,
       serving: selectedServing,
-      serving_id: selectedServing?.id,
       serving_quantity: servingQuantity,
       nutrients: nutrients,
     });
@@ -87,12 +86,22 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
   }
 
   return (
-    <div className="w-full flex flex-col-reverse lg:flex-row my-4">
-      <div className="p-2 border border-gray-100 shadow-md rounded-lg flex mr-8">
+    <div className="w-full flex flex-col-reverse lg:flex-row my-4 space-x-6 space-y-4 lg:space-y-0">
+      <div className="p-2 border border-gray-100 shadow-md rounded-lg flex">
         <FoodNutrientsPieChart nutrients={nutrients} />
-        <div>
-          <p>Protein</p>
-          <p>{nutrients?.protein} grams</p>
+        <div className="ml-12 mt-8 space-y-6">
+          <div className="flex">
+            <div className="w-6 h-6 rounded-full bg-gro-pink" />
+            <p className="mx-4">Protein {nutrients?.protein}g</p>
+          </div>
+          <div className="flex">
+            <div className="w-6 h-6 rounded-full bg-gro-purple" />
+            <p className="mx-4">Fats {nutrients?.total_fat}g</p>
+          </div>
+          <div className="flex">
+            <div className="w-6 h-6 rounded-full bg-gro-indigo" />
+            <p className="mx-4">Carbs {nutrients?.total_carbs}g</p>
+          </div>
         </div>
       </div>
       <div className="rounded-lg border border-gray-100 shadow-md p-4 flex-grow">

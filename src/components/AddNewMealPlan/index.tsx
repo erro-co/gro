@@ -20,6 +20,7 @@ const AddNewMealPlan: FC = () => {
     watch,
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useFormContext();
 
@@ -94,7 +95,7 @@ const AddNewMealPlan: FC = () => {
           .insert({
             meal: getMealIdByName(new_meals, meal),
             food: food.food,
-            serving: food.serving_id,
+            serving: food.serving.id,
             quantity: food.serving_quantity,
             template: false,
           })
@@ -107,8 +108,7 @@ const AddNewMealPlan: FC = () => {
       }
     });
 
-    // reset();
-    // setShowSuccessfulAddNewFoodModal(true);
+    reset();
   };
 
   return (
@@ -129,7 +129,7 @@ const AddNewMealPlan: FC = () => {
         <button
           onClick={() => console.log("clicked")}
           type="submit"
-          className="inline-flex border px-2 rounded-md"
+          className={clsx("inline-flex border px-2 rounded-md")}
         >
           <p className="my-auto font-bold">Create Meal Plan </p>
           <ChevronRightIcon className="w-8 my-auto" />
@@ -146,7 +146,7 @@ const AddNewMealPlan: FC = () => {
       <div className="mb-4">
         <button
           onClick={() => append({ name: `Meal ${fields.length + 1}` })}
-          className="bg-pink-400 text-white flex ml-auto mr-8 mt-4 p-2 rounded-md"
+          className="bg-gro-indigo text-white flex ml-auto mr-8 mt-4 p-2 rounded-md"
         >
           <PlusCircleIcon className="w-6 mr-2" />
           <p className="my-auto">Add Meal</p>

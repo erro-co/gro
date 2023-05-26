@@ -8,7 +8,8 @@ import ComboboxInput from "./ComboBoxInput";
 import { useFormContext } from "react-hook-form";
 import AddServingInput from "./AddServingInput";
 import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodModal";
-import { Serving, newFoodSchema } from "@/lib/schemas";
+import { FoodWithNutrientsAndServingSchema, Serving } from "@/lib/schemas";
+import { convertToBase100 } from "@/lib/utils";
 
 const AddNewFoodForm: FC = () => {
   const {
@@ -41,6 +42,15 @@ const AddNewFoodForm: FC = () => {
   }, []);
 
   //TODO: Add delete on error, base 100 values, and serving type toggle
+  const validateForm = (data: any) => {
+    try {
+      FoodWithNutrientsAndServingSchema.parse(data);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
 
   const onSubmit = async (data: any) => {
     if (validateForm(data) === false) {
@@ -53,7 +63,7 @@ const AddNewFoodForm: FC = () => {
         {
           name: data.name,
           brand: data.brand,
-          food_category: data.food_category.id,
+          food_category: data.food_category,
         },
       ])
       .select();
@@ -74,23 +84,14 @@ const AddNewFoodForm: FC = () => {
       return;
     }
 
-    const { error: nutrients_error } = await supabase.from("nutrients").insert([
-      {
-        calories: data.nutrients.calories,
-        protein: data.nutrients.protein,
-        saturated_fat: data.nutrients.saturated_fat,
-        trans_fat: data.nutrients.trans_fat,
-        fiber: data.nutrients.fiber,
-        sugar: data.nutrients.sugar,
-        sodium: data.nutrients.sodium,
-        cholesterol: data.nutrients.cholesterol,
-        food_id: new_food[0].id,
-        calcium: data.nutrients.calcium,
-        iron: data.nutrients.iron,
-        potassium: data.nutrients.potassium,
-        vitamin_d: data.nutrients.vitamin_d,
-      },
-    ]);
+    const base100NutrientsWithId = {
+      ...convertToBase100(data.nutrients, data.servings[0].weight),
+      food_id: new_food[0].id,
+    };
+
+    const { error: nutrients_error } = await supabase
+      .from("nutrients")
+      .insert(base100NutrientsWithId);
 
     if (nutrients_error) {
       console.error("Error inserting nutrients:", nutrients_error);
@@ -98,16 +99,6 @@ const AddNewFoodForm: FC = () => {
     }
     reset();
     setShowSuccessfulAddNewFoodModal(true);
-  };
-
-  const validateForm = (data: any) => {
-    try {
-      newFoodSchema.parse(data);
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
   };
 
   console.log({ errors });
@@ -170,7 +161,6 @@ const AddNewFoodForm: FC = () => {
               >
                 Category
               </label>
-
               <ComboboxInput
                 categories={foodCategories}
                 setSelectedFoodCategory={setSelectedFoodCategory}

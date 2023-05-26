@@ -3,13 +3,14 @@ import AddNewFoodForm from "@/components/forms/AddNewFood";
 import { FC } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { newFoodSchema } from "@/lib/schemas";
+import {
+  FoodWithNutrientsAndServingSchema,
+  FoodWithNutrientsAndServing,
+} from "@/lib/schemas";
 
-export type FormSchemaType = z.infer<typeof newFoodSchema>;
 const AddNewFoodPage: FC = () => {
-  const methods = useForm<FormSchemaType>({
-    resolver: zodResolver(newFoodSchema),
+  const methods = useForm<FoodWithNutrientsAndServing>({
+    resolver: zodResolver(FoodWithNutrientsAndServingSchema),
     defaultValues: {
       servings: [{ name: "", weight: undefined }],
     },

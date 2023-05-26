@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import ServingTypeToggle from "./ServingTypeToggle";
 import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
@@ -6,22 +6,8 @@ import clsx from "clsx";
 const NutritionFactsInput: FC = () => {
   const { register, watch } = useFormContext();
 
-  const [totalFat, setTotalFat] = useState<number>(0);
-  const [totalCarbs, setTotalCarbs] = useState<number>(0);
   const servingWeight = watch("servings.0.weight");
   const servingName = watch("servings.0.name");
-  const saturatedFat = watch("nutrition.saturated_fat");
-  const transFat = watch("nutrition.trans_fat");
-  const fiber = watch("nutrition.fiber");
-  const sugar = watch("nutrition.sugar");
-
-  useEffect(() => {
-    setTotalCarbs((fiber || 0) + (sugar || 0));
-  }, [fiber, sugar]);
-
-  useEffect(() => {
-    setTotalFat((saturatedFat || 0) + (transFat || 0));
-  }, [saturatedFat, transFat]);
 
   return (
     <div className="p-1 border-2 border-black font-sans w-72">
@@ -47,7 +33,7 @@ const NutritionFactsInput: FC = () => {
             {...register("nutrients.calories", { valueAsNumber: true })}
             id="nutrition-calories"
             type="number"
-            className="w-24 text-right pr-8 focus:pr-0 focus:placeholder:opacity-0"
+            className="w-28 text-right focus:pr-0 focus:placeholder:opacity-0"
             placeholder={"-"}
             step={0.1}
           />
@@ -57,7 +43,16 @@ const NutritionFactsInput: FC = () => {
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
-            <span className="font-bold">Total Fat</span> {totalFat} g
+            <span className="font-bold">Total Fat</span>{" "}
+            <input
+              {...register("nutrients.total_fat", { valueAsNumber: true })}
+              type="number"
+              id="nutrition-total-fat"
+              className="w-8 text-right pr-1"
+              placeholder={"-"}
+              step={0.1}
+            />{" "}
+            g
           </div>
         </div>
         <hr className="border-gray-500" />
@@ -127,7 +122,16 @@ const NutritionFactsInput: FC = () => {
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
-            <span className="font-bold">Total Carbohydrate</span> {totalCarbs} g
+            <span className="font-bold">Total Carbohydrate</span>{" "}
+            <input
+              {...register("nutrients.total_carbs", { valueAsNumber: true })}
+              type="number"
+              id="nutrition-total-carbs"
+              className="w-8 text-right pr-1"
+              placeholder={"-"}
+              step={0.1}
+            />{" "}
+            g
           </div>
         </div>
         <hr className="border-gray-500" />

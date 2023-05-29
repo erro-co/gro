@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState, FC } from "react";
+import { Fragment, useState, FC, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import {
@@ -14,6 +14,8 @@ import {
 } from "@heroicons/react/24/outline";
 import GroLogo from "@/components/icons/Logo";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+import { useSelectedLayoutSegment } from "next/navigation";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard/", icon: HomeIcon, current: true },
@@ -55,6 +57,25 @@ export interface IDashboardLayout {
 
 const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [profileName, setProfileName] = useState<string>("");
+  const [dataFetched, setDataFetched] = useState<boolean>(false);
+  const segment = useSelectedLayoutSegment();
+
+  const getUserName = async () => {
+    const user = await supabase.auth.getUser();
+    if (user) {
+      setProfileName(user.data.user?.email || "");
+      setDataFetched(true);
+    }
+  };
+
+  useEffect(() => {
+    getUserName();
+  }, []);
+
+  if (!dataFetched) {
+    return null;
+  }
 
   return (
     <>
@@ -126,8 +147,9 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                               <li key={item.name}>
                                 <Link
                                   href={item.href}
+                                  onClick={() => setSidebarOpen(false)} // Add this line
                                   className={clsx(
-                                    item.current
+                                    item.name.toLowerCase() === segment
                                       ? "bg-gray-50 text-indigo-600"
                                       : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold",
@@ -135,7 +157,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                                 >
                                   <item.icon
                                     className={clsx(
-                                      item.current
+                                      item.name.toLowerCase() === segment
                                         ? "text-indigo-600"
                                         : "text-gray-400 group-hover:text-indigo-600",
                                       "h-6 w-6 shrink-0",
@@ -173,7 +195,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                         <a
                           href={item.href}
                           className={clsx(
-                            item.current
+                            item.name.toLowerCase() === segment
                               ? "bg-gray-50 text-indigo-600"
                               : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
                             "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold",
@@ -181,7 +203,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                         >
                           <item.icon
                             className={clsx(
-                              item.current
+                              item.name.toLowerCase() === segment
                                 ? "text-indigo-600"
                                 : "text-gray-400 group-hover:text-indigo-600",
                               "h-6 w-6 shrink-0",
@@ -200,7 +222,10 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                     className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
                   >
                     <span className="sr-only">Your profile</span>
-                    <span aria-hidden="true">Tom Cook</span>
+                    <span aria-hidden="true">
+                      {profileName}
+                      {segment}
+                    </span>
                   </a>
                 </li>
               </ul>

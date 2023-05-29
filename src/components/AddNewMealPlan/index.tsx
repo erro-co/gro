@@ -64,6 +64,7 @@ const AddNewMealPlan: FC = () => {
       return;
     }
     console.log("new_meal_plan", new_meal_plan);
+
     const { data: new_meals, error: new_meals_error } = await supabase
       .from("meal")
       .insert(
@@ -91,21 +92,42 @@ const AddNewMealPlan: FC = () => {
 
     data.meals.forEach(async (meal: Meal) => {
       for (const food of meal.foods) {
-        const { error: new_meal_food_serving_error } = await supabase
-          .from("meal_food_serving")
-          .insert({
-            meal: getMealIdByName(new_meals, meal),
-            food: food.food,
-            serving: food.serving.id,
-            quantity: food.serving_quantity,
-            template: false,
-          })
-          .select();
+        const { data: new_food, error: new_meal_food_serving_error } =
+          await supabase
+            .from("meal_food_serving")
+            .insert({
+              meal: getMealIdByName(new_meals, meal),
+              food: food.food.id,
+              serving: food.serving.id,
+              quantity: food.serving_quantity,
+              template: false,
+            })
+            .select("*");
         if (new_meal_food_serving_error) {
           console.error("Error inserting food:", new_meal_food_serving_error);
           return;
         }
-        console.log("new_meal_food_serving", new_meal_food_serving_error);
+        console.log("new_meal_food_serving", new_food);
+
+        const {
+          data: meal_plan_food_serving_user,
+          error: meal_plan_food_serving_user_error,
+        } = await supabase
+          .from("meal_plan_food_serving_user")
+          .insert({
+            meal_plan_id: new_meal_plan[0].id,
+            meal_food_serving: new_food[0].id,
+            user: 2,
+          })
+          .select();
+        if (meal_plan_food_serving_user_error) {
+          console.error(
+            "Error inserting food:",
+            meal_plan_food_serving_user_error,
+          );
+          return;
+        }
+        console.log("meal_plan_food_serving", meal_plan_food_serving_user);
       }
     });
 

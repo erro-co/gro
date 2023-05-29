@@ -1,14 +1,15 @@
+import { MealPlan } from "@/lib/schemas";
 import { supabase } from "@/lib/supabase";
 import clsx from "clsx";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export type MealPlan = {
+interface MealPlanWithId extends MealPlan {
   id: number;
-  name: string;
-};
+}
 
 export default function MealPlanListTable() {
-  const [mealPlans, setMealPlans] = useState<MealPlan[]>();
+  const [mealPlans, setMealPlans] = useState<MealPlanWithId[]>();
 
   const getAllMealPlans = async () => {
     const { data: meal_plans, error } = await supabase
@@ -19,7 +20,7 @@ export default function MealPlanListTable() {
       console.log("Error getting meal plans:", error);
       return;
     }
-    setMealPlans(meal_plans as MealPlan[]);
+    setMealPlans(meal_plans as MealPlanWithId[]);
   };
 
   useEffect(() => {
@@ -61,8 +62,8 @@ export default function MealPlanListTable() {
             </tr>
           </thead>
           <tbody>
-            {mealPlans?.map((plan: MealPlan, planIdx) => (
-              <tr key={plan.id}>
+            {mealPlans?.map((plan: MealPlanWithId, planIdx) => (
+              <tr key={planIdx}>
                 <td
                   className={clsx(
                     planIdx === 0 ? "" : "border-t border-transparent",
@@ -100,12 +101,14 @@ export default function MealPlanListTable() {
                     "relative py-3.5 pl-3 pr-4 text-right text-sm font-medium sm:pr-6",
                   )}
                 >
-                  <button
-                    type="button"
-                    className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-                  >
-                    Select<span className="sr-only">, {plan.name}</span>
-                  </button>
+                  <Link href={`/dashboard/plans/${plan.id}`}>
+                    <button
+                      type="button"
+                      className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+                    >
+                      Select<span className="sr-only">, {plan.name}</span>
+                    </button>
+                  </Link>
                   {planIdx !== 0 ? (
                     <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
                   ) : null}

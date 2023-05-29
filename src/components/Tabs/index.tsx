@@ -191,11 +191,11 @@ export default function Tabs() {
               key={category}
               className={({ selected }) =>
                 clsx(
-                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-white",
+                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5 ",
                   "focus:outline-none focus:ring-0",
                   selected
                     ? "bg-white shadow text-blue-700"
-                    : "hover:bg-white/[0.12] hover:text-white",
+                    : "hover:bg-white/[0.12] text-white",
                 )
               }
             >

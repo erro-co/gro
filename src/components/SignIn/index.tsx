@@ -3,7 +3,7 @@ import GroLogo from "../icons/Logo";
 import { supabase } from "@/lib/supabase";
 
 export interface ISignIn {
-  setLoggedIn: (isLoggedIn: boolean) => void;
+  setLoggedIn?: (isLoggedIn: boolean) => void;
 }
 
 const SignIn: FC<ISignIn> = ({ setLoggedIn }) => {

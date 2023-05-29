@@ -130,9 +130,8 @@ const DisplayMealPage: FC = () => {
 
   return (
     <div>
-      {/* <h1 className="text-3xl font-bold mb-8">My Meal Plan</h1> */}
-      <div className="w-full my-8 flex bg-gro-pink/50 rounded-lg p-4 flex-col">
-        <p className="text-center text-xl font-bold pb-2">
+      <div className="w-full mb-6 flex bg-gro-pink/50 rounded-lg p-4 flex-col">
+        <p className="text-center text-3xl font-bold pb-2">
           {mealPlan?.name || "Meal Plan"}
         </p>
         <div className="flex flex-col lg:flex-row w-full">
@@ -159,24 +158,48 @@ const DisplayMealPage: FC = () => {
               </Pie>
             </PieChart>
           </div>
-          <div className="bg-white rounded-lg w-full lg:w-1/2 mx-auto my-auto py-4 flex flex-col lg:flex-col-reverse">
-            <div className=" flex justify-evenly space-x-4 px-2">
-              <div className="p-2 bg-gro-pink rounded-lg my-2 flex-1">
-                <p className="text-center text-xl font-bold text-white">250</p>
-                <p className="text-center text-xl font-bold text-white">
+          <div className="bg-white rounded-lg w-full lg:w-1/2 mx-auto flex flex-col lg:flex-col-reverse">
+            <div className="flex justify-evenly space-x-4 px-2">
+              <div className="p-1 bg-gro-pink rounded-lg my-2 flex-1">
+                <p className="text-center text-normal font-semibold text-white">
+                  250
+                </p>
+                <p className="text-center text-normal font-semibold text-white">
                   Protein
                 </p>
               </div>
-              <div className="p-2 bg-gro-purple rounded-lg my-2 flex-1">
-                <p className="text-center text-xl font-bold text-white">250</p>
-                <p className="text-center text-xl font-bold text-white">Fats</p>
+              <div className="p-1 bg-gro-purple rounded-lg my-2 flex-1">
+                <p className="text-center text-normal font-semibold text-white">
+                  250
+                </p>
+                <p className="text-center text-normal font-semibold text-white">
+                  Fats
+                </p>
               </div>
-              <div className="p-2 bg-gro-indigo rounded-lg my-2 flex-1">
-                <p className="text-center text-xl font-bold text-white">250</p>
-                <p className="text-center text-xl font-bold text-white">
+              <div className="p-1 bg-gro-indigo rounded-lg my-2 flex-1">
+                <p className="text-center text-normal font-semibold text-white">
+                  250
+                </p>
+                <p className="text-center text-normal font-semibold text-white">
                   Carbs
                 </p>
               </div>
+              {/* <div className="p-2 py-4 bg-gro-purple rounded-lg my-4 flex-1">
+                <p className="text-center text-normal font-semibold text-white">
+                  250
+                </p>
+                <p className="text-center text-normal font-semibold text-white">
+                  Protein
+                </p>
+              </div>
+              <div className="p-2 py-4 bg-gro-indigo rounded-lg my-4 flex-1">
+                <p className="text-center text-normal font-semibold text-white">
+                  250
+                </p>
+                <p className="text-center text-normal font-semibold text-white">
+                  Protein
+                </p>
+              </div> */}
             </div>
             <p className="font-bold text-xl text-center mb-2">Totals</p>
           </div>

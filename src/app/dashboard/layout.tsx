@@ -18,7 +18,7 @@ import { supabase } from "@/lib/supabase";
 import { useSelectedLayoutSegment } from "next/navigation";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard/", icon: HomeIcon, current: true },
+  { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
   {
     name: "Foods",
     href: "/dashboard/foods",

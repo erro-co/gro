@@ -3,6 +3,8 @@ import { MealFoodServing } from "../page";
 import Tabs from "@/components/Tabs";
 import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/24/outline";
+import useMediaQuery from "@/lib/hooks/useMediaQuery";
+import DropdownOptions from "@/components/DropdownOptions";
 
 interface IDisplayTable {
   foods: MealFoodServing[];
@@ -18,11 +20,12 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
       0,
     );
   }
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-6">
-      <Tabs />
-      <div className="-mx-4 mt-8 sm:-mx-0">
+    <div className="my-24">
+      {!isMobile ? <Tabs /> : <DropdownOptions />}
+      <div className="mt-8 border border-gray-300 rounded-lg p-1">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
             <tr>
@@ -97,7 +100,7 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
               </tr>
             ))}
             <tr className="bg-gray-100">
-              <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+              <td className="lg:hidden whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                 Totals:
               </td>
               <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell"></td>

@@ -7,7 +7,7 @@ import Link from "next/link";
 const PlansIndexPage = () => {
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-12">My plans</h1>
+      <h1 className="text-3xl font-bold mb-12">My plans</h1>
       <div className="flex w-full">
         <Link href="/dashboard/plans/add" className="ml-auto mr-8">
           <div className="bg-gro-pink text-white p-2 rounded-md w-fit flex">

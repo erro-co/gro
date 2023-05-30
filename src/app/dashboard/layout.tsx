@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState, FC, useEffect } from "react";
+import { Fragment, useState, FC } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import {
@@ -14,11 +14,11 @@ import {
 } from "@heroicons/react/24/outline";
 import GroLogo from "@/components/icons/Logo";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
 import { useSelectedLayoutSegment } from "next/navigation";
+import { useAuth } from "@/components/Providers/supabase-auth-provider";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard/", icon: HomeIcon, current: true },
+  { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
   {
     name: "Foods",
     href: "/dashboard/foods",
@@ -61,21 +61,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
   const [dataFetched, setDataFetched] = useState<boolean>(false);
   const segment = useSelectedLayoutSegment();
 
-  const getUserName = async () => {
-    const user = await supabase.auth.getUser();
-    if (user) {
-      setProfileName(user.data.user?.email || "");
-      setDataFetched(true);
-    }
-  };
-
-  useEffect(() => {
-    getUserName();
-  }, []);
-
-  if (!dataFetched) {
-    return null;
-  }
+  const { user, signOut } = useAuth();
 
   return (
     <>
@@ -222,10 +208,13 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                     className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
                   >
                     <span className="sr-only">Your profile</span>
-                    <span aria-hidden="true">
-                      {profileName}
-                      {segment}
-                    </span>
+                    <span aria-hidden="true">{profileName}</span>
+                    <button
+                      className="p-2 bg-red-500 text-white rounded-lg"
+                      onClick={signOut}
+                    >
+                      Sign out
+                    </button>
                   </a>
                 </li>
               </ul>

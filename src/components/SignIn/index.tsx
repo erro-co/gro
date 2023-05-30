@@ -1,28 +1,40 @@
-import { FC, useState } from "react";
+"use client";
+
+import { useAuth } from "@/components/Providers/supabase-auth-provider";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import GroLogo from "../icons/Logo";
-import { supabase } from "@/lib/supabase";
 
-export interface ISignIn {
-  setLoggedIn: (isLoggedIn: boolean) => void;
-}
-
-const SignIn: FC<ISignIn> = ({ setLoggedIn }) => {
+const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
   const [submitted, setSubmitted] = useState<boolean>(false);
-  const handleSignIn = async () => {
-    const { data, error } = await supabase.auth.signInWithOtp({
-      email: email,
-      options: {
-        emailRedirectTo: "http://localhost:3000/dashboard",
-      },
-    });
-    if (error) {
-      console.log(error);
-      return;
+
+  const [error, setError] = useState<string | null>(null);
+  const { signInWithMagicLink, user } = useAuth();
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+    try {
+      const error = await signInWithMagicLink(email);
+      if (error) {
+        setError(error);
+      }
+      setSubmitted(true);
+    } catch (error) {
+      console.log("Something went wrong!");
     }
   };
 
-  if (submitted) {
+  // Check if there is a user
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user]);
+
+  if (submitted)
     return (
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -35,7 +47,7 @@ const SignIn: FC<ISignIn> = ({ setLoggedIn }) => {
         </div>
       </div>
     );
-  }
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -49,7 +61,12 @@ const SignIn: FC<ISignIn> = ({ setLoggedIn }) => {
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-            <form className="space-y-6" action="#" method="POST">
+            <form
+              className="space-y-6"
+              action="#"
+              method="POST"
+              onSubmit={handleSubmit}
+            >
               <div>
                 <label
                   htmlFor="email"
@@ -72,11 +89,6 @@ const SignIn: FC<ISignIn> = ({ setLoggedIn }) => {
               <div>
                 <button
                   type="submit"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSignIn();
-                    setSubmitted(true);
-                  }}
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Sign in
@@ -99,4 +111,4 @@ const SignIn: FC<ISignIn> = ({ setLoggedIn }) => {
   );
 };
 
-export default SignIn;
+export default LoginForm;

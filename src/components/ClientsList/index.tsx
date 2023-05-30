@@ -1,171 +1,105 @@
-import { Fragment } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
+"use client";
 import Link from "next/link";
+import clsx from "clsx";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
-enum ProjectStatus {
+enum ClientStatus {
   Complete = "Active",
   InProgress = "In progress",
   Archived = "Archived",
 }
 
-const statuses: { [key in ProjectStatus]: string } = {
-  [ProjectStatus.Complete]: "text-green-700 bg-green-50 ring-green-600/20",
-  [ProjectStatus.InProgress]: "text-gray-600 bg-gray-50 ring-gray-500/10",
-  [ProjectStatus.Archived]: "text-yellow-800 bg-yellow-50 ring-yellow-600/20",
+const statuses: Record<ClientStatus, string> = {
+  [ClientStatus.Complete]: "text-green-700 bg-green-50 ring-green-600/20",
+  [ClientStatus.InProgress]: "text-gray-600 bg-gray-50 ring-gray-500/10",
+  [ClientStatus.Archived]: "text-yellow-800 bg-yellow-50 ring-yellow-600/20",
 };
 
-interface Project {
+interface Client {
   id: number;
-  name: string;
-  href: string;
-  status: ProjectStatus;
-  createdBy: string;
-  dueDate: string;
-  dueDateTime: string;
-}
-
-const projects: Project[] = [
-  {
-    id: 1,
-    name: "John Doe",
-    href: "#",
-    status: ProjectStatus.Complete,
-    createdBy: "Leslie Alexander",
-    dueDate: "March 17, 2023",
-    dueDateTime: "2023-03-17T00:00Z",
-  },
-  {
-    id: 1,
-    name: "John Doe",
-    href: "#",
-    status: ProjectStatus.Complete,
-    createdBy: "Leslie Alexander",
-    dueDate: "March 17, 2023",
-    dueDateTime: "2023-03-17T00:00Z",
-  },
-  {
-    id: 1,
-    name: "John Doe",
-    href: "#",
-    status: ProjectStatus.Complete,
-    createdBy: "Leslie Alexander",
-    dueDate: "March 17, 2023",
-    dueDateTime: "2023-03-17T00:00Z",
-  },
-  {
-    id: 1,
-    name: "John Doe",
-    href: "#",
-    status: ProjectStatus.Complete,
-    createdBy: "Leslie Alexander",
-    dueDate: "March 17, 2023",
-    dueDateTime: "2023-03-17T00:00Z",
-  },
-  // other projects...
-];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
+  created_at: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  trainer: {
+    first_name: string;
+    last_name: string;
+    email: string;
+  };
+  status: ClientStatus;
 }
 
 export default function ClientsList() {
+  const [clients, setClients] = useState<Client[]>([]);
+
+  const getAllClients = async () => {
+    const { data: clients, error } = await supabase
+      .from("user")
+      .select("*, trainer(*)")
+      .order("id", { ascending: true });
+
+    if (error) {
+      console.log(error);
+      return null;
+    } else {
+      console.log("clients", clients);
+      setClients(clients as Client[]);
+    }
+  };
+
+  useEffect(() => {
+    getAllClients();
+  }, []);
+
   return (
     <ul role="list" className="divide-y divide-gray-100">
-      {projects.map((project) => (
+      {clients.map((client, idx) => (
         <li
-          key={project.id}
+          key={idx}
           className="flex items-center justify-between gap-x-6 py-5"
         >
           <div className="min-w-0">
             <div className="flex items-start gap-x-3">
               <p className="text-sm font-semibold leading-6 text-gray-900">
-                {project.name}
+                {capitalizeFirstLetter(client.first_name)}{" "}
+                {capitalizeFirstLetter(client.last_name)}
               </p>
               <p
-                className={classNames(
-                  statuses[project.status],
+                className={clsx(
+                  "text-green-700 bg-green-50 ring-green-600/20",
                   "rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset",
                 )}
               >
-                {project.status}
+                Active
               </p>
             </div>
             <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
               <p className="whitespace-nowrap">
-                Due on{" "}
-                <time dateTime={project.dueDateTime}>{project.dueDate}</time>
+                Joined {new Date(client.created_at).toLocaleDateString()}
               </p>
-              <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
-                <circle cx={1} cy={1} r={1} />
-              </svg>
-              <p className="truncate">Created by {project.createdBy}</p>
+              {client.trainer ? (
+                <>
+                  <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                    <circle cx={1} cy={1} r={1} />
+                  </svg>
+                  <p className="truncate">
+                    Trainer: {capitalizeFirstLetter(client.trainer.first_name)}{" "}
+                    {capitalizeFirstLetter(client.trainer.last_name)}
+                  </p>
+                </>
+              ) : null}
             </div>
           </div>
           <div className="flex flex-none items-center gap-x-4">
             <Link
-              href={project.href}
+              href={"#"}
               className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
             >
-              View profile<span className="sr-only">, {project.name}</span>
+              View profile<span className="sr-only">, {client.first_name}</span>
             </Link>
-            <Menu as="div" className="relative flex-none">
-              <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
-                <span className="sr-only">Open options</span>
-                <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
-              </Menu.Button>
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                  <Menu.Item>
-                    {({ active }) => (
-                      <Link
-                        href="#"
-                        className={classNames(
-                          active ? "bg-gray-50" : "",
-                          "block px-3 py-1 text-sm leading-6 text-gray-900",
-                        )}
-                      >
-                        Edit<span className="sr-only">, {project.name}</span>
-                      </Link>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <Link
-                        href="#"
-                        className={classNames(
-                          active ? "bg-gray-50" : "",
-                          "block px-3 py-1 text-sm leading-6 text-gray-900",
-                        )}
-                      >
-                        Move<span className="sr-only">, {project.name}</span>
-                      </Link>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <Link
-                        href="#"
-                        className={classNames(
-                          active ? "bg-gray-50" : "",
-                          "block px-3 py-1 text-sm leading-6 text-gray-900",
-                        )}
-                      >
-                        Delete<span className="sr-only">, {project.name}</span>
-                      </Link>
-                    )}
-                  </Menu.Item>
-                </Menu.Items>
-              </Transition>
-            </Menu>
           </div>
         </li>
       ))}

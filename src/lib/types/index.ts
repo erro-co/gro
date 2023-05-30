@@ -133,19 +133,78 @@ export interface Database {
           created_at: string | null;
           id: number;
           meal_food_serving: number;
+          meal_plan_id: number | null;
           user: number;
         };
         Insert: {
           created_at?: string | null;
           id?: number;
           meal_food_serving: number;
+          meal_plan_id?: number | null;
           user: number;
         };
         Update: {
           created_at?: string | null;
           id?: number;
           meal_food_serving?: number;
+          meal_plan_id?: number | null;
           user?: number;
+        };
+      };
+      nutrients: {
+        Row: {
+          calcium: number;
+          calories: number;
+          cholesterol: number;
+          created_at: string | null;
+          fiber: number;
+          food_id: number;
+          iron: number;
+          potassium: number;
+          protein: number;
+          saturated_fat: number;
+          sodium: number;
+          sugar: number;
+          total_carbs: number;
+          total_fat: number;
+          trans_fat: number;
+          vitamin_d: number;
+        };
+        Insert: {
+          calcium: number;
+          calories: number;
+          cholesterol: number;
+          created_at?: string | null;
+          fiber: number;
+          food_id?: number;
+          iron: number;
+          potassium: number;
+          protein: number;
+          saturated_fat: number;
+          sodium: number;
+          sugar: number;
+          total_carbs: number;
+          total_fat: number;
+          trans_fat: number;
+          vitamin_d: number;
+        };
+        Update: {
+          calcium?: number;
+          calories?: number;
+          cholesterol?: number;
+          created_at?: string | null;
+          fiber?: number;
+          food_id?: number;
+          iron?: number;
+          potassium?: number;
+          protein?: number;
+          saturated_fat?: number;
+          sodium?: number;
+          sugar?: number;
+          total_carbs?: number;
+          total_fat?: number;
+          trans_fat?: number;
+          vitamin_d?: number;
         };
       };
       nutrition: {

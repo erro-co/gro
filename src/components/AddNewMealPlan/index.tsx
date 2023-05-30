@@ -167,14 +167,16 @@ const AddNewMealPlan: FC = () => {
             removeMeal={remove}
           />
         ))}
-        <div className="mb-4">
-          <button
-            onClick={() => append({ name: `Meal ${fields.length + 1}` })}
-            className="bg-gro-indigo text-white flex ml-auto mr-8 mt-4 p-2 rounded-md"
-          >
-            <PlusCircleIcon className="w-6 mr-2" />
-            <p className="my-auto">Add Meal</p>
-          </button>
+        <div className="mb-4 flex">
+          <div className="ml-auto flex">
+            <button
+              onClick={() => append({ name: `Meal ${fields.length + 1}` })}
+              className="bg-gro-indigo text-white flex mr-8 mt-4 p-2 rounded-md"
+            >
+              <PlusCircleIcon className="w-6 mr-2" />
+              <p className="my-auto">Add Meal</p>
+            </button>
+          </div>
         </div>
 
         <button

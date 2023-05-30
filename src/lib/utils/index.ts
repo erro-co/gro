@@ -28,3 +28,8 @@ export const convertToBase100 = (nutrition: Nutrition, weight: number) => {
     total_carbs: Number((nutrition.total_carbs * scale).toFixed(1)),
   };
 };
+
+export const capitalizeFirstLetter = (input: string): string => {
+  if (!input) return input;
+  return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+};

@@ -30,7 +30,7 @@ const AddMealTable: FC<IAddMealTable> = ({
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 my-4">
-      <div className="w-full flex mt-6">
+      <div className="w-full flex mt-6 justify-between">
         <div className="rounded-md flex border-2 p-1 focus-within:border-indigo-500">
           <input
             type="text"
@@ -40,6 +40,10 @@ const AddMealTable: FC<IAddMealTable> = ({
           />
           <PencilIcon className="w-6 ml-2 text-gray-400" />
         </div>
+        <button className="bg-gro-pink text-white flex p-2 rounded-md">
+          <PlusCircleIcon className="w-6 mr-2" />
+          <p className="my-auto">Notes</p>
+        </button>
       </div>
 
       <div className="mt-2 flow-root">

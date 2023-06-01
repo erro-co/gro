@@ -122,8 +122,8 @@ const DisplayMealPage: FC = () => {
 
   if (loading) {
     return (
-      <div>
-        <LoadingIcon className="w-40" />
+      <div className="w-40">
+        <LoadingIcon />
       </div>
     );
   }

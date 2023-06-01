@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState, FC } from "react";
+import { Fragment, useState, FC, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import {
@@ -14,8 +14,8 @@ import {
 } from "@heroicons/react/24/outline";
 import GroLogo from "@/components/icons/Logo";
 import Link from "next/link";
-import { useSelectedLayoutSegment } from "next/navigation";
-import { useAuth } from "@/components/Providers/supabase-auth-provider";
+import { useSelectedLayoutSegment, useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
@@ -58,11 +58,31 @@ export interface IDashboardLayout {
 const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileName, setProfileName] = useState<string>("");
-  const [dataFetched, setDataFetched] = useState<boolean>(false);
   const segment = useSelectedLayoutSegment();
+  const router = useRouter();
 
-  const { user, signOut } = useAuth();
+  const getUser = async () => {
+    const { data: user, error } = await supabase.auth.getUser();
 
+    if (error) {
+      console.log(error);
+      return null;
+    }
+    console.log("user", user);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.log(error);
+      return null;
+    }
+    router.refresh();
+  };
   return (
     <>
       <div>

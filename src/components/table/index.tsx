@@ -246,32 +246,31 @@ export default function Table() {
             </div>
           </div>
         </div>
-        {foods.length > PAGE_SIZE ? (
-          <div className="w-full flex mt-2">
-            <div className="ml-auto flex">
-              <button
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 flex flex-1"
-              >
-                <span>
-                  <ChevronLeftIcon className="w-6" />
-                </span>
-                Previous
-              </button>
-              <button
-                onClick={handleNextPage}
-                disabled={foods.length < PAGE_SIZE}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex flex-1"
-              >
-                Next
-                <span>
-                  <ChevronLeftIcon className="w-6 rotate-180" />
-                </span>
-              </button>
-            </div>
+
+        <div className="w-full flex mt-2">
+          <div className="ml-auto flex">
+            <button
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 flex flex-1"
+            >
+              <span>
+                <ChevronLeftIcon className="w-6" />
+              </span>
+              Previous
+            </button>
+            <button
+              onClick={handleNextPage}
+              disabled={foods.length < PAGE_SIZE}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex flex-1"
+            >
+              Next
+              <span>
+                <ChevronLeftIcon className="w-6 rotate-180" />
+              </span>
+            </button>
           </div>
-        ) : null}
+        </div>
       </div>
     </>
   );

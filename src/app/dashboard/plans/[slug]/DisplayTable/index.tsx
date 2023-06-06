@@ -23,7 +23,7 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   return (
-    <div className="my-24">
+    <div className="my-12">
       {!isMobile ? <Tabs /> : <DropdownOptions />}
       <div className="mt-8 border border-gray-300 rounded-lg p-1">
         <table className="min-w-full divide-y divide-gray-300">

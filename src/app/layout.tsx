@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import GroLogo from "@/components/icons/Logo";
 import LoadingIcon from "@/components/icons/LoadingIcon";
+import Link from "next/link";
 
 export interface IRootLayout {
   children: React.ReactNode;
@@ -108,12 +109,12 @@ const RootLayout: FC<IRootLayout> = ({ children }) => {
 
                       <p className="mt-10 text-center text-sm text-gray-500">
                         Not a member?{" "}
-                        <a
-                          href="#"
+                        <Link
+                          href="https://www.instagram.com/gronutrition/"
                           className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                         >
                           Get in contact with the team!
-                        </a>
+                        </Link>
                       </p>
                     </>
                   )}

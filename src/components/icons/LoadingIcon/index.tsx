@@ -5,7 +5,7 @@ const LoadingIcon = (props: SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 1200 1200"
     {...props}
-    className="animate-spin-pause"
+    className="animate-spin"
     fill="#EB9D9D"
   >
     <path d="M600 18.184c-320.91 0-581.82 260.91-581.82 581.82s260.91 581.82 581.82 581.82 581.82-260.91 581.82-581.82S920.91 18.184 600 18.184zm0 1127.3c-300.73 0-545.45-244.73-545.45-545.45S299.28 54.584 600 54.584s545.45 244.73 545.45 545.45-244.73 545.45-545.45 545.45z" />

@@ -14,7 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import GroLogo from "@/components/icons/Logo";
 import Link from "next/link";
-import { useSelectedLayoutSegment, useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 const navigation = [
@@ -28,6 +28,12 @@ const navigation = [
   {
     name: "Plans",
     href: "/dashboard/plans",
+    icon: TableCellsIcon,
+    current: false,
+  },
+  {
+    name: "My Plans",
+    href: "/dashboard/my-plans",
     icon: TableCellsIcon,
     current: false,
   },
@@ -51,6 +57,12 @@ const navigation = [
   },
 ];
 
+const clientNavigation = [
+  { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
+  { name: "My plans", href: "/my-plans", icon: TableCellsIcon, current: true },
+  { name: "Settings", href: "/settings", icon: Cog6ToothIcon, current: true },
+];
+
 export interface IDashboardLayout {
   children: React.ReactNode;
 }
@@ -58,8 +70,8 @@ export interface IDashboardLayout {
 const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileName, setProfileName] = useState<string>("");
-  const segment = useSelectedLayoutSegment();
   const router = useRouter();
+  const path = usePathname();
 
   const getUser = async () => {
     const { data: user, error } = await supabase.auth.getUser();
@@ -155,7 +167,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                                   href={item.href}
                                   onClick={() => setSidebarOpen(false)} // Add this line
                                   className={clsx(
-                                    item.name.toLowerCase() === segment
+                                    item.href === path
                                       ? "bg-gray-50 text-indigo-600"
                                       : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold",
@@ -163,7 +175,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                                 >
                                   <item.icon
                                     className={clsx(
-                                      item.name.toLowerCase() === segment
+                                      item.href === path
                                         ? "text-indigo-600"
                                         : "text-gray-400 group-hover:text-indigo-600",
                                       "h-6 w-6 shrink-0",
@@ -201,7 +213,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                         <a
                           href={item.href}
                           className={clsx(
-                            item.name.toLowerCase() === segment
+                            item.href === path
                               ? "bg-gray-50 text-indigo-600"
                               : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
                             "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold",
@@ -209,7 +221,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                         >
                           <item.icon
                             className={clsx(
-                              item.name.toLowerCase() === segment
+                              item.href === path
                                 ? "text-indigo-600"
                                 : "text-gray-400 group-hover:text-indigo-600",
                               "h-6 w-6 shrink-0",

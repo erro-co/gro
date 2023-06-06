@@ -1,5 +1,6 @@
 import { MealPlan } from "@/lib/schemas";
 import { supabase } from "@/lib/supabase";
+import { ArrowRightCircleIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -28,7 +29,7 @@ export default function MealPlanListTable() {
   }, []);
   return (
     <div className="px-4 sm:px-6 lg:px-8">
-      <div className="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg">
+      <div className="-mx-4 ring-1 ring-gray-300 sm:mx-0 rounded-lg">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
             <tr>
@@ -106,7 +107,8 @@ export default function MealPlanListTable() {
                       type="button"
                       className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                     >
-                      Select<span className="sr-only">, {plan.name}</span>
+                      <p className="hidden lg:block">Select</p>
+                      <ArrowRightCircleIcon className="w-6 lg:w-4 lg:ml-1 text-gro-indigo" />
                     </button>
                   </Link>
                   {planIdx !== 0 ? (

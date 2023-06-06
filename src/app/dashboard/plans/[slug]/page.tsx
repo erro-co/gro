@@ -2,30 +2,12 @@
 import { supabase } from "@/lib/supabase";
 import { FC, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { PieChart, Pie, Cell } from "recharts";
 import LoadingIcon from "@/components/icons/LoadingIcon";
-import { Disclosure } from "@headlessui/react";
-import { ChevronUpIcon } from "@heroicons/react/20/solid";
 import DisplayTable from "./DisplayTable";
 import { Nutrition, ServingWithId } from "@/lib/schemas";
+import MacroSummaryCard from "./MacroSummaryCard";
 
-const data = [
-  {
-    name: "Protein",
-    value: 100,
-  },
-  {
-    name: "Fats",
-    value: 100,
-  },
-  {
-    name: "Carbs",
-    value: 100,
-  },
-];
-const COLORS = ["#F695A0", "#DC7CDE", "#A351FA"];
-
-type MealPlan = {
+export type MealPlan = {
   id: number;
   created_at: string;
   name: string;
@@ -122,106 +104,17 @@ const DisplayMealPage: FC = () => {
 
   if (loading) {
     return (
-      <div className="w-40">
-        <LoadingIcon />
+      <div className="w-full">
+        <div className="w-32 mx-auto mt-24">
+          <LoadingIcon />
+        </div>
       </div>
     );
   }
 
   return (
     <div>
-      <div className="w-full mb-6 flex bg-gro-pink/50 rounded-lg p-4 flex-col">
-        <p className="text-center text-3xl font-bold pb-2">
-          {mealPlan?.name || "Meal Plan"}
-        </p>
-        <div className="flex flex-col lg:flex-row w-full">
-          <div className="mx-auto">
-            <PieChart width={200} height={200}>
-              <Pie
-                data={data}
-                cx={90}
-                cy={90}
-                innerRadius={50}
-                outerRadius={90}
-                stroke="none"
-                fill="#8884d8"
-                paddingAngle={1}
-                dataKey="value"
-                isAnimationActive={false}
-              >
-                {data.map((_, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </div>
-          <div className="bg-white rounded-lg w-full lg:w-1/2 mx-auto flex flex-col lg:flex-col-reverse">
-            <div className="flex justify-evenly space-x-4 px-2">
-              <div className="p-1 bg-gro-pink rounded-lg my-2 flex-1">
-                <p className="text-center text-normal font-semibold text-white">
-                  250
-                </p>
-                <p className="text-center text-normal font-semibold text-white">
-                  Protein
-                </p>
-              </div>
-              <div className="p-1 bg-gro-purple rounded-lg my-2 flex-1">
-                <p className="text-center text-normal font-semibold text-white">
-                  250
-                </p>
-                <p className="text-center text-normal font-semibold text-white">
-                  Fats
-                </p>
-              </div>
-              <div className="p-1 bg-gro-indigo rounded-lg my-2 flex-1">
-                <p className="text-center text-normal font-semibold text-white">
-                  250
-                </p>
-                <p className="text-center text-normal font-semibold text-white">
-                  Carbs
-                </p>
-              </div>
-              {/* <div className="p-2 py-4 bg-gro-purple rounded-lg my-4 flex-1">
-                <p className="text-center text-normal font-semibold text-white">
-                  250
-                </p>
-                <p className="text-center text-normal font-semibold text-white">
-                  Protein
-                </p>
-              </div>
-              <div className="p-2 py-4 bg-gro-indigo rounded-lg my-4 flex-1">
-                <p className="text-center text-normal font-semibold text-white">
-                  250
-                </p>
-                <p className="text-center text-normal font-semibold text-white">
-                  Protein
-                </p>
-              </div> */}
-            </div>
-            <p className="font-bold text-xl text-center mb-2">Totals</p>
-          </div>
-        </div>
-        <Disclosure as="div" className="mt-2">
-          {({ open }) => (
-            <>
-              <Disclosure.Button className="flex w-full justify-between rounded-lg bg-white px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
-                <span>Meal Plan Notes</span>
-                <ChevronUpIcon
-                  className={`${
-                    open ? "rotate-180 transform" : ""
-                  } h-5 w-5 text-purple-500`}
-                />
-              </Disclosure.Button>
-              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-      </div>
+      <MacroSummaryCard mealPlan={mealPlan} />
       {meals?.map((meal, index) => (
         <DisplayTable key={index} foods={meal} />
       ))}

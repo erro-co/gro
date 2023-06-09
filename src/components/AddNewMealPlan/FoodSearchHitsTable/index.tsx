@@ -1,4 +1,4 @@
-import { FoodCategory, FoodItem } from "@/lib/types";
+import { FoodItem } from "@/lib/types";
 import clsx from "clsx";
 import { Dispatch, FC, SetStateAction } from "react";
 
@@ -6,45 +6,15 @@ export interface IFoodSearchHitsTable {
   foods: FoodItem[];
   selectedFood: FoodItem | null;
   setSelectedFood: Dispatch<SetStateAction<FoodItem | null>>;
-  foodCategories: FoodCategory[];
-  selectedCategory: FoodCategory | null;
-  setSelectedCategory: Dispatch<SetStateAction<FoodCategory | null>>;
 }
 
-const categories = [
-  "All",
-  "Fruits & Vegetables",
-  "Carbs",
-  "Protein",
-  "Supplements",
-];
 const FoodSearchHitsTable: FC<IFoodSearchHitsTable> = ({
   foods,
   selectedFood,
   setSelectedFood,
-  foodCategories,
-  selectedCategory,
-  setSelectedCategory,
 }) => {
   return (
-    <div className="w-full">
-      <div className="flex space-x-6 mt-8 mb-4 ml-8">
-        {categories?.map((category, idx) => (
-          <div key={idx}>
-            <button
-              className={clsx(
-                "border-b-4",
-                category === selectedCategory?.name
-                  ? "border-indigo-500"
-                  : "border-transparent",
-              )}
-              // onClick={() => setSelectedCategory(category)}
-            >
-              {category}
-            </button>
-          </div>
-        ))}
-      </div>
+    <div className="w-full my-8">
       <div className="flow-root">
         <div className="">
           <div className="inline-block min-w-full py-2 align-middle">

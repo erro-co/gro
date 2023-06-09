@@ -55,7 +55,7 @@ const MacroSummaryCard: FC<IMacroSummaryCard> = ({ mealPlan }) => {
     },
   ];
   return (
-    <div className="w-full flex border-4 border-gro-indigo rounded-lg p-4 flex-col">
+    <div className="w-full lg:w-1/2 lg:mx-auto flex border-4 border-gro-indigo rounded-lg p-4 flex-col">
       <p className="text-center text-3xl font-bold pb-2">
         {mealPlan?.name || "Meal Plan"}
       </p>

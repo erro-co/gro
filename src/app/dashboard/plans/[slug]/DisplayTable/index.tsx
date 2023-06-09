@@ -23,9 +23,14 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   return (
-    <div className="my-12">
-      {!isMobile ? <Tabs /> : <DropdownOptions />}
-      <div className="mt-8 border border-gray-300 rounded-lg p-1">
+    <div className="my-12 shadow-lg border border-gray-100  p-2 rounded-lg">
+      <h2></h2>
+      {!isMobile ? (
+        <Tabs />
+      ) : (
+        <DropdownOptions options={["Option 1", "Option 2"]} />
+      )}
+      <div className="mt-2 border border-gray-300 rounded-lg p-1">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
             <tr>
@@ -99,24 +104,27 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
                 </td>
               </tr>
             ))}
-            <tr className="bg-gray-100">
-              <td className="lg:hidden whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                Totals:
+            <tr className="bg-gray-100 border border-t border-red-500lg">
+              <td className="hidden lg:table-cell whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                Net Totals:
               </td>
-              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell"></td>
-              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
+              <td className="hidden lg:table-cell whitespace-nowrap px-3 py-4 text-sm font-bold text-gray-500 sm:table-cell"></td>
+              <td className="hidden whitespace-nowrap px-3 py-4 text-sm font-bold lg:table-cell">
                 <p>{getTotalMacro(foods, "protein")}</p>
               </td>
-              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+              <td className="hidden lg:table-cell whitespace-nowrap px-3 py-4 text-sm font-bold">
                 <p>{getTotalMacro(foods, "total_fat")}</p>
               </td>
-              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+              <td className="hidden lg:table-cell whitespace-nowrap px-3 py-4 text-sm font-bold">
                 <p>{getTotalMacro(foods, "total_carbs")}</p>
               </td>
+              <td className="whitespace-nowrap px-3 py-4 text-sm font-bold">
+                <p>{getTotalMacro(foods, "calories")}</p>
+              </td>
               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
-              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
-              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
-              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
+              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
+              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
+              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
             </tr>
           </tbody>
         </table>

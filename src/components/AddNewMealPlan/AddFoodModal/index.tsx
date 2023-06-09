@@ -11,7 +11,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import FoodSearchBar from "../FoodSearchBar";
 import FoodSearchHitsTable from "../FoodSearchHitsTable";
 import { supabase } from "@/lib/supabase";
-import { FoodCategory, FoodItem } from "@/lib/types";
+import { FoodItem } from "@/lib/types";
 import AddFoodMetaDataForm from "../AddFoodMetaDataForm";
 import { useFormContext } from "react-hook-form";
 
@@ -25,24 +25,16 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [dataFetched, setDataFetched] = useState(false);
   const [selectedFood, setSelectedFood] = useState<FoodItem | null>(null);
-  const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([
-    { id: 0, name: "All", created_at: null },
-  ]);
-  const [selectedCategory, setSelectedCategory] = useState<FoodCategory | null>(
-    null,
-  );
-  const { register, watch } = useFormContext();
+
+  const { watch } = useFormContext();
 
   const meals = watch("meals");
 
   const fetchAllFoods = async () => {
-    let query = supabase
+    const query = supabase
       .from("food")
       .select()
       .filter("name", "ilike", `%${searchTerm}%`);
-    if (selectedCategory && selectedCategory.id !== 0) {
-      query = query.filter("food_category", "eq", selectedCategory.id);
-    }
     const { data: all_foods, error } = await query;
     if (error) {
       console.log("Failed to fetch error:", error);
@@ -52,28 +44,9 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
     setDataFetched(true);
   };
 
-  const fetchFoodCategory = async () => {
-    const { data: food_categories, error } = await supabase
-      .from("food_category")
-      .select("*");
-
-    if (error) {
-      console.log("Failed to fetch error:", error);
-    }
-    setFoodCategories([
-      ...foodCategories,
-      ...(food_categories as FoodCategory[]),
-    ]);
-    setSelectedCategory(foodCategories[0]);
-  };
-
-  useEffect(() => {
-    fetchFoodCategory();
-  }, []);
-
   useEffect(() => {
     fetchAllFoods();
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm]);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -102,7 +75,7 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white pb-4 pt-5 text-left shadow-xl transition-all w-full px-8">
-                <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
+                <div className="absolute right-0 top-0 pr-4 pt-4 sm:block">
                   <button
                     type="button"
                     className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -122,9 +95,6 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
                     foods={foods}
                     selectedFood={selectedFood}
                     setSelectedFood={setSelectedFood}
-                    foodCategories={foodCategories}
-                    selectedCategory={selectedCategory}
-                    setSelectedCategory={setSelectedCategory}
                   />
                 ) : null}
                 {selectedFood ? (

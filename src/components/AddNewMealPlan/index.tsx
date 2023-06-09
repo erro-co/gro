@@ -1,17 +1,18 @@
+"use client";
 import { FC, useState } from "react";
-import SearchBarButton from "./SearchBarButton";
 import AddFoodModal from "./AddFoodModal";
 import AddMealTable from "./AddMealTable";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import {
-  ChevronRightIcon,
+  CheckIcon,
   PencilIcon,
   PlusCircleIcon,
+  XMarkIcon,
 } from "@heroicons/react/20/solid";
-import clsx from "clsx";
 import { supabase } from "@/lib/supabase";
 import { Meal, newMealPlanSchema } from "@/lib/schemas";
 import { MealIndexProvider } from "@/lib/context/SelectedMealIndexContex";
+import useMediaQuery from "@/lib/hooks/useMediaQuery";
 
 const AddNewMealPlan: FC = () => {
   const [showFoodSearchModal, setShowFoodSearchModal] =
@@ -24,6 +25,7 @@ const AddNewMealPlan: FC = () => {
     reset,
     formState: { errors },
   } = useFormContext();
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
   const mealPlan = watch();
   console.log("MP", mealPlan);
@@ -135,29 +137,21 @@ const AddNewMealPlan: FC = () => {
   };
 
   return (
-    <form className="flex flex-col h-full" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col lg:h-full" onSubmit={handleSubmit(onSubmit)}>
       <MealIndexProvider>
         <AddFoodModal
           open={showFoodSearchModal}
           setOpen={setShowFoodSearchModal}
         />
         <div className="w-full flex">
-          <div className="mx-auto rounded-md border-2 flex p-2 focus-within:border-indigo-500">
+          <div className="w-full lg:w-fit lg:mx-auto rounded-md border-2 flex p-2 focus-within:border-indigo-500">
             <input
               type="text"
               {...register("name")}
-              className="text-2xl font-semibold focus:outline-none"
+              className="text-normal lg:text-2xl font-semibold focus:outline-none w-full"
             />
-            <PencilIcon className="w-6 ml-2 text-gray-400" />
+            <PencilIcon className="w-6 text-gray-400" />
           </div>
-          <button
-            onClick={() => console.log("clicked")}
-            type="submit"
-            className={clsx("inline-flex border px-2 rounded-md")}
-          >
-            <p className="my-auto font-bold">Create Meal Plan </p>
-            <ChevronRightIcon className="w-8 my-auto" />
-          </button>
         </div>
         {fields.map((meal, idx) => (
           <AddMealTable
@@ -171,23 +165,39 @@ const AddNewMealPlan: FC = () => {
           <div className="ml-auto flex">
             <button
               onClick={() => append({ name: `Meal ${fields.length + 1}` })}
-              className="bg-gro-indigo text-white flex mr-8 mt-4 p-2 rounded-md"
+              className="bg-gro-indigo text-white flex lg:mr-8 mt-1 lg:mt-4 p-1 lg:py-2 rounded-md"
             >
-              <PlusCircleIcon className="w-6 mr-2" />
-              <p className="my-auto">Add Meal</p>
+              <PlusCircleIcon className="w-6" />
+              {isMobile ? (
+                <p className="my-auto text-sm mx-2">Meal</p>
+              ) : (
+                <p className="my-auto text-sm lg:text-base">Add Meal</p>
+              )}
             </button>
           </div>
         </div>
 
-        <button
-          className={clsx(
-            fields.length > 2 ? "py-8" : "",
-            "mt-auto cursor-pointer",
-          )}
-          onClick={() => setShowFoodSearchModal(true)}
-        >
-          <SearchBarButton />
-        </button>
+        {validateForm(mealPlan) ? (
+          <div className="fixed bottom-0 left-1/2  transform -translate-x-1/2 flex justify-center w-full">
+            <button
+              type="submit"
+              className="absolute bottom-4 flex border px-4 py-2 lg:py-4 rounded-md  text-white bg-green-500 disabled:opacity-70"
+            >
+              {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
+              <CheckIcon className="w-6" />
+            </button>
+          </div>
+        ) : (
+          <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 flex justify-center w-full">
+            <button
+              disabled
+              className="absolute bottom-4 flex border px-4 py-2 lg:py-4 rounded-md mx-auto lg:mr-8 text-white bg-red-500 disabled:opacity-70"
+            >
+              {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
+              <XMarkIcon className="w-6" />
+            </button>
+          </div>
+        )}
       </MealIndexProvider>
     </form>
   );

@@ -1,32 +1,16 @@
 import { MealPlan } from "@/lib/schemas";
-import { supabase } from "@/lib/supabase";
 import { ArrowRightCircleIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { FC } from "react";
 
 interface MealPlanWithId extends MealPlan {
   id: number;
 }
-
-export default function MealPlanListTable() {
-  const [mealPlans, setMealPlans] = useState<MealPlanWithId[]>();
-
-  const getAllMealPlans = async () => {
-    const { data: meal_plans, error } = await supabase
-      .from("meal_plan")
-      .select("*");
-
-    if (error) {
-      console.log("Error getting meal plans:", error);
-      return;
-    }
-    setMealPlans(meal_plans as MealPlanWithId[]);
-  };
-
-  useEffect(() => {
-    getAllMealPlans();
-  }, []);
+export interface IMealPlanListTable {
+  mealPlans: MealPlanWithId[];
+}
+const MealPlanListTable: FC<IMealPlanListTable> = ({ mealPlans }) => {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="-mx-4 ring-1 ring-gray-300 sm:mx-0 rounded-lg">
@@ -122,4 +106,6 @@ export default function MealPlanListTable() {
       </div>
     </div>
   );
-}
+};
+
+export default MealPlanListTable;

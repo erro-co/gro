@@ -153,7 +153,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
                     <div className="flex flex-shrink-0 items-center p-0 md:px-4 pt-4">
-                      <div className="bg-[#F695A0] w-16 rounded-md">
+                      <div className="bg-[#F695A0] w-16 rounded-md mx-auto">
                         <GroLogo />
                       </div>
                     </div>
@@ -165,7 +165,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                               <li key={item.name}>
                                 <Link
                                   href={item.href}
-                                  onClick={() => setSidebarOpen(false)} // Add this line
+                                  onClick={() => setSidebarOpen(false)}
                                   className={clsx(
                                     item.href === path
                                       ? "bg-gray-50 text-indigo-600"
@@ -263,12 +263,14 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
-          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
-            Dashboard
+          <div className="w-full">
+            <div className="w-10 bg-gro-pink mx-auto rounded-lg -my-4">
+              <GroLogo />
+            </div>
           </div>
         </div>
 
-        <main className="py-10 lg:pl-72 h-screen">
+        <main className="py-10 lg:pl-72 lg:h-screen">
           <div className="px-4 sm:px-6 lg:px-8 h-full">{children}</div>
         </main>
       </div>

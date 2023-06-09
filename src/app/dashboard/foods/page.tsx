@@ -1,4 +1,4 @@
-import Table from "@/components/table";
+import FoodsPage from "@/components/Pages/FoodsPage";
 
 export const metadata = {
   title: "Gro - Foods",
@@ -7,8 +7,8 @@ export const metadata = {
   },
 };
 
-const FoodsPage = () => {
-  return <Table />;
+const FoodsIndexPage = () => {
+  return <FoodsPage />;
 };
 
-export default FoodsPage;
+export default FoodsIndexPage;

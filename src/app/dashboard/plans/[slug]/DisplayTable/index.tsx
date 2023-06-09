@@ -4,7 +4,6 @@ import Tabs from "@/components/Tabs";
 import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/24/outline";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-// import DropdownOptions from "@/components/DropdownOptions";
 
 interface IDisplayTable {
   foods: MealFoodServing[];
@@ -25,12 +24,7 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
   return (
     <div className="my-12 shadow-lg border border-gray-100  p-2 rounded-lg">
       <h2></h2>
-      {!isMobile ? (
-        <Tabs />
-      ) : (
-        // <DropdownOptions options={["Option 1", "Option 2"]} />
-        <></>
-      )}
+      {!isMobile ? <Tabs /> : <></>}
       <div className="mt-2 border border-gray-300 rounded-lg p-1">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>

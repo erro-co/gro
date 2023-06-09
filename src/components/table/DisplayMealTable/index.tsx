@@ -4,7 +4,6 @@ import { supabase } from "@/lib/supabase";
 import LoadingIcon from "../../icons/LoadingIcon";
 import Tabs from "@/components/Tabs";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import DropdownOptions from "@/components/DropdownOptions";
 
 export const SkeletonLoader = () => (
   <div className="animate-pulse flex space-x-4">
@@ -47,7 +46,7 @@ export default function DisplayMealTable() {
     <div className="px-2 lg:px-8 py-8">
       <h2 className="pl-1 py-2 text-2xl font-semibold">Meal 2</h2>
 
-      {isMobile ? <DropdownOptions /> : <Tabs />}
+      {isMobile ? <></> : <Tabs />}
 
       <div className="mt-2 sflow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

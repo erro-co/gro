@@ -34,7 +34,8 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
     const query = supabase
       .from("food")
       .select()
-      .filter("name", "ilike", `%${searchTerm}%`);
+      .filter("name", "ilike", `%${searchTerm}%`)
+      .range(0, 5);
     const { data: all_foods, error } = await query;
     if (error) {
       console.log("Failed to fetch error:", error);

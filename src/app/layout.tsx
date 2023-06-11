@@ -127,8 +127,8 @@ const RootLayout: FC<IRootLayout> = ({ children }) => {
     );
   }
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" className="">
+      <body className="h-screen">{children}</body>
     </html>
   );
 };

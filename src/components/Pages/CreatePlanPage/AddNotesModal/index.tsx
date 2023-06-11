@@ -23,7 +23,7 @@ const AddNotesModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
           <div className="fixed z-100 inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
-        <div className="fixed inset-2 lg:inset-56 z-50 overflow-y-auto rounded-lg">
+        <div className="fixed inset-2 lg:inset-56 z-50 overflow-y-auto rounded-lg mt-32">
           <div className="flex lg:min-h-full">
             <Transition.Child
               as={Fragment}

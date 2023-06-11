@@ -270,7 +270,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
           </div>
         </div>
 
-        <main className="py-10 lg:pl-72 lg:h-screen">
+        <main className="pt-14 lg:pl-72 lg:h-screen">
           <div className="px-4 sm:px-6 lg:px-8 h-full">{children}</div>
         </main>
       </div>

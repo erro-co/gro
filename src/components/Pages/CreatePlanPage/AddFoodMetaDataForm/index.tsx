@@ -86,7 +86,7 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
   }
 
   return (
-    <div className="w-full flex flex-col-reverse lg:flex-row my-4 space-x-6 space-y-4 lg:space-y-0">
+    <div className="w-full flex flex-col-reverse lg:flex-row lg:space-x-6 space-y-8 lg:space-y-0">
       <div className="p-2 border border-gray-100 shadow-md rounded-lg flex">
         <FoodNutrientsPieChart nutrients={nutrients} />
         <div className="ml-12 mt-8 space-y-6">

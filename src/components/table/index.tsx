@@ -95,7 +95,7 @@ export default function Table() {
           </div>
           <Link href="/dashboard/foods/add" className="">
             <div className="bg-gro-pink text-white p-2 rounded-md flex whitespace-nowrap ml-2">
-              <p className="my-auto hidden lg:block">New plan</p>
+              <p className="my-auto hidden lg:block">New food</p>
               <PlusCircleIcon className="w-7 m-0 lg:ml-1 my-auto" />
             </div>
           </Link>

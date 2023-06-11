@@ -1,8 +1,7 @@
 "use client";
 import { FC, useState } from "react";
-import AddFoodModal from "./AddFoodModal";
-import AddMealTable from "./AddMealTable";
-import { useFieldArray, useFormContext } from "react-hook-form";
+
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import {
   CheckIcon,
   PencilIcon,
@@ -13,6 +12,11 @@ import { supabase } from "@/lib/supabase";
 import { Meal, newMealPlanSchema } from "@/lib/schemas";
 import { MealIndexProvider } from "@/lib/context/SelectedMealIndexContex";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
+import AddFoodModal from "./AddFoodModal";
+import AddMealTable from "./AddMealTable";
+// import { Pie, PieChart } from "recharts";
+
+// const COLORS = ["#F695A0", "#DC7CDE", "#A351FA"];
 
 const AddNewMealPlan: FC = () => {
   const [showFoodSearchModal, setShowFoodSearchModal] =
@@ -26,10 +30,40 @@ const AddNewMealPlan: FC = () => {
     formState: { errors },
   } = useFormContext();
   const isMobile = useMediaQuery("(max-width: 640px)");
+  // const [totalMacros, setTotalMacros] = useState({
+  //   totalProtein: 0,
+  //   totalFat: 0,
+  //   totalCarbs: 0,
+  // });
 
-  const mealPlan = watch();
-  console.log("MP", mealPlan);
+  const mealPlan = useWatch();
+  const meals = watch("meals");
+  console.log("🚀 ~ file: index.tsx:40 ~ meals:", meals);
+  console.log("Meal Plan:", mealPlan); // you can also target specific fields by their names
   console.log({ errors });
+
+  // const calculateTotalMacros = () => {
+  //   let totalProtein = 0;
+  //   let totalFat = 0;
+  //   let totalCarbs = 0;
+  //   mealPlan.meals?.forEach((meal: any) => {
+  //     meal.foods.forEach((food: any) => {
+  //       totalProtein += food.nutrients.protein;
+  //       totalFat += food.nutrients.total_fat;
+  //       totalCarbs += food.nutrients.total_carbs;
+  //     });
+  //   });
+  //   setTotalMacros({
+  //     totalProtein,
+  //     totalFat,
+  //     totalCarbs,
+  //   });
+  //   console.log("Total Macros:", totalMacros);
+  // };
+
+  // useEffect(() => {
+  //   calculateTotalMacros();
+  // }, [mealPlan]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -137,14 +171,14 @@ const AddNewMealPlan: FC = () => {
   };
 
   return (
-    <form className="flex flex-col lg:h-full" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col h-full" onSubmit={handleSubmit(onSubmit)}>
       <MealIndexProvider>
         <AddFoodModal
           open={showFoodSearchModal}
           setOpen={setShowFoodSearchModal}
         />
         <div className="w-full flex">
-          <div className="w-full lg:w-fit lg:mx-auto rounded-md border-2 flex p-2 focus-within:border-indigo-500">
+          <div className="w-full lg:w-fit lg:mx-auto shadow border border-gray-200 rounded-lg flex p-2 focus-within:border-indigo-500">
             <input
               type="text"
               {...register("name")}
@@ -153,6 +187,38 @@ const AddNewMealPlan: FC = () => {
             <PencilIcon className="w-6 text-gray-400" />
           </div>
         </div>
+        {/* <div className="w-full flex p-2 rounded-lg shadow-lg border border-gray-200">
+          <div>
+            <PieChart width={30} height={30}>
+              <Pie
+                data={[
+                  {
+                    name: "Protein",
+                    value: totalMacros.totalProtein,
+                  },
+                  {
+                    name: "Fat",
+                    value: totalMacros.totalFat,
+                  },
+                  {
+                    name: "Carbs",
+                    value: totalMacros.totalCarbs,
+                  },
+                ]}
+                innerRadius={4}
+                outerRadius={14}
+                fill="#8884d8"
+                paddingAngle={1}
+                dataKey="value"
+              ></Pie>
+            </PieChart>
+          </div>
+          <div className="flex my-auto mx-2 space-x-2">
+            <p>Protein {totalMacros.totalProtein}</p>
+            <p>Fats {totalMacros.totalFat}</p>
+            <p>Carbs {totalMacros.totalCarbs}</p>
+          </div>
+        </div> */}
         {fields.map((meal, idx) => (
           <AddMealTable
             key={meal.id}
@@ -161,7 +227,7 @@ const AddNewMealPlan: FC = () => {
             removeMeal={remove}
           />
         ))}
-        <div className="mb-4 flex">
+        <div className="flex">
           <div className="ml-auto flex">
             <button
               onClick={() => append({ name: `Meal ${fields.length + 1}` })}
@@ -176,28 +242,25 @@ const AddNewMealPlan: FC = () => {
             </button>
           </div>
         </div>
-
-        {validateForm(mealPlan) ? (
-          <div className="fixed bottom-0 left-1/2  transform -translate-x-1/2 flex justify-center w-full">
+        <div className="mt-auto flex w-full">
+          {validateForm(mealPlan) ? (
             <button
               type="submit"
-              className="absolute bottom-4 flex border px-4 py-2 lg:py-4 rounded-md  text-white bg-green-500 disabled:opacity-70"
+              className="mx-auto flex border px-4 py-2 lg:py-4 rounded-md  text-white bg-green-500 disabled:opacity-70"
             >
               {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
               <CheckIcon className="w-6" />
             </button>
-          </div>
-        ) : (
-          <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 flex justify-center w-full">
+          ) : (
             <button
               disabled
-              className="absolute bottom-4 flex border px-4 py-2 lg:py-4 rounded-md mx-auto lg:mr-8 text-white bg-red-500 disabled:opacity-70"
+              className="flex border px-4 py-2 lg:py-4 rounded-md mx-auto text-white bg-red-500 disabled:opacity-70"
             >
               {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
               <XMarkIcon className="w-6" />
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </MealIndexProvider>
     </form>
   );

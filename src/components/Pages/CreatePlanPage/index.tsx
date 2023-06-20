@@ -1,7 +1,7 @@
 "use client";
 import { FC, useState } from "react";
 
-import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import {
   CheckIcon,
   PencilIcon,
@@ -21,6 +21,7 @@ import AddMealTable from "./AddMealTable";
 const AddNewMealPlan: FC = () => {
   const [showFoodSearchModal, setShowFoodSearchModal] =
     useState<boolean>(false);
+  const [mealPlanId, setMealPlanId] = useState<string>("");
   const {
     control,
     watch,
@@ -30,40 +31,11 @@ const AddNewMealPlan: FC = () => {
     formState: { errors },
   } = useFormContext();
   const isMobile = useMediaQuery("(max-width: 640px)");
-  // const [totalMacros, setTotalMacros] = useState({
-  //   totalProtein: 0,
-  //   totalFat: 0,
-  //   totalCarbs: 0,
-  // });
 
-  const mealPlan = useWatch();
-  const meals = watch("meals");
-  console.log("🚀 ~ file: index.tsx:40 ~ meals:", meals);
+  const mealPlan = watch();
+
   console.log("Meal Plan:", mealPlan); // you can also target specific fields by their names
   console.log({ errors });
-
-  // const calculateTotalMacros = () => {
-  //   let totalProtein = 0;
-  //   let totalFat = 0;
-  //   let totalCarbs = 0;
-  //   mealPlan.meals?.forEach((meal: any) => {
-  //     meal.foods.forEach((food: any) => {
-  //       totalProtein += food.nutrients.protein;
-  //       totalFat += food.nutrients.total_fat;
-  //       totalCarbs += food.nutrients.total_carbs;
-  //     });
-  //   });
-  //   setTotalMacros({
-  //     totalProtein,
-  //     totalFat,
-  //     totalCarbs,
-  //   });
-  //   console.log("Total Macros:", totalMacros);
-  // };
-
-  // useEffect(() => {
-  //   calculateTotalMacros();
-  // }, [mealPlan]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -99,7 +71,9 @@ const AddNewMealPlan: FC = () => {
       console.error("Error inserting food:", new_meal_plan_error);
       return;
     }
+    setMealPlanId(new_meal_plan[0].id);
     console.log("new_meal_plan", new_meal_plan);
+    console.log("new_meal_plan[0].id", new_meal_plan[0].id);
 
     const { data: new_meals, error: new_meals_error } = await supabase
       .from("meal")

@@ -1,11 +1,11 @@
 "use client";
-import SelectClientList from "@/components/SelectClientTable";
-import { supabase } from "@/lib/supabase";
-import { FC, useEffect, useState } from "react";
-import LoadingIcon from "@/components/icons/LoadingIcon";
+import ClientsList from "@/components/ClientsList";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import LoadingIcon from "@/components/icons/LoadingIcon";
+import { supabase } from "@/lib/supabase";
+import { PlusCircleIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
+import { FC, useEffect, useState } from "react";
 
 export interface Client {
   id: number;
@@ -22,11 +22,16 @@ export interface Client {
   status: ClientStatus;
 }
 
-enum ClientStatus {
+export enum ClientStatus {
   Complete = "Active",
   InProgress = "In progress",
   Archived = "Archived",
 }
+const statuses: Record<ClientStatus, string> = {
+  [ClientStatus.Complete]: "text-green-700 bg-green-50 ring-green-600/20",
+  [ClientStatus.InProgress]: "text-gray-600 bg-gray-50 ring-gray-500/10",
+  [ClientStatus.Archived]: "text-yellow-800 bg-yellow-50 ring-yellow-600/20",
+};
 
 const AddClientButton: FC = () => {
   return (
@@ -39,10 +44,10 @@ const AddClientButton: FC = () => {
   );
 };
 
-const SelectClientMPPage: FC = () => {
+const ClientPage = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
 
   const getAllClients = async () => {
     const { data: clients, error } = await supabase
@@ -54,6 +59,7 @@ const SelectClientMPPage: FC = () => {
       console.log(error);
       return null;
     } else {
+      console.log("clients", clients);
       setClients(clients as Client[]);
       setLoading(false);
     }
@@ -72,27 +78,19 @@ const SelectClientMPPage: FC = () => {
       </div>
     );
   }
+
   return (
-    <>
-      <div className="w-full">
-        <h2 className="text-3xl font-bold text-center mt-12 lg:mt-24">
-          Assign to a Client:
-        </h2>
-        <div className="mt-12 w-full lg:w-2/3 mx-auto">
-          <SearchBarWithAddButton
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            placeholder="Search for a client..."
-            button={<AddClientButton />}
-          />
-        </div>
-        <SelectClientList clients={clients} />
-        <button className="flex mx-auto w-full lg:w-2/3 p-2 bg-gray-400 font-bold text-white rounded-lg mt-4">
-          <p className="mx-auto">Skip</p>
-        </button>
-      </div>
-    </>
+    <div>
+      <h1 className="text-3xl font-bold mb-12">My Clients</h1>
+      <SearchBarWithAddButton
+        placeholder="Search clients..."
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        button={<AddClientButton />}
+      />
+      <ClientsList clients={clients} />
+    </div>
   );
 };
 
-export default SelectClientMPPage;
+export default ClientPage;

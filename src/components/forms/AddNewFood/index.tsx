@@ -10,7 +10,7 @@ import AddServingInput from "./AddServingInput";
 import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodModal";
 import { FoodWithNutrientsAndServingSchema, Serving } from "@/lib/schemas";
 import { convertToBase100 } from "@/lib/utils";
-
+import QuickAddFoodModal from "@/components/Modals/QuickAddFoodModal";
 const AddNewFoodForm: FC = () => {
   const {
     register,
@@ -25,6 +25,7 @@ const AddNewFoodForm: FC = () => {
     useState(false);
   const [selectedFoodCategory, setSelectedFoodCategory] =
     useState<FoodCategory | null>(null);
+  const [showQuickAddFoodModal, setShowQuickAddFoodModal] = useState(false);
 
   const fetchFoodCategories = async () => {
     const { data: food_category, error } = await supabase
@@ -114,12 +115,30 @@ const AddNewFoodForm: FC = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-12 sm:space-y-16">
         <div>
-          <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Add new food
-          </h2>
-          <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
-            This food can be access by all your clients
-          </p>
+          <div className="flex w-full">
+            <div>
+              <h2 className="text-base font-semibold leading-7 text-gray-900">
+                Add new food
+              </h2>
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
+                This food can be access by all your clients
+              </p>
+            </div>
+
+            <div className="ml-auto">
+              <QuickAddFoodModal
+                isOpen={showQuickAddFoodModal}
+                setIsOpen={setShowQuickAddFoodModal}
+              />
+              <button
+                onClick={() => setShowQuickAddFoodModal(true)}
+                className="bg-gro-indigo p-2 text-white rounded-lg"
+              >
+                Quick add
+              </button>
+            </div>
+          </div>
+
           <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
             <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
               <label

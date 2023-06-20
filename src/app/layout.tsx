@@ -18,11 +18,21 @@ const RootLayout: FC<IRootLayout> = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      const session = await supabase.auth.getSession();
-      console.log("session", session);
-      setSessionState(session.data.session);
-      if (session.data.session === null) {
-        setSuccefullySubmitted(false);
+      const localSession = JSON.parse(
+        localStorage.getItem("localSession") || "null",
+      );
+      if (localSession !== "null") {
+        const session = await supabase.auth.getSession();
+        console.log("session", session);
+        localStorage.setItem(
+          "localSession",
+          JSON.stringify(session.data.session),
+        );
+
+        setSessionState(session?.data?.session);
+        if (session?.data?.session === null) {
+          setSuccefullySubmitted(false);
+        }
       }
     })();
   }, []);
@@ -32,10 +42,7 @@ const RootLayout: FC<IRootLayout> = ({ children }) => {
     const { data, error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo:
-          process.env.NODE_ENV === "development"
-            ? "http://localhost:3000/dashboard"
-            : "https://gro-app.vercel.app/dashboard",
+        emailRedirectTo: "http://localhost:3000",
       },
     });
     if (error) {

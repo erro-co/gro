@@ -1,59 +1,15 @@
 "use client";
 import Link from "next/link";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { FC } from "react";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import { Client } from "../Pages/ClientsPage";
 
-enum ClientStatus {
-  Complete = "Active",
-  InProgress = "In progress",
-  Archived = "Archived",
+export interface IClientList {
+  clients: Client[];
 }
 
-const statuses: Record<ClientStatus, string> = {
-  [ClientStatus.Complete]: "text-green-700 bg-green-50 ring-green-600/20",
-  [ClientStatus.InProgress]: "text-gray-600 bg-gray-50 ring-gray-500/10",
-  [ClientStatus.Archived]: "text-yellow-800 bg-yellow-50 ring-yellow-600/20",
-};
-
-interface Client {
-  id: number;
-  created_at: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone: string;
-  trainer: {
-    first_name: string;
-    last_name: string;
-    email: string;
-  };
-  status: ClientStatus;
-}
-
-export default function ClientsList() {
-  const [clients, setClients] = useState<Client[]>([]);
-
-  const getAllClients = async () => {
-    const { data: clients, error } = await supabase
-      .from("user")
-      .select("*, trainer(*)")
-      .order("id", { ascending: true });
-
-    if (error) {
-      console.log(error);
-      return null;
-    } else {
-      console.log("clients", clients);
-      setClients(clients as Client[]);
-    }
-  };
-
-  useEffect(() => {
-    getAllClients();
-  }, []);
-
+const ClientsList: FC<IClientList> = ({ clients }) => {
   return (
     <ul role="list" className="divide-y divide-gray-100">
       {clients.map((client, idx) => (
@@ -105,4 +61,6 @@ export default function ClientsList() {
       ))}
     </ul>
   );
-}
+};
+
+export default ClientsList;

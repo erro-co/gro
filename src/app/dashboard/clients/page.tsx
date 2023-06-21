@@ -1,13 +1,14 @@
-"use client";
-import ClientsList from "@/components/ClientsList";
+import ClientsPage from "@/components/Pages/ClientsPage";
 
-const ClientsPage = () => {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold mb-12">My Clients</h1>
-      <ClientsList />
-    </div>
-  );
+export const metadata = {
+  title: "Gro - My Clients",
+  icons: {
+    icon: "/gro_logo.png",
+  },
 };
 
-export default ClientsPage;
+const ClientsIndexPage = () => {
+  return <ClientsPage />;
+};
+
+export default ClientsIndexPage;

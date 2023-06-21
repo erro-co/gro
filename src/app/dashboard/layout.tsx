@@ -16,6 +16,7 @@ import GroLogo from "@/components/icons/Logo";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
@@ -75,12 +76,25 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
 
   const getUser = async () => {
     const { data: user, error } = await supabase.auth.getUser();
-
     if (error) {
       console.log(error);
       return null;
     }
-    console.log("user", user);
+
+    const { data: user_details, error: user_details_error } = await supabase
+      .from("user")
+      .select("*")
+      .eq("email", user?.user?.email);
+
+    if (user_details_error) {
+      console.log(user_details_error);
+      return null;
+    }
+    setProfileName(
+      `${capitalizeFirstLetter(
+        user_details?.[0]?.first_name,
+      )} ${capitalizeFirstLetter(user_details?.[0]?.last_name)}`,
+    );
   };
 
   useEffect(() => {
@@ -89,6 +103,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
+
     if (error) {
       console.log(error);
       return null;
@@ -188,6 +203,21 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                             ))}
                           </ul>
                         </li>
+                        <li className="-mx-6 mt-auto">
+                          <a
+                            href="#"
+                            className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+                          >
+                            <span className="sr-only">Your profile</span>
+                            <span aria-hidden="true">{profileName}</span>
+                            <button
+                              className="p-2 bg-red-500 text-white rounded-lg ml-auto"
+                              onClick={signOut}
+                            >
+                              Sign out
+                            </button>
+                          </a>
+                        </li>
                       </ul>
                     </nav>
                   </div>
@@ -242,7 +272,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                     <span className="sr-only">Your profile</span>
                     <span aria-hidden="true">{profileName}</span>
                     <button
-                      className="p-2 bg-red-500 text-white rounded-lg"
+                      className="p-2 ml-auto bg-red-500 text-white rounded-lg"
                       onClick={signOut}
                     >
                       Sign out

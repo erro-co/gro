@@ -11,13 +11,14 @@ import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodM
 import { FoodWithNutrientsAndServingSchema, Serving } from "@/lib/schemas";
 import { convertToBase100 } from "@/lib/utils";
 import QuickAddFoodModal from "@/components/Modals/QuickAddFoodModal";
+import useMediaQuery from "@/lib/hooks/useMediaQuery";
+import { BoltIcon } from "@heroicons/react/20/solid";
 const AddNewFoodForm: FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-    watch,
   } = useFormContext();
   const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([]);
   const [dataFetched, setDataFetched] = useState(false);
@@ -26,7 +27,7 @@ const AddNewFoodForm: FC = () => {
   const [selectedFoodCategory, setSelectedFoodCategory] =
     useState<FoodCategory | null>(null);
   const [showQuickAddFoodModal, setShowQuickAddFoodModal] = useState(false);
-
+  const isMobile = useMediaQuery("(max-width: 640px)");
   const fetchFoodCategories = async () => {
     const { data: food_category, error } = await supabase
       .from("food_category")
@@ -134,7 +135,13 @@ const AddNewFoodForm: FC = () => {
                 onClick={() => setShowQuickAddFoodModal(true)}
                 className="bg-gro-indigo p-2 text-white rounded-lg"
               >
-                Quick add
+                {isMobile ? (
+                  <div className="w-8">
+                    <BoltIcon />
+                  </div>
+                ) : (
+                  <p>Quick add</p>
+                )}
               </button>
             </div>
           </div>
@@ -200,13 +207,15 @@ const AddNewFoodForm: FC = () => {
 
             <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
               <label
-                htmlFor="email"
+                htmlFor="nutrition"
                 className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
               >
                 Nutrition
               </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <NutritionLabelInput />
+              <div className="flex w-full">
+                <div className="flex mx-auto">
+                  <NutritionLabelInput />
+                </div>
               </div>
             </div>
           </div>

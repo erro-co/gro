@@ -46,3 +46,40 @@ export const convertKjToKcal = (kj: number): number => {
 
   return roundedKcal;
 };
+
+export const isValidWoolworthsUrl = (url: string): boolean => {
+  // We use the URL constructor to parse the URL. If the URL is not valid,
+  // the constructor will throw an error.
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(url);
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+
+  // Check if the hostname is 'www.woolworths.com.au'.
+  if (parsedUrl.hostname !== "www.woolworths.com.au") {
+    return false;
+  }
+
+  // Check if the path begins with '/shop/productdetails/'
+  if (!parsedUrl.pathname.startsWith("/shop/productdetails/")) {
+    return false;
+  }
+
+  // // Split the remaining path and make sure there is only one part left
+  // const pathParts = parsedUrl.pathname
+  //   .replace("/shop/productdetails/", "")
+  //   .split("/");
+  // if (pathParts.length !== 1) {
+  //   return false;
+  // }
+
+  // // Check if the remaining part of the path is a number
+  // if (isNaN(Number(pathParts[0]))) {
+  //   return false;
+  // }
+
+  return true;
+};

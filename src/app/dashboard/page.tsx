@@ -4,6 +4,7 @@ export const metadata = {
     icon: "/gro_logo.png",
   },
 };
+
 const DashboardHomePage = () => {
   return (
     <div>

@@ -54,6 +54,13 @@ const RootLayout: FC<IRootLayout> = ({ children }) => {
     setSuccefullySubmitted(true);
   };
 
+  if (process.env.NODE_ENV === "development") {
+    return (
+      <html lang="en" className="">
+        <body className="h-screen">{children}</body>
+      </html>
+    );
+  }
   if (sessionState === null) {
     return (
       <html lang="en" className="bg-blue-100">

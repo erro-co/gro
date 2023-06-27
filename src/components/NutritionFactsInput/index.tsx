@@ -43,7 +43,9 @@ const NutritionFactsInput: FC = () => {
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
-            <span className="font-bold">Total Fat</span>{" "}
+            <span className="font-bold">
+              Total Fat<span className="text-red-500 font-bold">*</span>
+            </span>{" "}
             <input
               {...register("nutrients.total_fat", { valueAsNumber: true })}
               type="number"
@@ -56,7 +58,7 @@ const NutritionFactsInput: FC = () => {
           </div>
         </div>
         <hr className="border-gray-500" />
-        <div className="flex justify-between">
+        <div className="pl-4 flex justify-between">
           <div>
             Saturated Fat<span className="text-red-500 font-bold">*</span>{" "}
             <input
@@ -71,19 +73,21 @@ const NutritionFactsInput: FC = () => {
           </div>
         </div>
         <hr className="border-gray-500" />
-        <div>
-          <span className="italic">
-            Trans Fat<span className="text-red-500 font-bold">*</span>
-          </span>{" "}
-          <input
-            {...register("nutrients.trans_fat", { valueAsNumber: true })}
-            type="number"
-            id="nutrition-trans-fat"
-            className="w-8 text-right pr-1 focus:placeholder:opacity-0"
-            placeholder={"-"}
-            step={0.1}
-          />
-          g
+        <div className="flex justify-between">
+          <div className="pl-4">
+            <span className="italic">
+              Trans Fat<span className="text-red-500 font-bold">*</span>
+            </span>{" "}
+            <input
+              {...register("nutrients.trans_fat", { valueAsNumber: true })}
+              type="number"
+              id="nutrition-trans-fat"
+              className="w-8 text-right pr-1 focus:placeholder:opacity-0"
+              placeholder={"-"}
+              step={0.1}
+            />
+            g
+          </div>
         </div>
         <hr className="border-gray-500" />
         <div className="flex justify-between">
@@ -122,7 +126,10 @@ const NutritionFactsInput: FC = () => {
         <hr className="border-gray-500" />
         <div className="flex justify-between">
           <div>
-            <span className="font-bold">Total Carbohydrate</span>{" "}
+            <span className="font-bold">
+              Total Carbohydrate
+              <span className="text-red-500 font-bold">*</span>
+            </span>{" "}
             <input
               {...register("nutrients.total_carbs", { valueAsNumber: true })}
               type="number"
@@ -150,32 +157,36 @@ const NutritionFactsInput: FC = () => {
           </div>
         </div>
         <hr className="border-gray-500" />
-        <div className="pl-4">
-          Sugar<span className="text-red-500 font-bold">*</span>{" "}
-          <input
-            {...register("nutrients.sugar", { valueAsNumber: true })}
-            type="number"
-            id="nutrition-total-sugar"
-            className="w-8 text-right pr-1"
-            placeholder={"-"}
-            step={0.1}
-          />
-          g
+        <div className=" flex justify-between">
+          <div className="pl-4">
+            Sugar<span className="text-red-500 font-bold">*</span>{" "}
+            <input
+              {...register("nutrients.sugar", { valueAsNumber: true })}
+              type="number"
+              id="nutrition-total-sugar"
+              className="w-8 text-right pr-1"
+              placeholder={"-"}
+              step={0.1}
+            />
+            g
+          </div>
         </div>
         <hr className="border-gray-500" />
-        <div>
-          <span className="font-bold">
-            Protein<span className="text-red-500 font-bold">*</span>
-          </span>{" "}
-          <input
-            {...register("nutrients.protein", { valueAsNumber: true })}
-            type="number"
-            id="nutrition-protein"
-            className="w-8 text-right pr-1"
-            placeholder={"-"}
-            step={0.1}
-          />
-          g
+        <div className="flex justify-between">
+          <div className="">
+            <span className="font-bold">
+              Protein<span className="text-red-500 font-bold">*</span>
+            </span>{" "}
+            <input
+              {...register("nutrients.protein", { valueAsNumber: true })}
+              type="number"
+              id="nutrition-protein"
+              className="w-8 text-right pr-1"
+              placeholder={"-"}
+              step={0.1}
+            />
+            g
+          </div>
         </div>
       </div>
       <div className="border-t-8 border-black pt-1 text-sm">

@@ -128,7 +128,7 @@ const AddMealTable: FC<IAddMealTable> = ({
                       <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                         <p>{f.food.name}</p>
                         {f.food.brand && (
-                          <p className="text-sm text-gray-200">
+                          <p className="text-sm font-normal text-gray-400">
                             {f.food.brand}
                           </p>
                         )}

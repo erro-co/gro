@@ -16,7 +16,6 @@ export default function Home() {
       <div className="w-40 bg-gro-pink rounded-lg">
         <GroLogo />
       </div>
-
       <div>
         <Link href="/dashboard/plans">
           <div className="bg-gro-purple p-4 text-white rounded-lg">

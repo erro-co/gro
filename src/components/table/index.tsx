@@ -13,6 +13,7 @@ import EditFoodModal from "../Modals/EditFoodModal";
 import { FoodWithNutrientsAndServing } from "@/lib/schemas";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import SearchBarWithAddButton from "../SearchBarWithAddButton";
+import { emptyPlaceholderFood } from "@/lib/consts";
 
 const PAGE_SIZE = 10;
 
@@ -31,13 +32,14 @@ type ReturnedFood = FoodWithNutrientsAndServing & {
   id: number;
 };
 export default function Table() {
-  const [foods, setFoods] = useState<any[]>([]);
-  const [dataFetched, setDataFetched] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [openEditFoodModal, setOpenEditFoodModal] = useState(false);
+  const [foods, setFoods] = useState<ReturnedFood[]>([]);
+  const [dataFetched, setDataFetched] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [openEditFoodModal, setOpenEditFoodModal] = useState<boolean>(false);
   const [selectedFood, setSelectedFood] =
-    useState<FoodWithNutrientsAndServing | null>(null);
+    useState<FoodWithNutrientsAndServing>(emptyPlaceholderFood);
+
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   const getAllFoods = async (page: number) => {
@@ -114,7 +116,7 @@ export default function Table() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      <a href="#" className="group inline-flex">
+                      <button className="group inline-flex">
                         Food Name
                         <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
                           <ChevronDownIcon
@@ -122,7 +124,7 @@ export default function Table() {
                             aria-hidden="true"
                           />
                         </span>
-                      </a>
+                      </button>
                     </th>
                     {!isMobile ? (
                       <>
@@ -130,25 +132,57 @@ export default function Table() {
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          Brand
+                          <button className="group inline-flex">
+                            Brand
+                            <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
+                              <ChevronDownIcon
+                                className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </button>
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          Protein
+                          <button className="group inline-flex">
+                            Protein
+                            <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
+                              <ChevronDownIcon
+                                className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </button>
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          Fats
+                          <button className="group inline-flex">
+                            Fats
+                            <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
+                              <ChevronDownIcon
+                                className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </button>
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          Carbs
+                          <button className="group inline-flex">
+                            Carbs
+                            <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
+                              <ChevronDownIcon
+                                className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </button>
                         </th>
                       </>
                     ) : null}
@@ -156,7 +190,15 @@ export default function Table() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Calories
+                      <button className="group inline-flex">
+                        Calories
+                        <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
+                          <ChevronDownIcon
+                            className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </button>
                     </th>
                     <th scope="col" className="">
                       <span className="sr-only">Delete</span>

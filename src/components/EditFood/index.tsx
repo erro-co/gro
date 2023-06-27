@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import NutritionFactsInput from "../NutritionFactsInput";
 import ComboboxInput from "../forms/AddNewFood/ComboBoxInput";
 import { FoodCategory } from "@/lib/types";
 import { supabase } from "@/lib/supabase";
 import { useFormContext } from "react-hook-form";
 import AddServingInput from "../forms/AddNewFood/AddServingInput";
+import { FoodWithNutrientsAndServing } from "@/lib/schemas";
 
-const EditFood = () => {
-  const { register } = useFormContext();
+export interface IEditFood {
+  food: FoodWithNutrientsAndServing;
+}
+
+const EditFood: FC<IEditFood> = ({ food }) => {
+  const { register, setValue } = useFormContext();
   const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([]);
   const [dataFetched, setDataFetched] = useState(false);
   const [showSuccessfulAddNewFoodModal, setShowSuccessfulAddNewFoodModal] =
@@ -31,9 +36,17 @@ const EditFood = () => {
   useEffect(() => {
     fetchFoodCategories();
   }, []);
+
+  useEffect(() => {
+    setValue("name", food?.name);
+    setValue("brand", food?.brand);
+    setValue("food_category", food?.food_category);
+    setValue("servings", food?.servings);
+    setValue("nutrients", food?.nutrients);
+  }, [food]);
   return (
     <form className="flex flex-col lg:flex-row">
-      <div className="ml-4 mr-24 space-y-4">
+      <div className="ml-4 space-y-4">
         <div>
           <label htmlFor="name">Food Name</label>
           <input
@@ -64,7 +77,6 @@ const EditFood = () => {
           />
         </div>
         <div>
-          {" "}
           <label htmlFor="serving">Serving</label>
           <AddServingInput />
         </div>

@@ -1,6 +1,5 @@
 "use client";
 import {
-  ChevronDownIcon,
   ChevronLeftIcon,
   PlusCircleIcon,
   TrashIcon,
@@ -14,6 +13,13 @@ import { FoodWithNutrientsAndServing } from "@/lib/schemas";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import SearchBarWithAddButton from "../SearchBarWithAddButton";
 import { emptyPlaceholderFood } from "@/lib/consts";
+import {
+  ChevronUpDownIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@heroicons/react/20/solid";
+
+type SortDirection = "ASC" | "DESC" | null;
 
 const PAGE_SIZE = 10;
 
@@ -26,6 +32,25 @@ const AddFoodButton: FC = () => {
       </div>
     </Link>
   );
+};
+
+const SortIcon = (sortDirection: SortDirection) => {
+  switch (sortDirection) {
+    case "ASC":
+      return (
+        <div className="bg-gray-100 rounded-lg">
+          <ChevronDownIcon className="w-5 m-0 my-auto" />
+        </div>
+      );
+    case "DESC":
+      return (
+        <div className="bg-gray-100 rounded-lg">
+          <ChevronUpIcon className="w-5 m-0 my-auto" />
+        </div>
+      );
+    default:
+      return <ChevronUpDownIcon className="w-5 m-0 my-auto" />;
+  }
 };
 
 type ReturnedFood = FoodWithNutrientsAndServing & {
@@ -41,15 +66,19 @@ export default function Table() {
     useState<FoodWithNutrientsAndServing>(emptyPlaceholderFood);
 
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
 
   const getAllFoods = async (page: number) => {
     const offset = (page - 1) * PAGE_SIZE;
     const { data, error } = await supabase
       .from("food")
-      .select(`*, nutrients(*, food_id)`)
+      .select(`*, nutrients(*, food_id), serving(*, food)`)
       .ilike("name", `%${searchTerm}%`)
       .range(offset, offset + PAGE_SIZE - 1)
-      .order("name", { ascending: true });
+      .order(sortColumn || "name", {
+        ascending: sortDirection !== "DESC",
+      });
 
     if (error) {
       console.log("Failed to fetch error:", error);
@@ -58,10 +87,20 @@ export default function Table() {
     setFoods(data as any);
     setDataFetched(true);
   };
+  const handleSortClick = async (column: string) => {
+    let newSortDirection: SortDirection = null;
+    if (sortDirection === null) {
+      newSortDirection = "ASC";
+    } else if (sortDirection === "ASC") {
+      newSortDirection = "DESC";
+    }
+    setSortDirection(newSortDirection);
+    setSortColumn(column);
+  };
 
   useEffect(() => {
     getAllFoods(currentPage);
-  }, [currentPage, searchTerm]);
+  }, [currentPage, searchTerm, sortDirection, sortColumn]);
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -116,13 +155,15 @@ export default function Table() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      <button className="group inline-flex">
+                      <button
+                        onClick={() => handleSortClick("name")}
+                        className="group inline-flex"
+                      >
                         Food Name
-                        <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                          <ChevronDownIcon
-                            className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                            aria-hidden="true"
-                          />
+                        <span className="ml-1 flex-none rounded text-gray-400">
+                          {sortColumn === "name"
+                            ? SortIcon(sortDirection)
+                            : SortIcon(null)}
                         </span>
                       </button>
                     </th>
@@ -132,13 +173,15 @@ export default function Table() {
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          <button className="group inline-flex">
+                          <button
+                            onClick={() => handleSortClick("brand")}
+                            className="group inline-flex"
+                          >
                             Brand
-                            <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                              <ChevronDownIcon
-                                className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                                aria-hidden="true"
-                              />
+                            <span className="ml-1 flex-none rounded text-gray-400">
+                              {sortColumn === "brand"
+                                ? SortIcon(sortDirection)
+                                : SortIcon(null)}
                             </span>
                           </button>
                         </th>
@@ -146,43 +189,54 @@ export default function Table() {
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          <button className="group inline-flex">
+                          {/* <button
+                            onClick={() =>
+                              handleSortClick("nutrients->protein")
+                            }
+                            className="group inline-flex"
+                          >
                             Protein
-                            <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                              <ChevronDownIcon
-                                className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                                aria-hidden="true"
-                              />
+                            <span className="ml-1 flex-none rounded text-gray-400">
+                              {sortColumn === "nutrients->protein"
+                                ? SortIcon(sortDirection)
+                                : SortIcon(null)}
                             </span>
-                          </button>
+                          </button> */}
+                          Protein
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          <button className="group inline-flex">
+                          {/* <button
+                            onClick={() => handleSortClick("fats")}
+                            className="group inline-flex"
+                          >
                             Fats
-                            <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                              <ChevronDownIcon
-                                className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                                aria-hidden="true"
-                              />
+                            <span className="ml-1 flex-none rounded text-gray-400">
+                              {sortColumn === "fats"
+                                ? SortIcon(sortDirection)
+                                : SortIcon(null)}
                             </span>
-                          </button>
+                          </button> */}
+                          Fats
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          <button className="group inline-flex">
+                          {/* <button
+                            onClick={() => handleSortClick("carbs")}
+                            className="group inline-flex"
+                          >
                             Carbs
-                            <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                              <ChevronDownIcon
-                                className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                                aria-hidden="true"
-                              />
+                            <span className="ml-1 flex-none rounded text-gray-400">
+                              {sortColumn === "carbs"
+                                ? SortIcon(sortDirection)
+                                : SortIcon(null)}
                             </span>
-                          </button>
+                          </button> */}
+                          Carbs
                         </th>
                       </>
                     ) : null}
@@ -190,15 +244,18 @@ export default function Table() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      <button className="group inline-flex">
+                      {/* <button
+                        onClick={() => handleSortClick("calories")}
+                        className="group inline-flex"
+                      >
                         Calories
-                        <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                          <ChevronDownIcon
-                            className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                            aria-hidden="true"
-                          />
+                        <span className="ml-1 flex-none rounded text-gray-400">
+                          {sortColumn === "calories"
+                            ? SortIcon(sortDirection)
+                            : SortIcon(null)}
                         </span>
-                      </button>
+                      </button> */}
+                      Calories
                     </th>
                     <th scope="col" className="">
                       <span className="sr-only">Delete</span>
@@ -271,23 +328,23 @@ export default function Table() {
           </div>
         </div>
         <div className="w-full mt-3 pb-4">
-          <div className="lg:ml-auto flex justify-between">
+          <div className="lg:ml-auto flex justify-between lg:justify-center lg:space-x-10">
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
-              className="bg-gro-indigo disabled:bg-gray-500 text-white font-bold py-2 rounded flex w-28"
+              className="bg-gro-indigo disabled:bg-gray-500 text-white font-bold p-2 rounded flex"
             >
               <span className="mx-auto flex">
-                <ChevronLeftIcon className="w-6" /> Previous
+                <ChevronLeftIcon className="w-6" />
               </span>
             </button>
             <button
               onClick={handleNextPage}
               disabled={foods.length < PAGE_SIZE}
-              className="bg-gro-indigo text-white font-bold py-2 rounded flex w-28"
+              className="bg-gro-indigo text-white font-bold p-2 rounded flex"
             >
               <span className="mx-auto flex">
-                Next <ChevronLeftIcon className="w-6 rotate-180" />
+                <ChevronLeftIcon className="w-6 rotate-180" />
               </span>
             </button>
           </div>

@@ -284,7 +284,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
           </div>
         </div>
 
-        <div className="sticky top-0 z-30 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden">
+        <div className="sticky top-0 z-30 flex items-center gap-x-6 bg-gro-pink/75 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
           <button
             type="button"
             className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
@@ -294,9 +294,9 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
           <div className="w-full">
-            <div className="w-10 bg-gro-pink mx-auto rounded-lg -my-4">
+            {/* <div className="w-10 bg-gro-pink mx-auto rounded-lg -my-4">
               <GroLogo />
-            </div>
+            </div> */}
           </div>
         </div>
 

@@ -30,7 +30,7 @@ export const emptyPlaceholderFood: FoodWithNutrientsAndServing = {
     total_fat: 0,
     vitamin_d: 0,
   },
-  servings: [
+  serving: [
     {
       name: "",
       weight: 0,

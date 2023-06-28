@@ -81,7 +81,7 @@ export default function Table() {
       });
 
     if (error) {
-      console.log("Failed to fetch error:", error);
+      console.error("Failed to fetch error:", error);
     }
 
     setFoods(data as any);
@@ -118,7 +118,7 @@ export default function Table() {
   const handleDeleteFood = async (id: number) => {
     const { error } = await supabase.from("food").delete().match({ id: id });
     if (error) {
-      console.log("Failed to delete food:", error);
+      console.error("Failed to delete food:", error);
     }
     getAllFoods(currentPage);
   };

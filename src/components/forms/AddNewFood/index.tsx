@@ -76,7 +76,7 @@ const AddNewFoodForm: FC = () => {
       return;
     }
     const { error: food_serving_error } = await supabase.from("serving").insert(
-      data.servings.map((serving: Serving) => ({
+      data.serving.map((serving: Serving) => ({
         food: new_food[0].id,
         name: serving.name,
         weight: serving.weight,
@@ -89,7 +89,7 @@ const AddNewFoodForm: FC = () => {
     }
 
     const base100NutrientsWithId = {
-      ...convertToBase100(data.nutrients, data.servings[0].weight),
+      ...convertToBase100(data.nutrients, data.serving[0].weight),
       food_id: new_food[0].id,
     };
 

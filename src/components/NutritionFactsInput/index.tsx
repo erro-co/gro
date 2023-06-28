@@ -28,7 +28,7 @@ const NutritionFactsInput: FC = () => {
             Calories<span className="text-red-500 font-bold">*</span>
           </div>
         </div>
-        <div className="text-5xl">
+        <div className="text-4xl">
           <input
             {...register("nutrients.calories", { valueAsNumber: true })}
             id="nutrition-calories"

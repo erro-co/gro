@@ -34,9 +34,6 @@ const AddNewMealPlan: FC = () => {
 
   const mealPlan = watch();
 
-  console.log("Meal Plan:", mealPlan); // you can also target specific fields by their names
-  console.log({ errors });
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: "meals",
@@ -72,8 +69,6 @@ const AddNewMealPlan: FC = () => {
       return;
     }
     setMealPlanId(new_meal_plan[0].id);
-    console.log("new_meal_plan", new_meal_plan);
-    console.log("new_meal_plan[0].id", new_meal_plan[0].id);
 
     const { data: new_meals, error: new_meals_error } = await supabase
       .from("meal")
@@ -88,8 +83,6 @@ const AddNewMealPlan: FC = () => {
       console.error("Error inserting food_serving:", new_meals_error);
       return;
     }
-
-    console.log("new_meals", new_meals);
 
     function getMealIdByName(meals: any[], newMeal: Meal) {
       const meal = meals.find((m) => m.name === newMeal.name);
@@ -117,7 +110,6 @@ const AddNewMealPlan: FC = () => {
           console.error("Error inserting food:", new_meal_food_serving_error);
           return;
         }
-        console.log("new_meal_food_serving", new_food);
 
         const {
           data: meal_plan_food_serving_user,
@@ -137,7 +129,6 @@ const AddNewMealPlan: FC = () => {
           );
           return;
         }
-        console.log("meal_plan_food_serving", meal_plan_food_serving_user);
       }
     });
 

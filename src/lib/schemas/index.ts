@@ -41,7 +41,7 @@ export const FoodSchema = z.object({
 
 export const FoodWithNutrientsAndServingSchema = FoodSchema.extend({
   nutrients: nutrientsSchema,
-  servings: z.array(servingSchema).min(1),
+  serving: z.array(servingSchema).min(1),
 });
 
 export const newMealPlanFoodSchema = z.object({

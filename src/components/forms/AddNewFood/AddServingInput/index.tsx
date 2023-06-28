@@ -8,12 +8,12 @@ const AddServingInput: FC = () => {
 
   const { fields, append, remove, update } = useFieldArray({
     control,
-    name: "servings",
+    name: "serving",
   });
 
   const checkIfServingEmpty = (index: number, type: "and" | "or") => {
-    const weight: number = watch(`servings.${index}.name`);
-    const name: string = watch(`servings.${index}.weight`);
+    const weight: number = watch(`serving.${index}.name`);
+    const name: string = watch(`serving.${index}.weight`);
     if (type === "and" && !isValueEmpty(weight) && !isValueEmpty(name)) {
       return true;
     } else if (
@@ -36,8 +36,8 @@ const AddServingInput: FC = () => {
 
   return (
     <div className="mt-2 sm:mt-0 w-full lg:w-fit">
-      <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-        <table className="min-w-full divide-y divide-gray-300">
+      <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
+        <table className="divide-y divide-gray-300">
           <thead className="">
             <tr>
               <th
@@ -72,7 +72,7 @@ const AddServingInput: FC = () => {
                 <td className="px-3 py-2.5 whitespace-nowrap text-sm text-gray-500">
                   <input
                     id="serving-name"
-                    {...register(`servings.${index}.name`)}
+                    {...register(`serving.${index}.name`)}
                     className="py-1 pl-2"
                     type="text"
                     placeholder="Serving"
@@ -80,22 +80,22 @@ const AddServingInput: FC = () => {
                 </td>
                 <td className="py-2.5 whitespace-nowrap text-sm text-gray-500">
                   <input
-                    {...register(`servings.${index}.weight`, {
+                    {...register(`serving.${index}.weight`, {
                       valueAsNumber: true,
                     })}
-                    className="py-1 pl-2"
+                    className="py-1 pl-2 w-16"
                     type="number"
                     placeholder="n/a"
                     id="serving-weight"
                   />
                 </td>
-                {checkIfServingEmpty(index, "or") ? (
-                  <td className="flex">
+                <td className="flex">
+                  {checkIfServingEmpty(index, "or") ? (
                     <button onClick={() => handleClear(index)} className="">
                       <XCircleIcon className="w-8 text-red-500 mt-2 mx-4" />
                     </button>
-                  </td>
-                ) : null}
+                  ) : null}
+                </td>
               </tr>
             ))}
           </tbody>

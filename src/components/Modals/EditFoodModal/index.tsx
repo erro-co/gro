@@ -17,13 +17,6 @@ export interface IEditFoodModal {
 const EditFoodModal: FC<IEditFoodModal> = ({ isOpen, setIsOpen, food }) => {
   const methods = useForm<FoodWithNutrientsAndServing>({
     resolver: zodResolver(FoodWithNutrientsAndServingSchema),
-    defaultValues: {
-      name: food?.name,
-      brand: food?.brand,
-      food_category: food?.food_category,
-      servings: food?.servings,
-      nutrients: food?.nutrients,
-    },
   });
 
   useEffect(() => {}, [food]);
@@ -68,7 +61,7 @@ const EditFoodModal: FC<IEditFoodModal> = ({ isOpen, setIsOpen, food }) => {
                     </FormProvider>
                   </div>
                 </div>
-                <div className="mt-5 sm:mt-6">
+                {/* <div className="mt-5 sm:mt-6">
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -76,7 +69,7 @@ const EditFoodModal: FC<IEditFoodModal> = ({ isOpen, setIsOpen, food }) => {
                   >
                     Update Food
                   </button>
-                </div>
+                </div> */}
               </Dialog.Panel>
             </Transition.Child>
           </div>

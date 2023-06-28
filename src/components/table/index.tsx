@@ -1,39 +1,84 @@
 "use client";
 import {
-  ChevronDownIcon,
   ChevronLeftIcon,
   PlusCircleIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import LoadingIcon from "../icons/LoadingIcon";
 import Link from "next/link";
 import EditFoodModal from "../Modals/EditFoodModal";
 import { FoodWithNutrientsAndServing } from "@/lib/schemas";
-import clsx from "clsx";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
+import SearchBarWithAddButton from "../SearchBarWithAddButton";
+import { emptyPlaceholderFood } from "@/lib/consts";
+import {
+  ChevronUpDownIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@heroicons/react/20/solid";
+
+type SortDirection = "ASC" | "DESC" | null;
 
 const PAGE_SIZE = 10;
 
+const AddFoodButton: FC = () => {
+  return (
+    <Link href="/dashboard/foods/add">
+      <div className="bg-gro-pink text-white p-2 rounded-lg flex whitespace-nowrap ml-2">
+        <p className="my-auto hidden lg:block">New Food</p>
+        <PlusCircleIcon className="w-7 m-0 lg:ml-1 my-auto" />
+      </div>
+    </Link>
+  );
+};
+
+const SortIcon = (sortDirection: SortDirection) => {
+  switch (sortDirection) {
+    case "ASC":
+      return (
+        <div className="bg-gray-100 rounded-lg">
+          <ChevronDownIcon className="w-5 m-0 my-auto" />
+        </div>
+      );
+    case "DESC":
+      return (
+        <div className="bg-gray-100 rounded-lg">
+          <ChevronUpIcon className="w-5 m-0 my-auto" />
+        </div>
+      );
+    default:
+      return <ChevronUpDownIcon className="w-5 m-0 my-auto" />;
+  }
+};
+
+type ReturnedFood = FoodWithNutrientsAndServing & {
+  id: number;
+};
 export default function Table() {
-  const [foods, setFoods] = useState<any[]>([]);
-  const [dataFetched, setDataFetched] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [openEditFoodModal, setOpenEditFoodModal] = useState(false);
+  const [foods, setFoods] = useState<ReturnedFood[]>([]);
+  const [dataFetched, setDataFetched] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [openEditFoodModal, setOpenEditFoodModal] = useState<boolean>(false);
   const [selectedFood, setSelectedFood] =
-    useState<FoodWithNutrientsAndServing | null>(null);
+    useState<FoodWithNutrientsAndServing>(emptyPlaceholderFood);
+
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
 
   const getAllFoods = async (page: number) => {
     const offset = (page - 1) * PAGE_SIZE;
     const { data, error } = await supabase
       .from("food")
-      .select(`*, nutrients(*, food_id)`)
+      .select(`*, nutrients(*, food_id), serving(*, food)`)
       .ilike("name", `%${searchTerm}%`)
       .range(offset, offset + PAGE_SIZE - 1)
-      .order("name", { ascending: true });
+      .order(sortColumn || "name", {
+        ascending: sortDirection !== "DESC",
+      });
 
     if (error) {
       console.log("Failed to fetch error:", error);
@@ -42,10 +87,20 @@ export default function Table() {
     setFoods(data as any);
     setDataFetched(true);
   };
+  const handleSortClick = async (column: string) => {
+    let newSortDirection: SortDirection = null;
+    if (sortDirection === null) {
+      newSortDirection = "ASC";
+    } else if (sortDirection === "ASC") {
+      newSortDirection = "DESC";
+    }
+    setSortDirection(newSortDirection);
+    setSortColumn(column);
+  };
 
   useEffect(() => {
     getAllFoods(currentPage);
-  }, [currentPage, searchTerm]);
+  }, [currentPage, searchTerm, sortDirection, sortColumn]);
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -58,6 +113,14 @@ export default function Table() {
   const editFood = (food: FoodWithNutrientsAndServing) => {
     setOpenEditFoodModal(true);
     setSelectedFood(food);
+  };
+
+  const handleDeleteFood = async (id: number) => {
+    const { error } = await supabase.from("food").delete().match({ id: id });
+    if (error) {
+      console.log("Failed to delete food:", error);
+    }
+    getAllFoods(currentPage);
   };
 
   if (!dataFetched)
@@ -74,166 +137,214 @@ export default function Table() {
         setIsOpen={setOpenEditFoodModal}
         food={selectedFood}
       />
-      <div className="px-2 sm:px-6 lg:px-8">
-        <div className="flex my-4">
-          <div className="border border-gray-300 flex bg-white rounded-lg flex-col w-full mx-auto">
-            <div className="flex w-full">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search food..."
-                className={clsx(
-                  "rounded-l-lg",
-                  "pl-2 py-2 border-none focus:outline-none border-transparent focus:border-transparent focus:ring-0 grow bg-white",
-                )}
-              />
-              <div className="my-auto pr-2">
-                <MagnifyingGlassIcon className="text-gray-500 w-6" />
-              </div>
-            </div>
-          </div>
-          <Link href="/dashboard/foods/add" className="">
-            <div className="bg-gro-pink text-white p-2 rounded-md flex whitespace-nowrap ml-2">
-              <p className="my-auto hidden lg:block">New food</p>
-              <PlusCircleIcon className="w-7 m-0 lg:ml-1 my-auto" />
-            </div>
-          </Link>
-        </div>
+      <SearchBarWithAddButton
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        placeholder="Search for food..."
+        button={<AddFoodButton />}
+      />
 
+      <div className="mt-2">
         <div className="flow-root">
-          <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
-                <table className="min-w-full divide-y divide-gray-300">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+          <div className="inline-block min-w-full py-2 align-middle">
+            <div className="overflow-hidden shadow-lg ring-1 ring-black ring-opacity-5 rounded-lg">
+              <table className="min-w-full divide-y divide-gray-300">
+                <thead className="">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      <button
+                        onClick={() => handleSortClick("name")}
+                        className="group inline-flex"
                       >
-                        <a href="#" className="group inline-flex">
-                          Food Name
-                          <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
-                            <ChevronDownIcon
-                              className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </a>
-                      </th>
-                      {!isMobile ? (
-                        <>
-                          <th
-                            scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                          >
-                            Brand
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                          >
-                            Protein
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                          >
-                            Fats
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                          >
-                            Carbs
-                          </th>
-                        </>
-                      ) : null}
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                      >
-                        Calories
-                      </th>
-                      {!isMobile ? (
+                        Food Name
+                        <span className="ml-1 flex-none rounded text-gray-400">
+                          {sortColumn === "name"
+                            ? SortIcon(sortDirection)
+                            : SortIcon(null)}
+                        </span>
+                      </button>
+                    </th>
+                    {!isMobile ? (
+                      <>
                         <th
                           scope="col"
-                          className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          <span className="sr-only">Edit</span>
+                          <button
+                            onClick={() => handleSortClick("brand")}
+                            className="group inline-flex"
+                          >
+                            Brand
+                            <span className="ml-1 flex-none rounded text-gray-400">
+                              {sortColumn === "brand"
+                                ? SortIcon(sortDirection)
+                                : SortIcon(null)}
+                            </span>
+                          </button>
                         </th>
-                      ) : null}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 bg-white">
-                    {foods?.map((f: FoodWithNutrientsAndServing, idx) => (
-                      <tr key={idx}>
-                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                          {f.name}
-                          {isMobile ? (
-                            <p className="text-gray-400 font-light">
-                              {f.brand}
-                            </p>
-                          ) : null}
-                        </td>
-                        {!isMobile ? (
-                          <>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              <p>{f.brand}</p>
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {f.nutrients?.protein}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {f.nutrients?.saturated_fat +
-                                f.nutrients?.trans_fat}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {f.nutrients?.fiber + f.nutrients?.sugar}
-                            </td>
-                          </>
-                        ) : null}
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          {/* <button
+                            onClick={() =>
+                              handleSortClick("nutrients->protein")
+                            }
+                            className="group inline-flex"
+                          >
+                            Protein
+                            <span className="ml-1 flex-none rounded text-gray-400">
+                              {sortColumn === "nutrients->protein"
+                                ? SortIcon(sortDirection)
+                                : SortIcon(null)}
+                            </span>
+                          </button> */}
+                          Protein
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          {/* <button
+                            onClick={() => handleSortClick("fats")}
+                            className="group inline-flex"
+                          >
+                            Fats
+                            <span className="ml-1 flex-none rounded text-gray-400">
+                              {sortColumn === "fats"
+                                ? SortIcon(sortDirection)
+                                : SortIcon(null)}
+                            </span>
+                          </button> */}
+                          Fats
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          {/* <button
+                            onClick={() => handleSortClick("carbs")}
+                            className="group inline-flex"
+                          >
+                            Carbs
+                            <span className="ml-1 flex-none rounded text-gray-400">
+                              {sortColumn === "carbs"
+                                ? SortIcon(sortDirection)
+                                : SortIcon(null)}
+                            </span>
+                          </button> */}
+                          Carbs
+                        </th>
+                      </>
+                    ) : null}
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      {/* <button
+                        onClick={() => handleSortClick("calories")}
+                        className="group inline-flex"
+                      >
+                        Calories
+                        <span className="ml-1 flex-none rounded text-gray-400">
+                          {sortColumn === "calories"
+                            ? SortIcon(sortDirection)
+                            : SortIcon(null)}
+                        </span>
+                      </button> */}
+                      Calories
+                    </th>
+                    <th scope="col" className="">
+                      <span className="sr-only">Delete</span>
+                    </th>
 
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {f.nutrients?.calories}
-                        </td>
-                        {!isMobile ? (
-                          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <button
-                              onClick={() => editFood(f)}
-                              className="text-indigo-600 hover:text-indigo-900"
-                            >
-                              Edit
-                            </button>
-                          </td>
+                    {!isMobile ? (
+                      <th
+                        scope="col"
+                        className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                      >
+                        <span className="sr-only">Edit</span>
+                      </th>
+                    ) : null}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-white">
+                  {foods?.map((f: ReturnedFood, idx) => (
+                    <tr key={idx}>
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                        {f.name}
+                        {isMobile ? (
+                          <p className="text-gray-400 font-light">{f.brand}</p>
                         ) : null}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                      </td>
+                      {!isMobile ? (
+                        <>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            <p>{f.brand}</p>
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {f.nutrients?.protein}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {f.nutrients?.saturated_fat +
+                              f.nutrients?.trans_fat}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {f.nutrients?.fiber + f.nutrients?.sugar}
+                          </td>
+                        </>
+                      ) : null}
+
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {f.nutrients?.calories}
+                      </td>
+
+                      {!isMobile ? (
+                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                          <button
+                            onClick={() => editFood(f)}
+                            className="text-indigo-600 hover:text-indigo-900"
+                          >
+                            Edit
+                          </button>
+                        </td>
+                      ) : null}
+                      <td className="relative whitespace-nowrap py-2 pr-2 text-right text-sm font-medium">
+                        <button
+                          onClick={(e) => handleDeleteFood(f.id)}
+                          className="text-white p-2 bg-red-500 rounded-md"
+                        >
+                          <TrashIcon className="w-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
-        <div className="w-full mt-3">
-          <div className="lg:ml-auto flex justify-between">
+        <div className="w-full mt-3 pb-4">
+          <div className="lg:ml-auto flex justify-between lg:justify-center lg:space-x-10">
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
-              className="bg-gro-indigo disabled:bg-gray-500 text-white font-bold py-2 rounded flex w-28"
+              className="bg-gro-indigo disabled:bg-gray-500 text-white font-bold p-2 rounded flex"
             >
               <span className="mx-auto flex">
-                <ChevronLeftIcon className="w-6" /> Previous
+                <ChevronLeftIcon className="w-6" />
               </span>
             </button>
             <button
               onClick={handleNextPage}
               disabled={foods.length < PAGE_SIZE}
-              className="bg-gro-indigo text-white font-bold py-2 rounded flex w-28"
+              className="bg-gro-indigo text-white font-bold p-2 rounded flex"
             >
               <span className="mx-auto flex">
-                Next <ChevronLeftIcon className="w-6 rotate-180" />
+                <ChevronLeftIcon className="w-6 rotate-180" />
               </span>
             </button>
           </div>

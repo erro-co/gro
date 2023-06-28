@@ -35,7 +35,7 @@ const statuses: Record<ClientStatus, string> = {
 
 const AddClientButton: FC = () => {
   return (
-    <Link href="/dashboard/client/add">
+    <Link href="/dashboard/clients/add">
       <div className="bg-gro-pink text-white p-2 rounded-lg flex whitespace-nowrap ml-2">
         <p className="my-auto hidden lg:block">New Client</p>
         <PlusCircleIcon className="w-7 m-0 lg:ml-1 my-auto" />

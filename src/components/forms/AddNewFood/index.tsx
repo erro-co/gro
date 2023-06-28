@@ -13,6 +13,7 @@ import { convertToBase100 } from "@/lib/utils";
 import QuickAddFoodModal from "@/components/Modals/QuickAddFoodModal";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { BoltIcon } from "@heroicons/react/20/solid";
+
 const AddNewFoodForm: FC = () => {
   const {
     register,

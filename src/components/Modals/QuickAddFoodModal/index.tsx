@@ -3,7 +3,6 @@ import { FC, Fragment, useState } from "react";
 import { CheckIcon, PlusIcon } from "@heroicons/react/20/solid";
 import WoolworthsIcon from "@/components/icons/WoolworthsIcon";
 import LoadingIcon from "@/components/icons/LoadingIcon";
-import { isValidWoolworthsUrl } from "@/lib/utils";
 import { useFormContext } from "react-hook-form";
 import axios from "axios";
 
@@ -136,7 +135,7 @@ const QuickAddFoodModal: FC<IQuickAddFoodModal> = ({ isOpen, setIsOpen }) => {
                       className="p-2 pl-4 w-full rounded-lg border-transparent focus:border-transparent focus:ring-0"
                       placeholder="paste link here"
                     />
-                    {isValidWoolworthsUrl(inputValue) ? (
+                    {inputValue.includes("woolworths.com.au") ? (
                       <div className="w-8 p-1 mx-1 rounded-full bg-green-100 my-auto">
                         <CheckIcon />
                       </div>

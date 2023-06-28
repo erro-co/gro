@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { FC, Fragment } from "react";
+import { FC, Fragment, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -11,7 +11,7 @@ import EditFood from "@/components/EditFood";
 export interface IEditFoodModal {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  food: FoodWithNutrientsAndServing | null;
+  food: FoodWithNutrientsAndServing;
 }
 
 const EditFoodModal: FC<IEditFoodModal> = ({ isOpen, setIsOpen, food }) => {
@@ -25,6 +25,8 @@ const EditFoodModal: FC<IEditFoodModal> = ({ isOpen, setIsOpen, food }) => {
       nutrients: food?.nutrients,
     },
   });
+
+  useEffect(() => {}, [food]);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -62,7 +64,7 @@ const EditFoodModal: FC<IEditFoodModal> = ({ isOpen, setIsOpen, food }) => {
                       Edit food
                     </Dialog.Title>
                     <FormProvider {...methods}>
-                      <EditFood />
+                      <EditFood food={food} />
                     </FormProvider>
                   </div>
                 </div>

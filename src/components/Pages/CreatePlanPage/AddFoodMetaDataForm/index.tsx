@@ -6,7 +6,7 @@ import { Meal, Nutrition, Serving } from "@/lib/schemas";
 import AddFoodServingInput from "../Inputs/AddFoodServingInput";
 import SelectMealInput from "../Inputs/SelectMealInput";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContex";
+import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
 
 export interface IAddFoodMetaDataForm {
   selectedFood: FoodItem | null;

@@ -3,7 +3,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { Meal } from "@/lib/schemas";
-import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContex";
+import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
 
 export interface ISelectMealInput {
   meals: Meal[];

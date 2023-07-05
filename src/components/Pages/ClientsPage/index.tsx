@@ -56,10 +56,9 @@ const ClientPage = () => {
       .order("id", { ascending: true });
 
     if (error) {
-      console.log(error);
+      console.error(error);
       return null;
     } else {
-      console.log("clients", clients);
       setClients(clients as Client[]);
       setLoading(false);
     }

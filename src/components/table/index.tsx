@@ -63,7 +63,7 @@ export default function Table() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [openEditFoodModal, setOpenEditFoodModal] = useState<boolean>(false);
   const [selectedFood, setSelectedFood] =
-    useState<FoodWithNutrientsAndServing>(emptyPlaceholderFood);
+    useState<ReturnedFood>(emptyPlaceholderFood);
 
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
@@ -81,7 +81,7 @@ export default function Table() {
       });
 
     if (error) {
-      console.log("Failed to fetch error:", error);
+      console.error("Failed to fetch error:", error);
     }
 
     setFoods(data as any);
@@ -110,7 +110,7 @@ export default function Table() {
     setCurrentPage(currentPage - 1);
   };
 
-  const editFood = (food: FoodWithNutrientsAndServing) => {
+  const editFood = (food: ReturnedFood) => {
     setOpenEditFoodModal(true);
     setSelectedFood(food);
   };
@@ -118,7 +118,7 @@ export default function Table() {
   const handleDeleteFood = async (id: number) => {
     const { error } = await supabase.from("food").delete().match({ id: id });
     if (error) {
-      console.log("Failed to delete food:", error);
+      console.error("Failed to delete food:", error);
     }
     getAllFoods(currentPage);
   };
@@ -315,7 +315,7 @@ export default function Table() {
                       <td className="relative whitespace-nowrap py-2 pr-2 text-right text-sm font-medium">
                         <button
                           onClick={(e) => handleDeleteFood(f.id)}
-                          className="text-white p-2 bg-red-500 rounded-md"
+                          className="text-white p-2 bg-red-500 rounded-md mr-2"
                         >
                           <TrashIcon className="w-4" />
                         </button>
@@ -332,7 +332,7 @@ export default function Table() {
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
-              className="bg-gro-indigo disabled:bg-gray-500 text-white font-bold p-2 rounded flex"
+              className="bg-gro-indigo disabled:bg-gray-500 text-white font-bold p-2 rounded flex cursor-pointer"
             >
               <span className="mx-auto flex">
                 <ChevronLeftIcon className="w-6" />
@@ -341,7 +341,7 @@ export default function Table() {
             <button
               onClick={handleNextPage}
               disabled={foods.length < PAGE_SIZE}
-              className="bg-gro-indigo text-white font-bold p-2 rounded flex"
+              className="bg-gro-indigo text-white font-bold p-2 rounded flex cursor-pointer"
             >
               <span className="mx-auto flex">
                 <ChevronLeftIcon className="w-6 rotate-180" />

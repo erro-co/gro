@@ -1,4 +1,4 @@
-import { FoodWithNutrientsAndServing } from "../schemas";
+import { CompleteFood } from "../schemas";
 
 export const foodCategories: string[] = [
   "fruits",
@@ -11,7 +11,8 @@ export const foodCategories: string[] = [
   "beverages",
 ];
 
-export const emptyPlaceholderFood: FoodWithNutrientsAndServing = {
+export const emptyPlaceholderFood: CompleteFood = {
+  id: 0,
   name: "",
   food_category: 0,
   nutrients: {
@@ -30,7 +31,7 @@ export const emptyPlaceholderFood: FoodWithNutrientsAndServing = {
     total_fat: 0,
     vitamin_d: 0,
   },
-  servings: [
+  serving: [
     {
       name: "",
       weight: 0,

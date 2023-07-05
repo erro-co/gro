@@ -9,7 +9,10 @@ export const joinClassNames = (
 export const isValueEmpty = (value: any) =>
   value === undefined || value === null || value === "";
 
-export const convertToBase100 = (nutrition: Nutrition, weight: number) => {
+export const convertToBase100 = (
+  nutrition: Nutrition,
+  weight: number,
+): Nutrition => {
   const scale = Number(100 / weight);
   return {
     calories: Number((nutrition.calories * scale).toFixed(1)),

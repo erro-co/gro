@@ -12,7 +12,7 @@ const AddNewFoodPage: FC = () => {
   const methods = useForm<FoodWithNutrientsAndServing>({
     resolver: zodResolver(FoodWithNutrientsAndServingSchema),
     defaultValues: {
-      servings: [{ name: "", weight: undefined }],
+      serving: [{ name: "", weight: undefined }],
     },
   });
   return (

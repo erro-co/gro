@@ -44,6 +44,11 @@ export const FoodWithNutrientsAndServingSchema = FoodSchema.extend({
   serving: z.array(servingSchema).min(1),
 });
 
+export const FoodWithNutrientsAndServingAndIdSchema =
+  FoodWithNutrientsAndServingSchema.extend({
+    id: z.number().nonnegative(),
+  });
+
 export const newMealPlanFoodSchema = z.object({
   food: FoodSchema.extend({ id: z.number().nonnegative() }),
   serving: servingWithIdSchema,
@@ -73,4 +78,7 @@ export type Categories = z.infer<typeof categoriesSchema>;
 export type Nutrition = z.infer<typeof nutrientsSchema>;
 export type FoodWithNutrientsAndServing = z.infer<
   typeof FoodWithNutrientsAndServingSchema
+>;
+export type CompleteFood = z.infer<
+  typeof FoodWithNutrientsAndServingAndIdSchema
 >;

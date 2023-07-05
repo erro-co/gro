@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { supabase } from "@/lib/supabase";
 import { Meal, newMealPlanSchema } from "@/lib/schemas";
-import { MealIndexProvider } from "@/lib/context/SelectedMealIndexContex";
+import { MealIndexProvider } from "@/lib/context/SelectedMealIndexContext";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import AddFoodModal from "./AddFoodModal";
 import AddMealTable from "./AddMealTable";

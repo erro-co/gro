@@ -3,20 +3,20 @@ import { FC, Fragment, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  FoodWithNutrientsAndServingSchema,
-  FoodWithNutrientsAndServing,
+  FoodWithNutrientsAndServingAndIdSchema,
+  CompleteFood,
 } from "@/lib/schemas";
 import EditFood from "@/components/EditFood";
 
 export interface IEditFoodModal {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  food: FoodWithNutrientsAndServing;
+  food: CompleteFood;
 }
 
 const EditFoodModal: FC<IEditFoodModal> = ({ isOpen, setIsOpen, food }) => {
-  const methods = useForm<FoodWithNutrientsAndServing>({
-    resolver: zodResolver(FoodWithNutrientsAndServingSchema),
+  const methods = useForm<CompleteFood>({
+    resolver: zodResolver(FoodWithNutrientsAndServingAndIdSchema),
   });
 
   useEffect(() => {}, [food]);

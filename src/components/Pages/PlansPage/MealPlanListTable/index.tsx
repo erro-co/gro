@@ -12,8 +12,8 @@ export interface IMealPlanListTable {
 }
 const MealPlanListTable: FC<IMealPlanListTable> = ({ mealPlans }) => {
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="-mx-4 ring-1 ring-gray-300 sm:mx-0 rounded-lg">
+    <div className="mt-4">
+      <div className="ring-1 ring-gray-300 rounded-lg">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
             <tr>

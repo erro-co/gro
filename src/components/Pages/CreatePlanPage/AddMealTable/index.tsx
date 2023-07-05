@@ -1,5 +1,5 @@
 "use client";
-import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContex";
+import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
 import { MealPlanFoodItem } from "@/lib/schemas";
 import {
   ChatBubbleOvalLeftEllipsisIcon,

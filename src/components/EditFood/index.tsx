@@ -5,10 +5,10 @@ import { FoodCategory } from "@/lib/types";
 import { supabase } from "@/lib/supabase";
 import { useFormContext } from "react-hook-form";
 import AddServingInput from "../forms/AddNewFood/AddServingInput";
-import { FoodWithNutrientsAndServing } from "@/lib/schemas";
+import { CompleteFood } from "@/lib/schemas";
 
 export interface IEditFood {
-  food: FoodWithNutrientsAndServing;
+  food: CompleteFood;
 }
 
 const EditFood: FC<IEditFood> = ({ food }) => {
@@ -20,8 +20,6 @@ const EditFood: FC<IEditFood> = ({ food }) => {
   } = useFormContext();
   const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([]);
   const [dataFetched, setDataFetched] = useState(false);
-  const [showSuccessfulAddNewFoodModal, setShowSuccessfulAddNewFoodModal] =
-    useState(false);
   const [selectedFoodCategory, setSelectedFoodCategory] =
     useState<FoodCategory | null>(null);
 
@@ -43,6 +41,7 @@ const EditFood: FC<IEditFood> = ({ food }) => {
   }, []);
 
   useEffect(() => {
+    setValue("id", food?.id);
     setValue("name", food?.name);
     setValue("brand", food?.brand);
     setValue("food_category", food?.food_category);
@@ -50,9 +49,51 @@ const EditFood: FC<IEditFood> = ({ food }) => {
     setValue("nutrients", food?.nutrients);
   }, [food]);
 
+  const updatefood = async (updateFood: any) => {
+    const { data: updated_food, error: updated_food_error } = await supabase
+      .from("food")
+      .update({
+        name: updateFood.name,
+        brand: updateFood.brand,
+        food_category: updateFood.food_category,
+      })
+      .eq("id", updateFood.id)
+      .select();
+    console.log("data", updated_food);
+    if (updated_food_error) {
+      console.log("Failed to update food:", updated_food_error);
+    }
+
+    const { data: updated_serving, error: updated_serving_error } =
+      await supabase
+        .from("serving")
+        .update({
+          name: updateFood.serving.name,
+          serving_size: updateFood.serving.serving_size,
+        })
+        .eq("id", updateFood.id)
+        .select();
+
+    console.log("data", updated_serving);
+    if (updated_serving_error) {
+      console.log("Failed to update food:", updated_serving_error);
+    }
+    const { data: updated_nutrients, error: updated_nutrients_error } =
+      await supabase
+        .from("nutrients")
+        .update(updateFood.nutrients)
+        .eq("food_id", updateFood.id)
+        .select();
+    console.log("data", updated_nutrients);
+    if (updated_nutrients_error) {
+      console.log("Failed to update food:", updated_nutrients_error);
+    }
+  };
+
   const onSubmit = async (data: any) => {
     console.log("data");
     console.log(data);
+    await updatefood(data);
   };
 
   return (

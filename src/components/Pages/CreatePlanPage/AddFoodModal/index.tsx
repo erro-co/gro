@@ -11,7 +11,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import FoodSearchBar from "../FoodSearchBar";
 import FoodSearchHitsTable from "../FoodSearchHitsTable";
 import { supabase } from "@/lib/supabase";
-import { FoodItem } from "@/lib/types";
+import { Food } from "@/lib/types";
 import AddFoodMetaDataForm from "../AddFoodMetaDataForm";
 import { useFormContext } from "react-hook-form";
 
@@ -21,10 +21,10 @@ export interface IAddFoodModal {
 }
 
 const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
-  const [foods, setFoods] = useState<FoodItem[]>([]);
+  const [foods, setFoods] = useState<Food[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dataFetched, setDataFetched] = useState(false);
-  const [selectedFood, setSelectedFood] = useState<FoodItem | null>(null);
+  const [selectedFood, setSelectedFood] = useState<Food | null>(null);
 
   const { watch } = useFormContext();
 
@@ -41,7 +41,7 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
       console.log("Failed to fetch error:", error);
     }
 
-    setFoods(all_foods as FoodItem[]);
+    setFoods(all_foods as Food[]);
     setDataFetched(true);
   };
 

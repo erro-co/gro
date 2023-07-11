@@ -1,11 +1,11 @@
-import { FoodItem } from "@/lib/types";
+import { Food } from "@/lib/types";
 import clsx from "clsx";
 import { Dispatch, FC, SetStateAction } from "react";
 
 export interface IFoodSearchHitsTable {
-  foods: FoodItem[];
-  selectedFood: FoodItem | null;
-  setSelectedFood: Dispatch<SetStateAction<FoodItem | null>>;
+  foods: Food[];
+  selectedFood: Food | null;
+  setSelectedFood: Dispatch<SetStateAction<Food | null>>;
 }
 
 const FoodSearchHitsTable: FC<IFoodSearchHitsTable> = ({
@@ -37,7 +37,7 @@ const FoodSearchHitsTable: FC<IFoodSearchHitsTable> = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {foods?.map((food: FoodItem, idx: number) => (
+                  {foods?.map((food: Food, idx: number) => (
                     <tr
                       key={idx}
                       className={clsx(

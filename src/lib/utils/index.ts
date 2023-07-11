@@ -49,3 +49,23 @@ export const convertKjToKcal = (kj: number): number => {
 
   return roundedKcal;
 };
+
+export const parseSupabaseDate = (
+  input: string,
+  type: "date" | "dateTime",
+): string => {
+  // Create a date object from the input string
+  const date = new Date(input);
+
+  // Extract and format the desired components
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based in JS, so we add 1
+  const year = date.getFullYear();
+
+  // Return the formatted string
+
+  if (type === "date") return `${day}/${month}/${year}`;
+  return `${hours}:${minutes} ${day}/${month}/${year}`;
+};

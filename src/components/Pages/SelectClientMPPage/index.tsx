@@ -4,8 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { FC, useEffect, useState } from "react";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
+import Addbutton from "@/components/SearchBarWithAddButton/AddButton";
 
 export interface Client {
   id: number;
@@ -27,17 +26,6 @@ enum ClientStatus {
   InProgress = "In progress",
   Archived = "Archived",
 }
-
-const AddClientButton: FC = () => {
-  return (
-    <Link href="/dashboard/client/add">
-      <div className="bg-gro-pink text-white p-2 rounded-lg flex whitespace-nowrap ml-2">
-        <p className="my-auto hidden lg:block">New Client</p>
-        <PlusCircleIcon className="w-7 m-0 lg:ml-1 my-auto" />
-      </div>
-    </Link>
-  );
-};
 
 const SelectClientMPPage: FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -73,25 +61,23 @@ const SelectClientMPPage: FC = () => {
     );
   }
   return (
-    <>
-      <div className="w-full">
-        <h2 className="text-3xl font-bold text-center mt-12 lg:mt-24">
-          Assign to a Client:
-        </h2>
-        <div className="mt-12 w-full lg:w-2/3 mx-auto">
-          <SearchBarWithAddButton
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            placeholder="Search for a client..."
-            button={<AddClientButton />}
-          />
-        </div>
-        <SelectClientList clients={clients} />
-        <button className="flex mx-auto w-full lg:w-2/3 p-2 bg-gray-400 font-bold text-white rounded-lg mt-4">
-          <p className="mx-auto">Skip</p>
-        </button>
+    <div className="w-full">
+      <h2 className="text-3xl font-bold text-center mt-12 lg:mt-24">
+        Assign to a Client:
+      </h2>
+      <div className="mt-12 w-full lg:w-2/3 mx-auto">
+        <SearchBarWithAddButton
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          placeholder="Search for a client..."
+          button={<Addbutton text="Add Client" link="dashboard/client/add" />}
+        />
       </div>
-    </>
+      <SelectClientList clients={clients} />
+      <button className="flex mx-auto w-full lg:w-2/3 p-2 bg-gray-400 font-bold text-white rounded-lg mt-4">
+        <p className="mx-auto">Skip</p>
+      </button>
+    </div>
   );
 };
 

@@ -189,53 +189,18 @@ export default function Table() {
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          {/* <button
-                            onClick={() =>
-                              handleSortClick("nutrients->protein")
-                            }
-                            className="group inline-flex"
-                          >
-                            Protein
-                            <span className="ml-1 flex-none rounded text-gray-400">
-                              {sortColumn === "nutrients->protein"
-                                ? SortIcon(sortDirection)
-                                : SortIcon(null)}
-                            </span>
-                          </button> */}
                           Protein
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          {/* <button
-                            onClick={() => handleSortClick("fats")}
-                            className="group inline-flex"
-                          >
-                            Fats
-                            <span className="ml-1 flex-none rounded text-gray-400">
-                              {sortColumn === "fats"
-                                ? SortIcon(sortDirection)
-                                : SortIcon(null)}
-                            </span>
-                          </button> */}
                           Fats
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          {/* <button
-                            onClick={() => handleSortClick("carbs")}
-                            className="group inline-flex"
-                          >
-                            Carbs
-                            <span className="ml-1 flex-none rounded text-gray-400">
-                              {sortColumn === "carbs"
-                                ? SortIcon(sortDirection)
-                                : SortIcon(null)}
-                            </span>
-                          </button> */}
                           Carbs
                         </th>
                       </>
@@ -244,17 +209,6 @@ export default function Table() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      {/* <button
-                        onClick={() => handleSortClick("calories")}
-                        className="group inline-flex"
-                      >
-                        Calories
-                        <span className="ml-1 flex-none rounded text-gray-400">
-                          {sortColumn === "calories"
-                            ? SortIcon(sortDirection)
-                            : SortIcon(null)}
-                        </span>
-                      </button> */}
                       Calories
                     </th>
                     <th scope="col" className="">
@@ -315,7 +269,7 @@ export default function Table() {
                       <td className="relative whitespace-nowrap py-2 pr-2 text-right text-sm font-medium">
                         <button
                           onClick={(e) => handleDeleteFood(f.id)}
-                          className="text-white p-2 bg-red-500 rounded-md mr-2"
+                          className="text-white p-2 bg-red-500 rounded-md mr-"
                         >
                           <TrashIcon className="w-4" />
                         </button>

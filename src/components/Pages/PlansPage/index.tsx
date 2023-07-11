@@ -5,13 +5,9 @@ import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 import MealPlanListTable from "./MealPlanListTable";
 import { supabase } from "@/lib/supabase";
-import { MealPlan } from "@/lib/schemas";
+import { MealPlan } from "@/lib/types";
 import LoadingIcon from "../../icons/LoadingIcon";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
-
-interface MealPlanWithId extends MealPlan {
-  id: number;
-}
 
 const AddMealPlanButton: FC = () => (
   <Link href="/dashboard/plans/add">
@@ -23,7 +19,7 @@ const AddMealPlanButton: FC = () => (
 );
 
 const PlansPage: FC = () => {
-  const [mealPlans, setMealPlans] = useState<MealPlanWithId[]>([]);
+  const [mealPlans, setMealPlans] = useState<MealPlan[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -38,7 +34,7 @@ const PlansPage: FC = () => {
       console.log("Error getting meal plans:", error);
       return;
     }
-    setMealPlans(meal_plans as MealPlanWithId[]);
+    setMealPlans(meal_plans as MealPlan[]);
     setLoading(false);
   };
 

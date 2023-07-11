@@ -1,4 +1,4 @@
-import { FoodItem } from "@/lib/types";
+import { Food } from "@/lib/types";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import FoodNutrientsPieChart from "@/components/Charts/FoodNutrientsPieChart";
@@ -9,10 +9,10 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
 
 export interface IAddFoodMetaDataForm {
-  selectedFood: FoodItem | null;
+  selectedFood: Food | null;
   meals: Meal[];
   setOpen: Dispatch<SetStateAction<boolean>>;
-  setSelectedFood: Dispatch<SetStateAction<FoodItem | null>>;
+  setSelectedFood: Dispatch<SetStateAction<Food | null>>;
 }
 
 export type ServingWithId = Serving & { id: number };

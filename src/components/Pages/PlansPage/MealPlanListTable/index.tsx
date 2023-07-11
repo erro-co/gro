@@ -1,14 +1,12 @@
-import { MealPlan } from "@/lib/schemas";
 import { ArrowRightCircleIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
 import { FC } from "react";
+import { MealPlan } from "@/lib/types";
+import { parseSupabaseDate } from "@/lib/utils";
 
-interface MealPlanWithId extends MealPlan {
-  id: number;
-}
 export interface IMealPlanListTable {
-  mealPlans: MealPlanWithId[];
+  mealPlans: MealPlan[];
 }
 const MealPlanListTable: FC<IMealPlanListTable> = ({ mealPlans }) => {
   return (
@@ -33,6 +31,12 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({ mealPlans }) => {
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
+                Created at
+              </th>
+              <th
+                scope="col"
+                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+              >
                 Template
               </th>
               <th
@@ -47,7 +51,7 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({ mealPlans }) => {
             </tr>
           </thead>
           <tbody>
-            {mealPlans?.map((plan: MealPlanWithId, planIdx) => (
+            {mealPlans?.map((plan: MealPlan, planIdx) => (
               <tr key={planIdx}>
                 <td
                   className={clsx(
@@ -71,7 +75,15 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({ mealPlans }) => {
                     "hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell",
                   )}
                 >
-                  {/* {plan.template ? "Yes" : "No"} */}
+                  {parseSupabaseDate(plan.created_at || "", "date")}
+                </td>
+                <td
+                  className={clsx(
+                    planIdx === 0 ? "" : "border-t border-gray-200",
+                    "hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell",
+                  )}
+                >
+                  {/* {plan.template ? "Yes" : "No"} */} No
                 </td>
                 <td
                   className={clsx(

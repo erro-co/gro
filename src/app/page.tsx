@@ -1,34 +1,44 @@
-"use client";
-import GroLogo from "@/components/icons/Logo";
-import { supabase } from "@/lib/supabase";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import LogoutButton from "../components/LogoutButton";
+import CountdownTimer from "@/components/Countdown";
 
-export default function Home() {
-  const router = useRouter();
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-  };
+export default async function Index() {
+  const supabase = createServerComponentClient({ cookies });
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="w-40 bg-gro-pink rounded-lg">
-        <GroLogo />
-      </div>
-      <div>
-        <Link href="/dashboard/plans">
-          <div className="bg-gro-purple p-4 text-white rounded-lg">
-            Go to Dashboard
+    <div className="w-full flex flex-col items-center">
+      <nav className="w-full flex justify-center h-16">
+        <div className="w-full max-w-5xl flex justify-between items-center p-3 text-sm text-foreground">
+          <div />
+
+          <div>
+            {user ? (
+              <div className="flex items-center gap-4">
+                <Link href={"/dashboard"} className="border p-2 rounded">
+                  Dashboard
+                </Link>
+                <LogoutButton />
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="py-2 px-5 rounded-md no-underline bg-gro-indigo text-white"
+              >
+                Login
+              </Link>
+            )}
           </div>
-        </Link>
+        </div>
+      </nav>
+      <div>
+        <CountdownTimer />
       </div>
-      <button
-        onClick={handleSignOut}
-        className="p-2 bg-red-500 text-white text-xl rounded-md"
-      >
-        Sign out
-      </button>
-    </main>
+    </div>
   );
 }

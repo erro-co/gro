@@ -1,4 +1,6 @@
-import React from "react";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "Gro - Settings",
@@ -7,8 +9,19 @@ export const metadata = {
   },
 };
 
-const SettingsPage = () => {
+const SettingsIndexPage = async () => {
+  const supabase = createServerComponentClient({ cookies });
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    // This route can only be accessed by authenticated users.
+    // Unauthenticated users will be redirected to the `/login` route.
+    redirect("/login");
+  }
   return <div>SettingsPage</div>;
 };
 
-export default SettingsPage;
+export default SettingsIndexPage;

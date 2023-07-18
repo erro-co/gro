@@ -38,7 +38,7 @@ const CountdownTimer: FC = () => {
   const { days, hours, minutes, seconds } = secondsToTime(timeLeft);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen text-center">
+    <div className="flex flex-col items-center justify-center text-center mt-36">
       <div>
         <div className="w-40 mx-auto bg-gro-pink rounded-lg mb-12">
           <GroLogo />

@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState, FC, useEffect } from "react";
+import { Fragment, useState, FC } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import {
@@ -15,8 +15,7 @@ import {
 import GroLogo from "@/components/icons/Logo";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { supabase } from "@/lib/supabase";
-import { capitalizeFirstLetter } from "@/lib/utils";
+import LogoutButton from "@/components/LogoutButton";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
@@ -74,42 +73,33 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
   const router = useRouter();
   const path = usePathname();
 
-  const getUser = async () => {
-    const { data: user, error } = await supabase.auth.getUser();
-    if (error) {
-      console.log(error);
-      return null;
-    }
+  // const getUser = async () => {
+  //   const { data: user, error } = await supabase.auth.getUser();
+  //   if (error) {
+  //     console.log(error);
+  //     return null;
+  //   }
 
-    const { data: user_details, error: user_details_error } = await supabase
-      .from("user")
-      .select("*")
-      .eq("email", user?.user?.email);
+  //   const { data: user_details, error: user_details_error } = await supabase
+  //     .from("user")
+  //     .select("*")
+  //     .eq("email", user?.user?.email);
 
-    if (user_details_error) {
-      console.log(user_details_error);
-      return null;
-    }
-    setProfileName(
-      `${capitalizeFirstLetter(
-        user_details?.[0]?.first_name,
-      )} ${capitalizeFirstLetter(user_details?.[0]?.last_name)}`,
-    );
-  };
+  //   if (user_details_error) {
+  //     console.log(user_details_error);
+  //     return null;
+  //   }
+  //   setProfileName(
+  //     `${capitalizeFirstLetter(
+  //       user_details?.[0]?.first_name,
+  //     )} ${capitalizeFirstLetter(user_details?.[0]?.last_name)}`,
+  //   );
+  // };
 
-  useEffect(() => {
-    getUser();
-  }, []);
+  // useEffect(() => {
+  //   getUser();
+  // }, []);
 
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      console.log(error);
-      return null;
-    }
-    router.refresh();
-  };
   return (
     <>
       <div>
@@ -210,12 +200,13 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                           >
                             <span className="sr-only">Your profile</span>
                             <span aria-hidden="true">{profileName}</span>
-                            <button
+                            {/* <button
                               className="p-2 bg-red-500 text-white rounded-lg ml-auto"
                               onClick={signOut}
                             >
                               Sign out
-                            </button>
+                            </button> */}
+                            <LogoutButton />
                           </a>
                         </li>
                       </ul>
@@ -271,12 +262,13 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                   >
                     <span className="sr-only">Your profile</span>
                     <span aria-hidden="true">{profileName}</span>
-                    <button
+                    {/* <button
                       className="p-2 ml-auto bg-red-500 text-white rounded-lg"
                       onClick={signOut}
                     >
                       Sign out
-                    </button>
+                    </button> */}
+                    <LogoutButton />
                   </a>
                 </li>
               </ul>

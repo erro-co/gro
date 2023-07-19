@@ -125,8 +125,10 @@ export default function Table() {
 
   if (!dataFetched)
     return (
-      <div className="w-40 mx-auto mt-20">
-        <LoadingIcon />
+      <div className="w-full mt-24">
+        <div className="w-32 mx-auto">
+          <LoadingIcon />
+        </div>
       </div>
     );
 

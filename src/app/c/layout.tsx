@@ -7,9 +7,7 @@ import {
   HomeIcon,
   XMarkIcon,
   FireIcon,
-  TableCellsIcon,
-  UsersIcon,
-  CalendarIcon,
+  UserIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import GroLogo from "@/components/icons/Logo";
@@ -18,34 +16,22 @@ import { usePathname } from "next/navigation";
 import LogoutButton from "@/components/LogoutButton";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
+  { name: "Dashboard", href: "/c/", icon: HomeIcon, current: true },
   {
-    name: "Foods",
-    href: "/dashboard/foods",
+    name: "Plans",
+    href: "/c/plans",
     icon: FireIcon,
     current: false,
   },
   {
-    name: "Plans",
-    href: "/dashboard/plans",
-    icon: TableCellsIcon,
-    current: false,
-  },
-  {
-    name: "Clients",
-    href: "/dashboard/clients",
-    icon: UsersIcon,
-    current: false,
-  },
-  {
-    name: "Schedule",
-    href: "/dashboard/schedule",
-    icon: CalendarIcon,
+    name: "Profile",
+    href: "/c/profile",
+    icon: UserIcon,
     current: false,
   },
   {
     name: "Settings",
-    href: "/dashboard/settings",
+    href: "/c/settings",
     icon: Cog6ToothIcon,
     current: false,
   },
@@ -236,11 +222,11 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
-          <div className="w-full">
-            {/* <div className="w-10 bg-gro-pink mx-auto rounded-lg -my-4">
+          {/* <div className="w-full">
+            <div className="w-10 bg-gro-pink mx-auto rounded-lg -my-4">
               <GroLogo />
-            </div> */}
-          </div>
+            </div>
+          </div> */}
         </div>
 
         <main className="pt-14 lg:pl-72 lg:h-screen">

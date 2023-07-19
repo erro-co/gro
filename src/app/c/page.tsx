@@ -1,28 +1,22 @@
-import CalendarPage from "@/components/Calendars";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export const metadata = {
-  title: "Gro - Schedule",
-  icons: {
-    icon: "/gro_logo.png",
-  },
-};
-
-const ScheduleIndexPage = async () => {
+const ClientDashboardIndexPage = async () => {
   const supabase = createServerComponentClient({ cookies });
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  console.log(user);
 
   if (!user) {
     // This route can only be accessed by authenticated users.
     // Unauthenticated users will be redirected to the `/login` route.
     redirect("/login");
   }
-  return <CalendarPage />;
+
+  return <div>ClientDashboardIndexPage</div>;
 };
 
-export default ScheduleIndexPage;
+export default ClientDashboardIndexPage;

@@ -91,18 +91,18 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
                 />
-                {dataFetched ? (
-                  <FoodSearchHitsTable
-                    foods={foods}
-                    selectedFood={selectedFood}
-                    setSelectedFood={setSelectedFood}
-                  />
-                ) : null}
                 {selectedFood ? (
                   <AddFoodMetaDataForm
                     selectedFood={selectedFood}
                     meals={meals}
                     setOpen={setOpen}
+                    setSelectedFood={setSelectedFood}
+                  />
+                ) : null}
+                {dataFetched ? (
+                  <FoodSearchHitsTable
+                    foods={foods}
+                    selectedFood={selectedFood}
                     setSelectedFood={setSelectedFood}
                   />
                 ) : null}

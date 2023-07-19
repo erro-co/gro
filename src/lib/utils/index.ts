@@ -1,4 +1,5 @@
 import { Nutrition } from "../schemas";
+import { supabase } from "../supabase";
 
 export const joinClassNames = (
   ...classes: (string | boolean | undefined)[]
@@ -68,4 +69,36 @@ export const parseSupabaseDate = (
 
   if (type === "date") return `${day}/${month}/${year}`;
   return `${hours}:${minutes} ${day}/${month}/${year}`;
+};
+
+export const supabaseValueExists = async (
+  table: string,
+  column: string,
+  value: any,
+): Promise<boolean> => {
+  console.log(table, column, value);
+  try {
+    const { data, error } = await supabase
+      .from(table)
+      .select(column)
+      .eq(column, value)
+      .limit(1);
+
+    if (error) {
+      console.error(
+        `An error occurred while checking the value of ${value} in ${table}.${column}`,
+        error,
+      );
+      return false;
+    }
+
+    if (data && data.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error("An error occurred while checking the value.", error);
+    return false;
+  }
 };

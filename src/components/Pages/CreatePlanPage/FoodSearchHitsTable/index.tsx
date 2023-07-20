@@ -20,7 +20,7 @@ const FoodSearchHitsTable: FC<IFoodSearchHitsTable> = ({
           <div className="inline-block min-w-full py-2 align-middle">
             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
-                <thead className="bg-gray-50">
+                <thead className="bg-gro-pink/50">
                   <tr>
                     <th
                       scope="col"
@@ -44,12 +44,13 @@ const FoodSearchHitsTable: FC<IFoodSearchHitsTable> = ({
                         selectedFood === food
                           ? "bg-pink-300 text-white"
                           : "hover:bg-gray-200 ",
+                        idx % 2 === 0 ? "bg-white" : "bg-gray-50",
                       )}
                       onClick={() =>
                         setSelectedFood(selectedFood === food ? null : food)
                       }
                     >
-                      <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                      <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-light text-gray-900 sm:pl-6">
                         {food.name}
                       </td>
                       <td

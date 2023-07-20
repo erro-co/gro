@@ -2,7 +2,7 @@
 import Link from "next/link";
 import clsx from "clsx";
 import { FC } from "react";
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { capitalizeFirstLetter } from "@/lib/helpers";
 import { Client } from "../Pages/SelectClientMPPage";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 

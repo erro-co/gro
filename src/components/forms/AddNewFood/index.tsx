@@ -9,7 +9,7 @@ import { useFormContext } from "react-hook-form";
 import AddServingInput from "./AddServingInput";
 import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodModal";
 import { FoodWithNutrientsAndServingSchema, Serving } from "@/lib/schemas";
-import { convertToBase100 } from "@/lib/utils";
+import { convertToBase100 } from "@/lib/helpers";
 import QuickAddFoodModal from "@/components/Modals/QuickAddFoodModal";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { BoltIcon } from "@heroicons/react/20/solid";

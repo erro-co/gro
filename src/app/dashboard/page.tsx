@@ -1,3 +1,4 @@
+import DashboardPage from "@/components/Pages/DashboardPage";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -23,11 +24,7 @@ const DashboardHomePage = async () => {
     // Unauthenticated users will be redirected to the `/login` route.
     redirect("/login");
   }
-  return (
-    <div>
-      <h1 className="text-3xl font-bold">Dashboard</h1>
-    </div>
-  );
+  return <DashboardPage />;
 };
 
 export default DashboardHomePage;

@@ -13,5 +13,6 @@ module.exports = {
     "comma-dangle": [2, "always-multiline"],
     "unused-imports/no-unused-imports": "error",
     "@typescript-eslint/no-empty-function": "warn",
+    "@typescript-eslint/no-empty-interface": "warn",
   },
 };

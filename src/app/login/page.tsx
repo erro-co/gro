@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import GroLogo from "@/components/icons/Logo";
-import { supabaseValueExists } from "@/lib/utils";
+import { supabaseValueExists } from "@/lib/helpers";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 
 type LoginViews =

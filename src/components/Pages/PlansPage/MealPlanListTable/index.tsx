@@ -3,7 +3,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { FC } from "react";
 import { MealPlan } from "@/lib/types";
-import { parseSupabaseDate } from "@/lib/utils";
+import { parseSupabaseDate } from "@/lib/helpers";
 
 export interface IMealPlanListTable {
   mealPlans: MealPlan[];

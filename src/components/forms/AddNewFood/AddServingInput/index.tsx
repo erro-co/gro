@@ -1,7 +1,7 @@
 import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/20/solid";
 import { FC } from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { isValueEmpty } from "@/lib/utils";
+import { isValueEmpty } from "@/lib/helpers";
 
 const AddServingInput: FC = () => {
   const { control, watch, register } = useFormContext();

@@ -5,7 +5,7 @@ import LoadingIcon from "@/components/icons/LoadingIcon";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { supabase } from "@/lib/supabase";
 import { User } from "@/lib/types";
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { capitalizeFirstLetter } from "@/lib/helpers";
 
 const DisplayClientPage = () => {
   const path = usePathname();

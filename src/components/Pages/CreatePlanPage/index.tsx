@@ -152,38 +152,7 @@ const AddNewMealPlan: FC = () => {
             <PencilIcon className="w-6 text-gray-400" />
           </div>
         </div>
-        {/* <div className="w-full flex p-2 rounded-lg shadow-lg border border-gray-200">
-          <div>
-            <PieChart width={30} height={30}>
-              <Pie
-                data={[
-                  {
-                    name: "Protein",
-                    value: totalMacros.totalProtein,
-                  },
-                  {
-                    name: "Fat",
-                    value: totalMacros.totalFat,
-                  },
-                  {
-                    name: "Carbs",
-                    value: totalMacros.totalCarbs,
-                  },
-                ]}
-                innerRadius={4}
-                outerRadius={14}
-                fill="#8884d8"
-                paddingAngle={1}
-                dataKey="value"
-              ></Pie>
-            </PieChart>
-          </div>
-          <div className="flex my-auto mx-2 space-x-2">
-            <p>Protein {totalMacros.totalProtein}</p>
-            <p>Fats {totalMacros.totalFat}</p>
-            <p>Carbs {totalMacros.totalCarbs}</p>
-          </div>
-        </div> */}
+
         {fields.map((meal, idx) => (
           <AddMealTable
             key={meal.id}
@@ -196,13 +165,13 @@ const AddNewMealPlan: FC = () => {
           <div className="ml-auto flex">
             <button
               onClick={() => append({ name: `Meal ${fields.length + 1}` })}
-              className="bg-gro-indigo text-white flex lg:mr-8 mt-1 lg:mt-4 p-1 lg:py-2 rounded-md"
+              className="bg-gro-indigo text-white flex mt-1 p-1 lg:py-2 rounded-md"
             >
               <PlusCircleIcon className="w-6" />
               {isMobile ? (
                 <p className="my-auto text-sm mx-2">Meal</p>
               ) : (
-                <p className="my-auto text-sm lg:text-base">Add Meal</p>
+                <p className="my-auto text-xs lg:text-base pr-1">Add Meal</p>
               )}
             </button>
           </div>

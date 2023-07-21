@@ -18,6 +18,7 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from "@heroicons/react/20/solid";
+import clsx from "clsx";
 
 type SortDirection = "ASC" | "DESC" | null;
 
@@ -149,13 +150,13 @@ export default function Table() {
       <div className="mt-2">
         <div className="flow-root">
           <div className="inline-block min-w-full py-2 align-middle">
-            <div className="overflow-hidden shadow-lg ring-1 ring-black ring-opacity-5 rounded-lg">
+            <div className="overflow-hidden ring-1 ring-black ring-opacity-5 rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
-                <thead className="">
+                <thead>
                   <tr>
                     <th
                       scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                     >
                       <button
                         onClick={() => handleSortClick("name")}
@@ -173,7 +174,7 @@ export default function Table() {
                       <>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                         >
                           <button
                             onClick={() => handleSortClick("brand")}
@@ -189,19 +190,19 @@ export default function Table() {
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                         >
                           Protein
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                         >
                           Fats
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                         >
                           Carbs
                         </th>
@@ -209,7 +210,7 @@ export default function Table() {
                     ) : null}
                     <th
                       scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                     >
                       Calories
                     </th>
@@ -220,7 +221,7 @@ export default function Table() {
                     {!isMobile ? (
                       <th
                         scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                        className="relative py-2 pl-3 pr-4 sm:pr-6"
                       >
                         <span className="sr-only">Edit</span>
                       </th>
@@ -229,8 +230,14 @@ export default function Table() {
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {foods?.map((f: ReturnedFood, idx) => (
-                    <tr key={idx}>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                    <tr
+                      key={idx}
+                      className={clsx(
+                        "font-light",
+                        idx % 2 !== 0 ? "bg-gray-50" : "",
+                      )}
+                    >
+                      <td className="whitespace-nowrap py-1 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
                         {f.name}
                         {isMobile ? (
                           <p className="text-gray-400 font-light">{f.brand}</p>
@@ -238,28 +245,28 @@ export default function Table() {
                       </td>
                       {!isMobile ? (
                         <>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
                             <p>{f.brand}</p>
                           </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
                             {f.nutrients?.protein}
                           </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
                             {f.nutrients?.saturated_fat +
                               f.nutrients?.trans_fat}
                           </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
                             {f.nutrients?.fiber + f.nutrients?.sugar}
                           </td>
                         </>
                       ) : null}
 
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
                         {f.nutrients?.calories}
                       </td>
 
                       {!isMobile ? (
-                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                        <td className="relative whitespace-nowrap py-1 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <button
                             onClick={() => editFood(f)}
                             className="text-indigo-600 hover:text-indigo-900"
@@ -268,7 +275,7 @@ export default function Table() {
                           </button>
                         </td>
                       ) : null}
-                      <td className="relative whitespace-nowrap py-2 pr-2 text-right text-sm font-medium">
+                      <td className="relative whitespace-nowrap py-1 pr-2 text-right text-sm font-medium">
                         <button
                           onClick={(e) => handleDeleteFood(f.id)}
                           className="text-white p-2 bg-red-500 rounded-md mr-"

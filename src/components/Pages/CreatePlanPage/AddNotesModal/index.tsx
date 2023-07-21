@@ -24,7 +24,7 @@ const AddNotesModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
         </Transition.Child>
 
         <div className="fixed inset-2 lg:inset-56 z-50 overflow-y-auto rounded-lg mt-32">
-          <div className="flex lg:min-h-full">
+          <div className="flex">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"

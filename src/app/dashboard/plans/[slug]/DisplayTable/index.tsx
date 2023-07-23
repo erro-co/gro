@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { MealFoodServing } from "../page";
-import Tabs from "@/components/Tabs";
 import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/24/outline";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
@@ -22,11 +21,9 @@ function getTotalMacro(
 
 const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
   const isMobile = useMediaQuery("(max-width: 640px)");
-
   return (
     <div className="pb-12">
       <h2 className="font-semibold">Meal 1</h2>
-      {!isMobile ? <Tabs /> : <></>}
       <div className="mt-2 border border-gray-300 rounded-lg p-1">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
@@ -65,7 +62,7 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
                 scope="col"
                 className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
               >
-                Calories (kcal)
+                Calories {isMobile ? null : "(kca)"}
               </th>
               <th
                 scope="col"
@@ -104,7 +101,7 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
             <tr className="text-xs lg:text-sm">
               <td
                 className="whitespace-nowrap py-2 pl-4 pr-3 font-bold text-gray-900 sm:pl-0"
-                colSpan={2}
+                colSpan={isMobile ? 1 : 2}
               >
                 Totals:
               </td>

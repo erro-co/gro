@@ -113,7 +113,7 @@ const DisplayMealPage: FC = () => {
   }
 
   return (
-    <div>
+    <div className="-mt-8">
       <MacroSummaryCard mealPlan={mealPlan} />
       {meals?.map((meal, index) => (
         <DisplayTable key={index} foods={meal} />

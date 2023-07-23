@@ -20,8 +20,8 @@ import LogoutButton from "@/components/LogoutButton";
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
   {
-    name: "Foods",
-    href: "/dashboard/foods",
+    name: "Nutrition",
+    href: "/dashboard/nutrition",
     icon: FireIcon,
     current: false,
   },
@@ -117,7 +117,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
                     <div className="flex flex-shrink-0 items-center p-0 md:px-4 pt-4">
-                      <div className="bg-[#F695A0] w-16 rounded-md mx-auto">
+                      <div className="bg-gro-pink w-16 rounded-md mx-auto">
                         <GroLogo />
                       </div>
                     </div>
@@ -180,7 +180,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-40 lg:flex lg:w-72 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pt-6">
-            <div className="w-16 mx-auto bg-[#F695A0] rounded-md">
+            <div className="w-16 mx-auto bg-gro-pink rounded-md">
               <GroLogo />
             </div>
             <nav className="flex flex-1 flex-col">
@@ -227,7 +227,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
           </div>
         </div>
 
-        <div className="sticky top-0 z-30 flex items-center gap-x-6 bg-gro-pink/75 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
+        <div className="sticky top-0 z-30 flex items-center gap-x-6 bg-gro-pink px-4 py-4 shadow-sm sm:px-6 lg:hidden">
           <button
             type="button"
             className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
@@ -236,11 +236,6 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
-          <div className="w-full">
-            {/* <div className="w-10 bg-gro-pink mx-auto rounded-lg -my-4">
-              <GroLogo />
-            </div> */}
-          </div>
         </div>
 
         <main className="pt-14 lg:pl-72 lg:h-screen">

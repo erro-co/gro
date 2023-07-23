@@ -60,7 +60,6 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
         console.log("Failed to fetch error:", error);
         return;
       } else if (macros && macros.length > 0) {
-        console.log("test");
         setNutrients(macros[0] as Nutrition);
       }
 

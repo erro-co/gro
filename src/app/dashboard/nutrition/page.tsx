@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Gro - Foods",
+  title: "Gro - Nutrition",
   icons: {
     icon: "/gro_logo.png",
   },

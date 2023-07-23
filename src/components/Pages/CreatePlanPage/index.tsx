@@ -1,12 +1,10 @@
 "use client";
 import { FC, useState } from "react";
-
 import { useFieldArray, useFormContext } from "react-hook-form";
 import {
   CheckIcon,
   PencilIcon,
   PlusCircleIcon,
-  XMarkIcon,
 } from "@heroicons/react/20/solid";
 import { supabase } from "@/lib/supabase";
 import { Meal, newMealPlanSchema } from "@/lib/schemas";
@@ -14,22 +12,12 @@ import { MealIndexProvider } from "@/lib/context/SelectedMealIndexContext";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import AddFoodModal from "./AddFoodModal";
 import AddMealTable from "./AddMealTable";
-// import { Pie, PieChart } from "recharts";
-
-// const COLORS = ["#F695A0", "#DC7CDE", "#A351FA"];
 
 const AddNewMealPlan: FC = () => {
   const [showFoodSearchModal, setShowFoodSearchModal] =
     useState<boolean>(false);
   const [mealPlanId, setMealPlanId] = useState<string>("");
-  const {
-    control,
-    watch,
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useFormContext();
+  const { control, watch, register, handleSubmit, reset } = useFormContext();
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   const mealPlan = watch();
@@ -167,7 +155,7 @@ const AddNewMealPlan: FC = () => {
               onClick={() => append({ name: `Meal ${fields.length + 1}` })}
               className="bg-gro-indigo text-white flex mt-1 p-1 lg:py-2 rounded-md"
             >
-              <PlusCircleIcon className="w-6" />
+              <PlusCircleIcon className="w-5" />
               {isMobile ? (
                 <p className="my-auto text-sm mx-2">Meal</p>
               ) : (
@@ -185,15 +173,7 @@ const AddNewMealPlan: FC = () => {
               {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
               <CheckIcon className="w-6" />
             </button>
-          ) : (
-            <button
-              disabled
-              className="flex border px-4 py-2 lg:py-4 rounded-md mx-auto text-white bg-red-500 disabled:opacity-70"
-            >
-              {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
-              <XMarkIcon className="w-6" />
-            </button>
-          )}
+          ) : null}
         </div>
       </MealIndexProvider>
     </form>

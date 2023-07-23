@@ -9,21 +9,23 @@ interface IDisplayTable {
   foods: MealFoodServing[];
 }
 
+function getTotalMacro(
+  foods: MealFoodServing[],
+  macro: keyof (typeof foods)[0]["food"]["nutrients"],
+): number {
+  const total = foods.reduce(
+    (total, food) => total + food.food.nutrients[macro] * food.quantity,
+    0,
+  );
+  return parseFloat(total.toFixed(1));
+}
+
 const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
-  function getTotalMacro(
-    foods: MealFoodServing[],
-    macro: keyof (typeof foods)[0]["food"]["nutrients"],
-  ): number {
-    return foods.reduce(
-      (total, food) => total + food.food.nutrients[macro] * food.quantity,
-      0,
-    );
-  }
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   return (
-    <div className="my-12 shadow-lg border border-gray-100  p-2 rounded-lg">
-      <h2></h2>
+    <div className="pb-12">
+      <h2 className="font-semibold">Meal 1</h2>
       {!isMobile ? <Tabs /> : <></>}
       <div className="mt-2 border border-gray-300 rounded-lg p-1">
         <table className="min-w-full divide-y divide-gray-300">
@@ -31,43 +33,43 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
             <tr>
               <th
                 scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                className="py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
               >
                 Food
               </th>
               <th
                 scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                className="hidden px-3 py-2 text-left text-sm font-semibold text-gray-900 sm:table-cell"
               >
                 Brand
               </th>
               <th
                 scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                className="hidden px-3 py-2 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
-                Protein
+                Protein (g)
               </th>
               <th
                 scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                className="hidden px-3 py-2 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
-                Fats
+                Fats (g)
               </th>
               <th
                 scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                className="hidden px-3 py-2 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
-                Carbs
+                Carbs (g)
               </th>
               <th
                 scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
               >
-                Calories
+                Calories (kcal)
               </th>
               <th
                 scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
               >
                 Servings
               </th>
@@ -75,51 +77,49 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {foods.map((food: MealFoodServing) => (
-              <tr key={food.id}>
-                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+              <tr key={food.id} className="font-light text-xs lg:text-sm">
+                <td className="whitespace-nowrap py-2 pl-4 pr-3  text-gray-900 sm:pl-0">
                   {food.food.name}
                 </td>
-                <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                <td className="hidden whitespace-nowrap px-3 py-1  text-gray-500 lg:table-cell">
                   {food.food.brand}
                 </td>
-                <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                <td className="hidden whitespace-nowrap px-3 py-1  text-gray-500 lg:table-cell">
                   {food.food.nutrients.protein * food.quantity}
                 </td>
-                <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                <td className="hidden whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
                   {food.food.nutrients.total_fat * food.quantity}
                 </td>
-                <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                <td className="hidden whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
                   {food.food.nutrients.total_carbs * food.quantity}
                 </td>
-                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                <td className="whitespace-nowrap px-3 py-1 text-gray-500 sm:table-cell">
                   {food.food.nutrients.calories * food.quantity}
                 </td>
-                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                <td className="whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
                   {food.quantity} {food.serving.name}
                 </td>
               </tr>
             ))}
-            <tr className="bg-gray-100 border border-t border-red-500lg">
-              <td className="hidden lg:table-cell whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                Net Totals:
+            <tr className="text-xs lg:text-sm">
+              <td
+                className="whitespace-nowrap py-2 pl-4 pr-3 font-bold text-gray-900 sm:pl-0"
+                colSpan={2}
+              >
+                Totals:
               </td>
-              <td className="hidden lg:table-cell whitespace-nowrap px-3 py-4 text-sm font-bold text-gray-500 sm:table-cell"></td>
-              <td className="hidden whitespace-nowrap px-3 py-4 text-sm font-bold lg:table-cell">
+              <td className="hidden whitespace-nowrap px-3 py-1  font-bold lg:table-cell">
                 <p>{getTotalMacro(foods, "protein")}</p>
               </td>
-              <td className="hidden lg:table-cell whitespace-nowrap px-3 py-4 text-sm font-bold">
+              <td className="hidden lg:table-cell whitespace-nowrap px-3 py-1 font-bold">
                 <p>{getTotalMacro(foods, "total_fat")}</p>
               </td>
-              <td className="hidden lg:table-cell whitespace-nowrap px-3 py-4 text-sm font-bold">
+              <td className="hidden lg:table-cell whitespace-nowrap px-3 py-1 font-bold">
                 <p>{getTotalMacro(foods, "total_carbs")}</p>
               </td>
-              <td className="whitespace-nowrap px-3 py-4 text-sm font-bold">
+              <td className="whitespace-nowrap px-3 py-1 font-bold">
                 <p>{getTotalMacro(foods, "calories")}</p>
               </td>
-              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
-              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
-              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
-              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
             </tr>
           </tbody>
         </table>

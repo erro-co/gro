@@ -26,7 +26,7 @@ const PAGE_SIZE = 10;
 
 const AddFoodButton: FC = () => {
   return (
-    <Link href="/dashboard/foods/add">
+    <Link href="/dashboard/nutrition/add">
       <div className="bg-gro-pink text-white p-2 rounded-lg flex whitespace-nowrap ml-2">
         <p className="my-auto hidden lg:block">New Food</p>
         <PlusCircleIcon className="w-7 m-0 lg:ml-1 my-auto" />
@@ -277,8 +277,8 @@ export default function Table() {
                       ) : null}
                       <td className="relative whitespace-nowrap py-1 pr-2 text-right text-sm font-medium">
                         <button
-                          onClick={(e) => handleDeleteFood(f.id)}
-                          className="text-white p-2 bg-red-500 rounded-md mr-"
+                          onClick={(_e) => handleDeleteFood(f.id)}
+                          className="text-red-500 pt-1"
                         >
                           <TrashIcon className="w-4" />
                         </button>
@@ -290,28 +290,31 @@ export default function Table() {
             </div>
           </div>
         </div>
-        <div className="w-full mt-3 pb-4">
-          <div className="lg:ml-auto flex justify-between lg:justify-center lg:space-x-10">
-            <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className="bg-gro-indigo disabled:bg-gray-500 text-white font-bold p-2 rounded flex cursor-pointer"
-            >
-              <span className="mx-auto flex">
-                <ChevronLeftIcon className="w-6" />
-              </span>
-            </button>
-            <button
-              onClick={handleNextPage}
-              disabled={foods.length < PAGE_SIZE}
-              className="bg-gro-indigo text-white font-bold p-2 rounded flex cursor-pointer"
-            >
-              <span className="mx-auto flex">
-                <ChevronLeftIcon className="w-6 rotate-180" />
-              </span>
-            </button>
+
+        {foods.length > PAGE_SIZE ? (
+          <div className="w-full mt-3 pb-4">
+            <div className="lg:ml-auto flex justify-between lg:justify-center lg:space-x-10">
+              <button
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className="bg-gro-indigo disabled:bg-gray-500 text-white font-bold p-2 rounded flex cursor-pointer"
+              >
+                <span className="mx-auto flex">
+                  <ChevronLeftIcon className="w-6" />
+                </span>
+              </button>
+              <button
+                onClick={handleNextPage}
+                disabled={foods.length < PAGE_SIZE}
+                className="bg-gro-indigo text-white font-bold p-2 rounded flex cursor-pointer"
+              >
+                <span className="mx-auto flex">
+                  <ChevronLeftIcon className="w-6 rotate-180" />
+                </span>
+              </button>
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </>
   );

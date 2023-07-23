@@ -9,6 +9,13 @@ import AddNotesModal from "../AddNotesModal";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 export interface IAddMealTable {
   mealIndex: number;
   setShowFoodSearchModal: Dispatch<SetStateAction<boolean>>;
@@ -21,8 +28,7 @@ const AddMealTable: FC<IAddMealTable> = ({
 }) => {
   const [showNotesModal, setShowNotesModal] = useState(false);
   const { control, watch, register } = useFormContext();
-  const { value: selectedMealIndex, updateValue: setSelectMealIndex } =
-    useMealIndexContext();
+  const { updateValue: setSelectMealIndex } = useMealIndexContext();
 
   const { remove } = useFieldArray({
     control,
@@ -32,6 +38,15 @@ const AddMealTable: FC<IAddMealTable> = ({
   const meals = watch("meals");
   const foodList = watch(`meals[${mealIndex}].foods`);
   const isMobile = useMediaQuery("(max-width: 640px)");
+
+  const handleAddFood = (mealIndex: number) => {
+    setSelectMealIndex(mealIndex);
+    setShowFoodSearchModal(true);
+  };
+
+  const handleAddNote = () => {
+    setShowNotesModal(true);
+  };
 
   return (
     <div className="my-4">
@@ -45,73 +60,63 @@ const AddMealTable: FC<IAddMealTable> = ({
           />
           <PencilIcon className="w-4 ml-2 text-gray-400" />
         </div>
-        {/* <button
-          onClick={() => setShowNotesModal(true)}
-          className="text-gro-pink lg:text-white lg:bg-gro-pink lg:px-2 lg:pt-0.5 flex rounded-md"
-        >
-          {isMobile ? null : <p className="mt-1">Notes</p>}
-          <ChatBubbleOvalLeftEllipsisIcon className="w-8 lg:ml-2" />
-        </button> */}
         <AddNotesModal open={showNotesModal} setOpen={setShowNotesModal} />
       </div>
-
       <div className="mt-2 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden border">
+            <div className="overflow-hidden border rounded-lg">
               <table className="min-w-full divide-y divide-gray-300 border-none lg:border">
-                {!isMobile ? (
-                  <thead className="">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
-                      >
-                        Food Name
-                      </th>
-                      {isMobile ? null : (
-                        <>
-                          <th
-                            scope="col"
-                            className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
-                          >
-                            Net Protein
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
-                          >
-                            Net Total Fats
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
-                          >
-                            Net Total Carbs
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
-                          >
-                            Net Calories
-                          </th>
-                        </>
-                      )}
-                      <th scope="col" className="relative py-2 flex">
-                        <button
-                          onClick={() => removeMeal(mealIndex)}
-                          className={clsx(
-                            meals && meals.length === 1 && "hidden",
-                            "text-red-500",
-                          )}
+                <thead className="">
+                  <tr className="">
+                    <th
+                      scope="col"
+                      className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
+                    >
+                      Food
+                    </th>
+                    {isMobile ? null : (
+                      <>
+                        <th
+                          scope="col"
+                          className="py-2 text-left text-sm font-semibold text-gray-900"
                         >
-                          <TrashIcon className="w-4" />
-                        </button>
-                      </th>
-                    </tr>
-                  </thead>
-                ) : null}
-
+                          Protein
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-2 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Fats
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-2 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Carbs
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-2 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Calories
+                        </th>
+                      </>
+                    )}
+                    <th scope="col" className="relative py-2 flex">
+                      <button
+                        onClick={() => removeMeal(mealIndex)}
+                        className={clsx(
+                          meals && meals.length === 1 && "hidden",
+                          "text-red-500",
+                          "ml-auto mr-2",
+                        )}
+                      >
+                        <TrashIcon className="w-4" />
+                      </button>
+                    </th>
+                  </tr>
+                </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {foodList?.map((f: MealPlanFoodItem, idx: number) => (
                     <tr key={idx} className="font-light">
@@ -142,29 +147,35 @@ const AddMealTable: FC<IAddMealTable> = ({
                       <td className="relative whitespace-nowrap py-1 pr-2 text-right text-sm font-medium">
                         <button
                           onClick={() => remove(idx)}
-                          className="text-red-500 p-1 rounded-md"
+                          className="text-red-500 rounded-md"
                         >
                           <TrashIcon className="w-4" />
-                          <span className="sr-only">, {f.food.name}</span>
                         </button>
                       </td>
                     </tr>
                   ))}
                   <tr>
-                    <td colSpan={7} className="py-1 text-center">
-                      <button
-                        type="button"
-                        className="items-center px-2 lg:py-2 border border-transparent text-sm lg:text-base font-medium rounded-md shadow-sm text-white bg-gro-purple"
-                        onClick={() => {
-                          setSelectMealIndex(mealIndex);
-                          setShowFoodSearchModal(true);
-                        }}
-                      >
-                        <PlusCircleIcon
-                          className="h-4 w-4"
-                          aria-hidden="true"
-                        />
-                      </button>
+                    <td colSpan={7} className="text-center">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <div className="p-2 mt-1 rounded-lg shadow-sm text-white bg-gro-purple">
+                            <PlusCircleIcon
+                              className="w-5"
+                              aria-hidden="true"
+                            />
+                          </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem
+                            onClick={(_e) => handleAddFood(mealIndex)}
+                          >
+                            Add Food
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={handleAddNote}>
+                            Add Note
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </td>
                   </tr>
                 </tbody>

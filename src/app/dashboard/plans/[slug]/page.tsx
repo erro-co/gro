@@ -4,97 +4,86 @@ import { FC, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import DisplayTable from "./DisplayTable";
-import { Nutrition, ServingWithId } from "@/lib/schemas";
 import MacroSummaryCard from "./MacroSummaryCard";
 
-export type MealPlan = {
-  id: number;
-  created_at: string;
-  name: string;
-  template: boolean;
-  meal_plan_food_serving_user: MealPlanFoodServingUser[];
-};
-
-type MealPlanFoodServingUser = {
-  id: number;
-  created_at: string;
-  meal_food_serving: MealFoodServing;
-  user: number;
-  meal_plan_id: number;
-};
-
-export type MealFoodServing = {
-  id: number;
-  created_at: string;
-  meal: number;
-  food: Food;
-  serving: ServingWithId;
+export interface MealFoodServing {
+  meal: {
+    id: number;
+    name: string;
+    notes: string;
+  };
   quantity: number;
-  template: boolean;
-};
+  serving: {
+    name: string;
+    weight: number;
+  };
+  food: {
+    brand: string;
+    name: string;
+    food_category: {
+      name: string;
+    };
+    nutrients: {
+      calories: number;
+      protein: number;
+      total_fat: number;
+      total_carbs: number;
+      fiber: number;
+      sugar: number;
+      potassium: number;
+      sodium: number;
+      cholesterol: number;
+      saturated_fat: number;
+      vitamin_d: number;
+      calcium: number;
+      iron: number;
+      trans_fat: number;
+    };
+  };
+}
 
-export type Food = {
-  id: number;
-  created_at: string;
-  name: string;
-  food_category: number;
-  tags: null | string[];
-  brand: string;
-  nutrients: Nutrition;
-};
+function sortMealFoodServing(mealFoodServings: MealFoodServing[]) {
+  const sortedMealFoodServings: { [key: number]: MealFoodServing[] } = {};
 
-function groupByMeal(meals: any): any[][] {
-  const grouped: { [key: number]: any } = {};
-
-  meals.forEach((meal: any) => {
-    const mealId = meal.meal_food_serving.meal;
-    if (!grouped[mealId]) {
-      grouped[mealId] = [];
+  mealFoodServings.forEach((mealFoodServing: MealFoodServing) => {
+    const mealId = mealFoodServing.meal.id;
+    if (sortedMealFoodServings[mealId]) {
+      sortedMealFoodServings[mealId].push(mealFoodServing);
+    } else {
+      sortedMealFoodServings[mealId] = [mealFoodServing];
     }
-    grouped[mealId].push(meal.meal_food_serving);
   });
 
-  // Convert the grouped object to an array of arrays,
-  // where the first element is the meal ID and the second element is the array of meals
-  const groupedArray = Object.entries(grouped).map(([mealId, meals]) => [
-    Number(mealId),
-    meals,
-  ]);
-
-  // Sort the array by the meal IDs
-  groupedArray.sort((a, b) => a[0] - b[0]);
-
-  // Remove the meal ID from the array
-  const finalArray = groupedArray.map((item) => item[1]);
-
-  return finalArray;
+  return Object.values(sortedMealFoodServings);
 }
 
 const DisplayMealPage: FC = () => {
-  const [mealPlan, setMealPlan] = useState<MealPlan>();
+  const [mealPlan, setMealPlan] = useState<MealFoodServing[]>();
   const [meals, setMeals] = useState<MealFoodServing[][]>();
   const [loading, setLoading] = useState(true);
+
   const path = usePathname();
+  const mealPlanId = path.split("/")[3];
 
   const selectPlan = async () => {
-    const planId = path.split("/")[3];
     const { data: meal_plan, error } = await supabase
-      .from("meal_plan")
+      .from("meal_plan_food_serving_user")
       .select(
-        `*, meal_plan_food_serving_user(*, meal_food_serving(*, food(*, nutrients(*, food_id)), serving(*)))`,
+        "meal_food_serving(meal(id, name, notes), quantity, serving(name, weight), food(brand, name, food_category(name), nutrients(*)))",
       )
-      .eq("id", planId)
-      .eq("meal_plan_food_serving_user.meal_plan_id", planId);
-
+      .eq("meal_plan_id", mealPlanId);
     if (error) {
-      console.log("Error getting meal plan:", error);
+      console.error("Error getting meal plan from supabase:", error);
       return;
     }
     console.log("meal_plan", meal_plan);
-    const grouped = groupByMeal(meal_plan[0].meal_plan_food_serving_user);
+
+    const formattedMeals = meal_plan.map((meal: any) => meal.meal_food_serving);
+
+    const grouped = sortMealFoodServing(formattedMeals as MealFoodServing[]);
     console.log("grouped", grouped);
-    setMealPlan(meal_plan[0] as MealPlan);
-    setMeals(grouped as any);
+    setMealPlan(formattedMeals);
+    setMeals(grouped);
     setLoading(false);
   };
 
@@ -114,8 +103,8 @@ const DisplayMealPage: FC = () => {
 
   return (
     <div className="-mt-8">
-      <MacroSummaryCard mealPlan={mealPlan} />
-      {meals?.map((meal, index) => (
+      {mealPlan && <MacroSummaryCard mealPlan={mealPlan} />}
+      {meals?.map((meal: MealFoodServing[], index: number) => (
         <DisplayTable key={index} foods={meal} />
       ))}
     </div>

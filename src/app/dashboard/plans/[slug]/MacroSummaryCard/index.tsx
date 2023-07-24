@@ -3,14 +3,14 @@ import { motion } from "framer-motion";
 import { Disclosure } from "@headlessui/react";
 import MacroSummaryPieChart from "../MacroSummaryPieChart";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
-import { MealPlan } from "../page";
+import { MealFoodServing } from "../page";
 import clsx from "clsx";
 
 export interface IMacroSummaryCard {
-  mealPlan: any;
+  mealPlan: MealFoodServing[];
 }
 
-function calculateNutritionTotals(mealPlan: MealPlan): {
+function calculateNutritionTotals(mealPlan: any): {
   totalProtein: number;
   totalFat: number;
   totalCarbs: number;
@@ -21,9 +21,9 @@ function calculateNutritionTotals(mealPlan: MealPlan): {
   let totalCarbs = 0;
   let totalCals = 0;
 
-  mealPlan.meal_plan_food_serving_user.forEach((item) => {
-    const food = item.meal_food_serving.food;
-    const quantity = item.meal_food_serving.quantity;
+  mealPlan.forEach((item: MealFoodServing) => {
+    const food = item.food;
+    const quantity = item.quantity;
     totalProtein += food.nutrients.protein * quantity;
     totalFat += food.nutrients.total_fat * quantity;
     totalCarbs += food.nutrients.total_carbs * quantity;
@@ -57,9 +57,9 @@ const MacroSummaryCard: FC<IMacroSummaryCard> = ({ mealPlan }) => {
   ];
   return (
     <div className="w-full flex flex-col mb-6">
-      <h2 className="text-center text-2xl font-bold pb-2">
+      {/* <h2 className="text-center text-2xl font-bold pb-2">
         {mealPlan?.name || "Meal Plan"}
-      </h2>
+      </h2> */}
       <div className="flex mx-auto">
         <MacroSummaryPieChart macros={pieChartData} totalCals={totalCals} />
         <div className="w-full mx-auto lg:mx-0 lg:ml-4 flex">

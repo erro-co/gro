@@ -23,14 +23,14 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
   const isMobile = useMediaQuery("(max-width: 640px)");
   return (
     <div className="pb-12">
-      <h2 className="font-semibold">Meal 1</h2>
+      <h2 className="font-semibold">{foods[0].meal.name}</h2>
       <div className="mt-2 border border-gray-300 rounded-lg p-1">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
             <tr>
               <th
                 scope="col"
-                className="py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                className="py-2 pl-2 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
               >
                 Food
               </th>
@@ -73,9 +73,9 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {foods.map((food: MealFoodServing) => (
-              <tr key={food.id} className="font-light text-xs lg:text-sm">
-                <td className="whitespace-nowrap py-2 pl-4 pr-3  text-gray-900 sm:pl-0">
+            {foods.map((food: MealFoodServing, idx) => (
+              <tr key={idx} className="font-light text-xs lg:text-sm">
+                <td className="whitespace-nowrap py-2 pl-2 pr-3  text-gray-900 sm:pl-0">
                   {food.food.name}
                 </td>
                 <td className="hidden whitespace-nowrap px-3 py-1  text-gray-500 lg:table-cell">
@@ -100,7 +100,7 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
             ))}
             <tr className="text-xs lg:text-sm">
               <td
-                className="whitespace-nowrap py-2 pl-4 pr-3 font-bold text-gray-900 sm:pl-0"
+                className="whitespace-nowrap py-2 pl-2 pr-3 font-bold text-gray-900 sm:pl-0"
                 colSpan={isMobile ? 1 : 2}
               >
                 Totals:
@@ -121,23 +121,25 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
           </tbody>
         </table>
       </div>
-      <Disclosure as="div" className="mt-2">
-        {({ open }) => (
-          <>
-            <Disclosure.Button className="flex w-full justify-between rounded-lg bg-white px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75 border">
-              Summary & Notes
-              <ChevronUpIcon
-                className={`${
-                  open ? "rotate-180 transform" : ""
-                } h-5 w-5 text-purple-500`}
-              />
-            </Disclosure.Button>
-            <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
+      {foods[0].meal.notes !== null ? (
+        <Disclosure as="div" className="mt-2">
+          {({ open }) => (
+            <>
+              <Disclosure.Button className="flex w-full justify-between rounded-lg bg-white px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75 border">
+                Summary & Notes
+                <ChevronUpIcon
+                  className={`${
+                    open ? "rotate-180 transform" : ""
+                  } h-5 w-5 text-purple-500`}
+                />
+              </Disclosure.Button>
+              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>
+      ) : null}
     </div>
   );
 };

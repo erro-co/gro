@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import LoadingIcon from "@/components/icons/LoadingIcon";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { supabase } from "@/lib/supabase";
 import { User } from "@/lib/types";
 import { capitalizeFirstLetter } from "@/lib/helpers";
+import Loading from "@/components/Loading";
 
 const DisplayClientPage = () => {
   const path = usePathname();
@@ -28,13 +28,7 @@ const DisplayClientPage = () => {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="w-full mt-24">
-        <div className="w-32 mx-auto">
-          <LoadingIcon />
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

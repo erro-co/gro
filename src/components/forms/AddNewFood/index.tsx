@@ -2,8 +2,8 @@
 import NutritionLabelInput from "@/components/NutritionFactsInput";
 import { supabase } from "@/lib/supabase";
 import { FC, useEffect, useState } from "react";
-import LoadingIcon from "@/components/icons/LoadingIcon";
 import { FoodCategory } from "@/lib/types";
+import Loading from "@/components/Loading";
 import ComboboxInput from "./ComboBoxInput";
 import { useFormContext } from "react-hook-form";
 import AddServingInput from "./AddServingInput";
@@ -107,11 +107,7 @@ const AddNewFoodForm: FC = () => {
 
   console.log({ errors });
   if (!dataFetched) {
-    return (
-      <div className="w-40 mx-auto mt-20">
-        <LoadingIcon />
-      </div>
-    );
+    return <Loading />;
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -213,10 +209,8 @@ const AddNewFoodForm: FC = () => {
               >
                 Nutrition
               </label>
-              <div className="flex w-full">
-                <div className="flex mx-auto">
-                  <NutritionLabelInput />
-                </div>
+              <div className="mt-2 sm:col-span-2 sm:mt-0">
+                <NutritionLabelInput />
               </div>
             </div>
           </div>

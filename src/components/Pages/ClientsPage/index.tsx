@@ -1,11 +1,11 @@
 "use client";
 import ClientsList from "@/components/ClientsList";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
-import LoadingIcon from "@/components/icons/LoadingIcon";
 import { supabase } from "@/lib/supabase";
 import { PlusCircleIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { FC, useEffect, useState } from "react";
+import Loading from "@/components/Loading";
 
 export interface Client {
   id: number;
@@ -69,13 +69,7 @@ const ClientPage = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex w-full mt-24">
-        <div className="w-32 mx-auto">
-          <LoadingIcon />
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

@@ -42,23 +42,23 @@ const AddServingInput: FC = () => {
             <tr>
               <th
                 scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
               >
                 #
               </th>
               <th
                 scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
               >
                 Measure
               </th>
               <th
                 scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
               >
                 Grams
               </th>
-              <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+              <th scope="col" className="relative py-1 pl-3 pr-4 sm:pr-6">
                 <span className="sr-only">Delete</span>
               </th>
             </tr>

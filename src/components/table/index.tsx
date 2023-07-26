@@ -6,7 +6,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { FC, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import LoadingIcon from "../icons/LoadingIcon";
 import Link from "next/link";
 import EditFoodModal from "../Modals/EditFoodModal";
 import { FoodWithNutrientsAndServing } from "@/lib/schemas";
@@ -19,6 +18,8 @@ import {
   ChevronUpIcon,
 } from "@heroicons/react/20/solid";
 import clsx from "clsx";
+import Loading from "../Loading";
+import ConfirmDeleteActionModal from "../Modals/ConfirmDeleteActionModal";
 
 type SortDirection = "ASC" | "DESC" | null;
 
@@ -57,6 +58,7 @@ const SortIcon = (sortDirection: SortDirection) => {
 type ReturnedFood = FoodWithNutrientsAndServing & {
   id: number;
 };
+
 export default function Table() {
   const [foods, setFoods] = useState<ReturnedFood[]>([]);
   const [dataFetched, setDataFetched] = useState<boolean>(false);
@@ -65,6 +67,8 @@ export default function Table() {
   const [openEditFoodModal, setOpenEditFoodModal] = useState<boolean>(false);
   const [selectedFood, setSelectedFood] =
     useState<ReturnedFood>(emptyPlaceholderFood);
+  const [openConfirmDeleteActionModal, setOpenConfirmDeleteActionModal] =
+    useState<boolean>(false);
 
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
@@ -121,17 +125,12 @@ export default function Table() {
     if (error) {
       console.error("Failed to delete food:", error);
     }
+    setSelectedFood(emptyPlaceholderFood);
+    setOpenConfirmDeleteActionModal(false);
     getAllFoods(currentPage);
   };
 
-  if (!dataFetched)
-    return (
-      <div className="w-full mt-24">
-        <div className="w-32 mx-auto">
-          <LoadingIcon />
-        </div>
-      </div>
-    );
+  if (!dataFetched) return <Loading />;
 
   return (
     <>
@@ -139,6 +138,11 @@ export default function Table() {
         isOpen={openEditFoodModal}
         setIsOpen={setOpenEditFoodModal}
         food={selectedFood}
+      />
+      <ConfirmDeleteActionModal
+        open={openConfirmDeleteActionModal}
+        setOpen={setOpenConfirmDeleteActionModal}
+        deleteFunction={() => handleDeleteFood(selectedFood.id)}
       />
       <SearchBarWithAddButton
         searchTerm={searchTerm}
@@ -192,19 +196,19 @@ export default function Table() {
                           scope="col"
                           className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                         >
-                          Protein
+                          Protein (g)
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                         >
-                          Fats
+                          Fats (g)
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                         >
-                          Carbs
+                          Carbs (g)
                         </th>
                       </>
                     ) : null}
@@ -212,7 +216,7 @@ export default function Table() {
                       scope="col"
                       className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                     >
-                      Calories
+                      Calories (kcal)
                     </th>
                     <th scope="col" className="">
                       <span className="sr-only">Delete</span>
@@ -277,7 +281,10 @@ export default function Table() {
                       ) : null}
                       <td className="relative whitespace-nowrap py-1 pr-2 text-right text-sm font-medium">
                         <button
-                          onClick={(_e) => handleDeleteFood(f.id)}
+                          onClick={(e) => {
+                            setSelectedFood(f);
+                            setOpenConfirmDeleteActionModal(true);
+                          }}
                           className="text-red-500 pt-1"
                         >
                           <TrashIcon className="w-4" />

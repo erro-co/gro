@@ -2,7 +2,7 @@
 import SelectClientList from "@/components/SelectClientTable";
 import { supabase } from "@/lib/supabase";
 import { FC, useEffect, useState } from "react";
-import LoadingIcon from "@/components/icons/LoadingIcon";
+import Loading from "@/components/Loading";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
 import Addbutton from "@/components/SearchBarWithAddButton/AddButton";
 
@@ -52,13 +52,7 @@ const SelectClientMPPage: FC = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex w-full mt-24">
-        <div className="w-32 mx-auto">
-          <LoadingIcon />
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
   return (
     <div className="w-full">

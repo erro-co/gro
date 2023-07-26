@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import GroLogo from "@/components/icons/Logo";
-import { supabaseValueExists } from "@/lib/helpers";
+import { getUserRole, supabaseValueExists } from "@/lib/helpers";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 
 type LoginViews =
@@ -16,7 +16,7 @@ type LoginViews =
 
 type LoginErrors =
   | "No account"
-  | "Incorrect password"
+  | "Invalid Login Credentials"
   | "Please enter password"
   | "Please enter email"
   | null;
@@ -41,6 +41,13 @@ export default function Login() {
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+    if (!(await supabaseValueExists("user", "email", email))) {
+      setLoading(false);
+      console.log("no account");
+      setLoginError("No account");
+      return;
+    }
     await supabase.auth.signUp({
       email,
       password,
@@ -52,26 +59,34 @@ export default function Login() {
   };
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setLoading(true);
 
-    if (!(await supabaseValueExists("user", "email", email))) {
+    const { data: sign_in, error: sign_in_error } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+    if (sign_in_error) {
       setLoading(false);
-      console.log("no account");
-      setLoginError("No account");
+      setLoginError("Invalid Login Credentials");
       return;
     }
+    const role = await getUserRole(
+      sign_in.user.email?.toLowerCase() as string,
+      supabase,
+    );
 
-    e.preventDefault();
-    await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    setLoading(false);
+    if (typeof window !== "undefined") {
+      // @ts-ignore
+      localStorage.setItem("role", role.user_type.name);
+      localStorage.setItem("user", JSON.stringify(sign_in.user));
+    }
+
     router.push("/dashboard");
     router.refresh();
   };
-
-  useEffect(() => {}, []);
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center sm:px-6 lg:px-8 bg-gray-100 h-screen">

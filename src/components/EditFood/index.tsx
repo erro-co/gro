@@ -84,7 +84,6 @@ const EditFood: FC<IEditFood> = ({ food }) => {
         .update(updateFood.nutrients)
         .eq("food_id", updateFood.id)
         .select();
-    console.log("data", updated_nutrients);
     if (updated_nutrients_error) {
       console.log("Failed to update food:", updated_nutrients_error);
     }

@@ -1,3 +1,4 @@
+import { SupabaseClient } from "@supabase/supabase-js";
 import { Nutrition } from "../schemas";
 import { supabase } from "../supabase";
 
@@ -76,7 +77,6 @@ export const supabaseValueExists = async (
   column: string,
   value: any,
 ): Promise<boolean> => {
-  console.log(table, column, value);
   try {
     const { data, error } = await supabase
       .from(table)
@@ -101,4 +101,16 @@ export const supabaseValueExists = async (
     console.error("An error occurred while checking the value.", error);
     return false;
   }
+};
+
+export const getUserRole = async (email: string, supabase: SupabaseClient) => {
+  const { data, error } = await supabase
+    .from("user")
+    .select("user_type(name)")
+    .eq("email", email)
+    .single();
+  if (error || !data) {
+    throw error || new Error("No user data returned");
+  }
+  return data;
 };

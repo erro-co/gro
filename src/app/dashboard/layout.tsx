@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState, FC } from "react";
+import React, { Fragment, useState, FC } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import {
@@ -17,7 +17,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LogoutButton from "@/components/LogoutButton";
 
-const navigation = [
+export const dynamic = "force-dynamic";
+
+type NavigationItem = {
+  name: string;
+  href: string;
+  icon: any;
+  current: boolean;
+};
+
+const adminNavigation: NavigationItem[] = [
   { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
   {
     name: "Nutrition",
@@ -51,6 +60,36 @@ const navigation = [
   },
 ];
 
+const clientNavigation = [
+  { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
+
+  {
+    name: " My Plans",
+    href: "/dashboard/plans",
+    icon: TableCellsIcon,
+    current: false,
+  },
+  {
+    name: "My Schedule",
+    href: "/dashboard/schedule",
+    icon: CalendarIcon,
+    current: false,
+  },
+  {
+    name: "Settings",
+    href: "/dashboard/settings",
+    icon: Cog6ToothIcon,
+    current: false,
+  },
+];
+
+let navigation: any[];
+
+if (typeof window !== "undefined" && localStorage.getItem("role") === "admin") {
+  navigation = adminNavigation;
+} else {
+  navigation = clientNavigation;
+}
 export interface IDashboardLayout {
   children: React.ReactNode;
 }

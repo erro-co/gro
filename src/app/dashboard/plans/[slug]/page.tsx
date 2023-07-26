@@ -89,7 +89,7 @@ const DisplayMealPage: FC = () => {
 
   useEffect(() => {
     selectPlan();
-  }, []);
+  }, [selectPlan]);
 
   if (loading) {
     return (

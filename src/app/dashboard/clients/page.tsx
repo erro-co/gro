@@ -24,6 +24,7 @@ const ClientIndexPage = async () => {
     // Unauthenticated users will be redirected to the `/login` route.
     redirect("/login");
   }
+
   return <ClientsPage />;
 };
 

@@ -1,12 +1,7 @@
 "use client";
-import {
-  ChevronLeftIcon,
-  PlusCircleIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { FC, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import Link from "next/link";
 import EditFoodModal from "../Modals/EditFoodModal";
 import { FoodWithNutrientsAndServing } from "@/lib/schemas";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
@@ -20,21 +15,11 @@ import {
 import clsx from "clsx";
 import Loading from "../Loading";
 import ConfirmDeleteActionModal from "../Modals/ConfirmDeleteActionModal";
+import AddButton from "../SearchBarWithAddButton/AddButton";
 
 type SortDirection = "ASC" | "DESC" | null;
 
 const PAGE_SIZE = 10;
-
-const AddFoodButton: FC = () => {
-  return (
-    <Link href="/dashboard/nutrition/add">
-      <div className="bg-gro-pink text-white p-2 rounded-lg flex whitespace-nowrap ml-2">
-        <p className="my-auto hidden lg:block">New Food</p>
-        <PlusCircleIcon className="w-7 m-0 lg:ml-1 my-auto" />
-      </div>
-    </Link>
-  );
-};
 
 const SortIcon = (sortDirection: SortDirection) => {
   switch (sortDirection) {
@@ -59,7 +44,7 @@ type ReturnedFood = FoodWithNutrientsAndServing & {
   id: number;
 };
 
-export default function Table() {
+const Table: FC = () => {
   const [foods, setFoods] = useState<ReturnedFood[]>([]);
   const [dataFetched, setDataFetched] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -148,7 +133,7 @@ export default function Table() {
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         placeholder="Search for food..."
-        button={<AddFoodButton />}
+        button={<AddButton link="/dashboard/foods/add" text="Add Food" />}
       />
 
       <div className="mt-2">
@@ -325,4 +310,6 @@ export default function Table() {
       </div>
     </>
   );
-}
+};
+
+export default Table;

@@ -1,34 +1,70 @@
 "use client";
-
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 import MealPlanListTable from "./MealPlanListTable";
 import { supabase } from "@/lib/supabase";
-import { MealPlan } from "@/lib/types";
+import { MealPlan, User } from "@/lib/types";
 import LoadingIcon from "../../icons/LoadingIcon";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
+import { SelectTrainer } from "./SelectTrainer";
+import AddButton from "@/components/SearchBarWithAddButton/AddButton";
+import useMediaQuery from "@/lib/hooks/useMediaQuery";
 
-const AddMealPlanButton: FC = () => (
-  <Link href="/dashboard/plans/add">
-    <div className="bg-gro-pink text-white p-2 rounded-md flex whitespace-nowrap ml-2">
-      <p className="my-auto hidden lg:block">New plan</p>
-      <PlusCircleIcon className="w-7 m-0 lg:ml-1 my-auto" />
-    </div>
-  </Link>
-);
+const findTrainerIndex = (trainers: User[]) => {
+  if (!trainers || typeof window === "undefined") return 0;
+  const user = localStorage.getItem("user");
+
+  if (user) {
+    const { email } = JSON.parse(user);
+    const trainerIndex = trainers.findIndex(
+      (trainer) => trainer.email === email,
+    );
+    console.log("trainer", trainerIndex);
+    return trainerIndex;
+  }
+  return 0;
+};
 
 const PlansPage: FC = () => {
   const [mealPlans, setMealPlans] = useState<MealPlan[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
-
+  const [selectedTrainer, setSelectedTrainer] = useState<User | "All">("All");
+  const [trainers, setTrainers] = useState<User[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const getAllMealPlans = async () => {
-    const { data: meal_plans, error } = await supabase
+  const isMobile = useMediaQuery("(max-width: 640px)");
+
+  const fetchData = async () => {
+    if (trainers === null) {
+      const { data: trainers, error } = await supabase
+        .from("user")
+        .select("*")
+        .eq("user_type", 1)
+        .order("first_name", { ascending: true });
+
+      if (error) {
+        console.log("Error getting trainers:", error);
+        return;
+      }
+      console.log("trainers", trainers);
+      setTrainers(trainers as User[]);
+      console.log("findTrainerIndex", findTrainerIndex(trainers));
+      setSelectedTrainer(trainers[findTrainerIndex(trainers)]);
+    }
+
+    let query = supabase
       .from("meal_plan")
       .select("*")
-      .range(0, 6)
+      .range(0, isMobile ? 5 : 9)
+      .ilike("name", `%${searchTerm}%`)
       .order("created_at", { ascending: false });
+
+    if (selectedTrainer !== "All") {
+      query = query.eq(
+        "user",
+        trainers?.[findTrainerIndex(trainers)]?.id ?? "",
+      );
+    }
+
+    const { data: meal_plans, error } = await query;
 
     if (error) {
       console.log("Error getting meal plans:", error);
@@ -39,8 +75,8 @@ const PlansPage: FC = () => {
   };
 
   useEffect(() => {
-    getAllMealPlans();
-  }, []);
+    fetchData();
+  }, [selectedTrainer, searchTerm]);
 
   if (loading) {
     return (
@@ -56,12 +92,19 @@ const PlansPage: FC = () => {
       <h1 className="text-3xl font-bold mb-12 text-center lg:text-left">
         My plans
       </h1>
-      <SearchBarWithAddButton
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        placeholder="Search plans"
-        button={<AddMealPlanButton />}
-      />
+      <div className="w-full flex flex-col-reverse lg:flex-row mb-8">
+        <SelectTrainer
+          selectedTrainer={selectedTrainer}
+          setSelectedTrainer={setSelectedTrainer}
+          trainers={trainers}
+        />
+        <SearchBarWithAddButton
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          placeholder="Search plans"
+          button={<AddButton link="/dashboard/plans/add" text="New Plan" />}
+        />
+      </div>
       <MealPlanListTable mealPlans={mealPlans} />
     </>
   );

@@ -53,7 +53,7 @@ const PlansPage: FC = () => {
     let query = supabase
       .from("meal_plan")
       .select("*")
-      .range(0, isMobile ? 5 : 9)
+      .range(0, 9)
       .ilike("name", `%${searchTerm}%`)
       .order("created_at", { ascending: false });
 
@@ -76,7 +76,7 @@ const PlansPage: FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [selectedTrainer, searchTerm]);
+  }, [selectedTrainer, searchTerm, fetchData]);
 
   if (loading) {
     return (
@@ -105,7 +105,10 @@ const PlansPage: FC = () => {
           button={<AddButton link="/dashboard/plans/add" text="New Plan" />}
         />
       </div>
-      <MealPlanListTable mealPlans={mealPlans} />
+      <MealPlanListTable
+        mealPlans={mealPlans}
+        getAllMealPlans={() => fetchData()}
+      />
     </>
   );
 };

@@ -105,7 +105,7 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
 
   return (
     <div>
-      <h1 className="text-lg lg:text-2xl text-center mb-2">
+      <h1 className="text-lg lg:text-xl text-center font-light mt-2 mb-2">
         {selectedFood?.name}
       </h1>
       <div className="w-full flex flex-col items-stretch lg:flex-row mb-2 md:mb-6">

@@ -19,14 +19,7 @@ import LogoutButton from "@/components/LogoutButton";
 
 export const dynamic = "force-dynamic";
 
-type NavigationItem = {
-  name: string;
-  href: string;
-  icon: any;
-  current: boolean;
-};
-
-const adminNavigation: NavigationItem[] = [
+const adminNavigation = [
   { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
   {
     name: "Nutrition",

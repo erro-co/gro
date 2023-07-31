@@ -133,7 +133,7 @@ const Table: FC = () => {
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         placeholder="Search for food..."
-        button={<AddButton link="/dashboard/foods/add" text="Add Food" />}
+        button={<AddButton link="/dashboard/nutrition/add" text="Add Food" />}
       />
 
       <div className="mt-2">
@@ -266,7 +266,7 @@ const Table: FC = () => {
                       ) : null}
                       <td className="relative whitespace-nowrap py-1 pr-2 text-right text-sm font-medium">
                         <button
-                          onClick={(e) => {
+                          onClick={() => {
                             setSelectedFood(f);
                             setOpenConfirmDeleteActionModal(true);
                           }}

@@ -15,5 +15,13 @@ module.exports = {
     "@typescript-eslint/no-empty-function": "warn",
     "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/ban-ts-comment": "warn",
+    "@typescript-eslint/no-unused-vars": [
+      "warn", // or "error"
+      {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+      },
+    ],
   },
 };

@@ -12,6 +12,7 @@ import { MealIndexProvider } from "@/lib/context/SelectedMealIndexContext";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import AddFoodModal from "./AddFoodModal";
 import AddMealTable from "./AddMealTable";
+import ConfirmationModal from "./ConfirmationModal";
 
 const AddNewMealPlan: FC = () => {
   const [showFoodSearchModal, setShowFoodSearchModal] =
@@ -19,6 +20,10 @@ const AddNewMealPlan: FC = () => {
   const [mealPlanId, setMealPlanId] = useState<string>("");
   const { control, watch, register, handleSubmit, reset } = useFormContext();
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const [loaded, setLoaded] = useState(false);
+  const [loadingView, setLoadingView] = useState<
+    "loaded" | "loading" | "confirmed"
+  >("loading");
 
   const mealPlan = watch();
 
@@ -39,6 +44,7 @@ const AddNewMealPlan: FC = () => {
   };
 
   const onSubmit = async (data: any) => {
+    setLoaded(false);
     if (validateForm(data) === false) {
       return;
     }
@@ -119,64 +125,70 @@ const AddNewMealPlan: FC = () => {
         }
       }
     });
-
+    setLoaded(true);
     reset();
   };
 
   return (
-    <form className="flex flex-col h-full" onSubmit={handleSubmit(onSubmit)}>
-      <MealIndexProvider>
-        <AddFoodModal
-          open={showFoodSearchModal}
-          setOpen={setShowFoodSearchModal}
-        />
-        <div className="w-full flex">
-          <div className="w-full lg:w-fit lg:mx-auto shadow border border-gray-200 rounded-lg flex p-2 focus-within:border-indigo-500">
-            <input
-              type="text"
-              {...register("name")}
-              className="text-normal lg:text-2xl font-semibold focus:outline-none w-full"
-            />
-            <PencilIcon className="w-6 text-gray-400" />
-          </div>
-        </div>
-
-        {fields.map((meal, idx) => (
-          <AddMealTable
-            key={meal.id}
-            mealIndex={idx}
-            setShowFoodSearchModal={setShowFoodSearchModal}
-            removeMeal={remove}
+    <>
+      <ConfirmationModal isOpen={loaded} setIsOpen={setLoaded} />
+      <form className="flex flex-col h-full" onSubmit={handleSubmit(onSubmit)}>
+        <MealIndexProvider>
+          <AddFoodModal
+            open={showFoodSearchModal}
+            setOpen={setShowFoodSearchModal}
           />
-        ))}
-        <div className="flex">
-          <div className="ml-auto flex">
-            <button
-              onClick={() => append({ name: `Meal ${fields.length + 1}` })}
-              className="bg-gro-indigo text-white flex mt-1 p-1 lg:py-2 rounded-md"
-            >
-              <PlusCircleIcon className="w-5" />
-              {isMobile ? (
-                <p className="my-auto text-sm mx-2">Meal</p>
-              ) : (
-                <p className="my-auto text-xs lg:text-base pr-1">Add Meal</p>
-              )}
-            </button>
+          <div className="w-full flex">
+            <div className="w-full lg:w-fit lg:mx-auto shadow border border-gray-200 rounded-lg flex p-2 focus-within:border-indigo-500">
+              <input
+                type="text"
+                {...register("name")}
+                className="text-normal lg:text-2xl font-semibold focus:outline-none w-full"
+              />
+              <PencilIcon className="w-6 text-gray-400" />
+            </div>
           </div>
-        </div>
-        <div className="mt-auto flex w-full">
-          {validateForm(mealPlan) ? (
-            <button
-              type="submit"
-              className="mx-auto flex border px-4 py-2 lg:py-4 rounded-md  text-white bg-green-500 disabled:opacity-70"
-            >
-              {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
-              <CheckIcon className="w-6" />
-            </button>
-          ) : null}
-        </div>
-      </MealIndexProvider>
-    </form>
+
+          {fields.map((meal, idx) => (
+            <AddMealTable
+              key={meal.id}
+              mealIndex={idx}
+              setShowFoodSearchModal={setShowFoodSearchModal}
+              removeMeal={remove}
+            />
+          ))}
+          <div className="flex">
+            <div className="ml-auto flex">
+              <button
+                onClick={() => append({ name: `Meal ${fields.length + 1}` })}
+                className="bg-gro-indigo text-white flex p-2 rounded-md"
+              >
+                <PlusCircleIcon className="w-6" />
+                {isMobile ? (
+                  <p className="my-auto text-xs mx-2">Meal</p>
+                ) : (
+                  <p className="my-auto text-xs lg:text-base mx-2">Add Meal</p>
+                )}
+              </button>
+            </div>
+          </div>
+          <div className="mt-auto flex w-full mb-4">
+            {validateForm(mealPlan) ? (
+              <button
+                type="submit"
+                className="mx-auto flex border px-4 py-2 lg:py-4 rounded-md  text-white bg-green-500 disabled:opacity-70"
+              >
+                {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
+
+                <div className="ml-2">
+                  <CheckIcon className="w-6" />
+                </div>
+              </button>
+            ) : null}
+          </div>
+        </MealIndexProvider>
+      </form>
+    </>
   );
 };
 

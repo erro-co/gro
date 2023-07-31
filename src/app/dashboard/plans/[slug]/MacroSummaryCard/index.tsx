@@ -10,7 +10,7 @@ export interface IMacroSummaryCard {
   mealPlan: MealFoodServing[];
 }
 
-function calculateNutritionTotals(mealPlan: any): {
+function calculateNutritionTotals(mealPlan: MealFoodServing[]): {
   totalProtein: number;
   totalFat: number;
   totalCarbs: number;

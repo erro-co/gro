@@ -35,7 +35,7 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
       .from("food")
       .select()
       .filter("name", "ilike", `%${searchTerm}%`)
-      .range(0, 5);
+      .range(0, 7);
     const { data: all_foods, error } = await query;
     if (error) {
       console.log("Failed to fetch error:", error);
@@ -61,11 +61,11 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed z-100 inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div className="fixed z-100 inset-0 bg-gray-900 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
-        <div className="fixed inset-2 lg:inset-24 z-50 overflow-y-auto rounded-lg">
-          <div className="flex min-h-full">
+        <div className="fixed inset-2 lg:inset-12 z-50 overflow-y-auto rounded-lg">
+          <div className="flex">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -75,7 +75,7 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white pb-4 pt-5 text-left shadow-xl transition-all w-full px-8">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white pb-4 pt-5 text-left shadow-xl transition-all w-full lg:max-w-6xl mx-auto px-4 lg:px-8">
                 <div className="absolute right-0 top-0 pr-4 pt-4 sm:block">
                   <button
                     type="button"
@@ -91,6 +91,7 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
                 />
+
                 {dataFetched ? (
                   <FoodSearchHitsTable
                     foods={foods}

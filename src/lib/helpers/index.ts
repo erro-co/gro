@@ -1,4 +1,6 @@
+import { SupabaseClient } from "@supabase/supabase-js";
 import { Nutrition } from "../schemas";
+import { supabase } from "../supabase";
 
 export const joinClassNames = (
   ...classes: (string | boolean | undefined)[]
@@ -68,4 +70,47 @@ export const parseSupabaseDate = (
 
   if (type === "date") return `${day}/${month}/${year}`;
   return `${hours}:${minutes} ${day}/${month}/${year}`;
+};
+
+export const supabaseValueExists = async (
+  table: string,
+  column: string,
+  value: any,
+): Promise<boolean> => {
+  try {
+    const { data, error } = await supabase
+      .from(table)
+      .select(column)
+      .eq(column, value)
+      .limit(1);
+
+    if (error) {
+      console.error(
+        `An error occurred while checking the value of ${value} in ${table}.${column}`,
+        error,
+      );
+      return false;
+    }
+
+    if (data && data.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error("An error occurred while checking the value.", error);
+    return false;
+  }
+};
+
+export const getUserRole = async (email: string, supabase: SupabaseClient) => {
+  const { data, error } = await supabase
+    .from("user")
+    .select("user_type(name)")
+    .eq("email", email)
+    .single();
+  if (error || !data) {
+    throw error || new Error("No user data returned");
+  }
+  return data;
 };

@@ -3,13 +3,14 @@ import { motion } from "framer-motion";
 import { Disclosure } from "@headlessui/react";
 import MacroSummaryPieChart from "../MacroSummaryPieChart";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
-import { MealPlan } from "../page";
+import { MealFoodServing } from "../page";
+import clsx from "clsx";
 
 export interface IMacroSummaryCard {
-  mealPlan: any;
+  mealPlan: MealFoodServing[];
 }
 
-function calculateNutritionTotals(mealPlan: MealPlan): {
+function calculateNutritionTotals(mealPlan: MealFoodServing[]): {
   totalProtein: number;
   totalFat: number;
   totalCarbs: number;
@@ -20,9 +21,9 @@ function calculateNutritionTotals(mealPlan: MealPlan): {
   let totalCarbs = 0;
   let totalCals = 0;
 
-  mealPlan.meal_plan_food_serving_user.forEach((item) => {
-    const food = item.meal_food_serving.food;
-    const quantity = item.meal_food_serving.quantity;
+  mealPlan.forEach((item: MealFoodServing) => {
+    const food = item.food;
+    const quantity = item.quantity;
     totalProtein += food.nutrients.protein * quantity;
     totalFat += food.nutrients.total_fat * quantity;
     totalCarbs += food.nutrients.total_carbs * quantity;
@@ -55,22 +56,26 @@ const MacroSummaryCard: FC<IMacroSummaryCard> = ({ mealPlan }) => {
     },
   ];
   return (
-    <div className="w-full lg:w-1/2 lg:mx-auto flex border-4 border-gro-indigo rounded-lg p-4 flex-col">
-      <p className="text-center text-3xl font-bold pb-2">
+    <div className="w-full flex flex-col mb-6">
+      {/* <h2 className="text-center text-2xl font-bold pb-2">
         {mealPlan?.name || "Meal Plan"}
-      </p>
-      <div className="flex lg:flex-row w-full">
+      </h2> */}
+      <div className="flex mx-auto">
         <MacroSummaryPieChart macros={pieChartData} totalCals={totalCals} />
-        <div className="w-full lg:w-1/2 mx-auto flex">
-          <div className="flex flex-col justify-evenly w-full space-y-2 px-4">
+        <div className="w-full mx-auto lg:mx-0 lg:ml-4 flex">
+          <div className="flex flex-col my-auto ml-4 mt-4 w-full lg:w-[500px] space-y-2">
             <motion.div
-              className="flex"
+              className={clsx("flex")}
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
               <div className="w-6 h-6 bg-gro-pink rounded-full" />
-              <div className="bg-gro-pink rounded-lg py-0.5 px-2 ml-2 flex-1">
+              <div
+                className={clsx(
+                  "bg-gro-pink rounded-lg py-0.5 px-2 ml-2 flex-1",
+                )}
+              >
                 <p className="text-sm font-semibold text-white">
                   {totalProtein} Protein
                 </p>
@@ -102,26 +107,28 @@ const MacroSummaryCard: FC<IMacroSummaryCard> = ({ mealPlan }) => {
                 </p>
               </div>
             </motion.div>
+            <Disclosure as="div" className="mt-2">
+              {({ open }) => (
+                <>
+                  <Disclosure.Button className="flex w-full justify-between rounded-lg bg-white px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                    <span>Meal Plan Notes</span>
+                    <ChevronUpIcon
+                      className={`${
+                        open ? "rotate-180 transform" : ""
+                      } h-5 w-5 text-purple-500`}
+                    />
+                  </Disclosure.Button>
+                  <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm">
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </p>
+                  </Disclosure.Panel>
+                </>
+              )}
+            </Disclosure>
           </div>
         </div>
       </div>
-      <Disclosure as="div" className="mt-2">
-        {({ open }) => (
-          <>
-            <Disclosure.Button className="flex w-full justify-between rounded-lg bg-white px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
-              <span>Meal Plan Notes</span>
-              <ChevronUpIcon
-                className={`${
-                  open ? "rotate-180 transform" : ""
-                } h-5 w-5 text-purple-500`}
-              />
-            </Disclosure.Button>
-            <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
     </div>
   );
 };

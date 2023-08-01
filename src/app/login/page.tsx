@@ -4,19 +4,50 @@ import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import GroLogo from "@/components/icons/Logo";
+import { getUserRole, supabaseValueExists } from "@/lib/helpers";
+import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 
-type LoginViews = "sign-in" | "sign-up" | "check-email";
+type LoginViews =
+  | "sign-in"
+  | "sign-up"
+  | "check-email"
+  | "forgot-password"
+  | "no-account";
+
+type LoginErrors =
+  | "No account"
+  | "Invalid Login Credentials"
+  | "Please enter password"
+  | "Please enter email"
+  | null;
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState<LoginErrors>(null);
   const [view, setView] = useState<LoginViews>("sign-in");
   const router = useRouter();
   const supabase = createClientComponentClient();
   const [loading, setLoading] = useState(false);
 
+  const createUser = async (email: string) => {
+    const { data, error } = await supabase.from("user").insert([{ email }]);
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  };
+
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+    if (!(await supabaseValueExists("user", "email", email))) {
+      setLoading(false);
+      console.log("no account");
+      setLoginError("No account");
+      return;
+    }
     await supabase.auth.signUp({
       email,
       password,
@@ -28,13 +59,31 @@ export default function Login() {
   };
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
-    setLoading(true);
     e.preventDefault();
-    await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    setLoading(false);
+    setLoading(true);
+
+    const { data: sign_in, error: sign_in_error } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+    if (sign_in_error) {
+      setLoading(false);
+      setLoginError("Invalid Login Credentials");
+      return;
+    }
+    const role = await getUserRole(
+      sign_in.user.email?.toLowerCase() as string,
+      supabase,
+    );
+
+    if (typeof window !== "undefined") {
+      // @ts-ignore
+      localStorage.setItem("role", role.user_type.name);
+      localStorage.setItem("user", JSON.stringify(sign_in.user));
+    }
+
     router.push("/dashboard");
     router.refresh();
   };
@@ -57,7 +106,19 @@ export default function Login() {
             </div>
           ) : (
             <form onSubmit={view === "sign-in" ? handleSignIn : handleSignUp}>
-              <div className="">
+              {loginError !== null ? (
+                <div className="flex w-full">
+                  <div className="mx-auto flex">
+                    <div className="w-6 text-red-500">
+                      <ExclamationCircleIcon />
+                    </div>
+                    <p className="text-red-500 text-sm pt-0.5 pl-1">
+                      {loginError}
+                    </p>
+                  </div>
+                </div>
+              ) : null}
+              <div>
                 <label
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"

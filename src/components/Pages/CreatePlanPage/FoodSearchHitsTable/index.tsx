@@ -20,42 +20,43 @@ const FoodSearchHitsTable: FC<IFoodSearchHitsTable> = ({
           <div className="inline-block min-w-full py-2 align-middle">
             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
-                <thead className="bg-gray-50">
+                <thead className="bg-gro-pink/50">
                   <tr>
                     <th
                       scope="col"
-                      className=" w-full py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                      className=" w-full py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                     >
                       Name
                     </th>
                     <th
                       scope="col"
-                      className="pr-20 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      className="pr-20 py-2 text-left text-sm font-semibold text-gray-900"
                     >
                       Brand
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
+                <tbody className="divide-y divide-gray-200">
                   {foods?.map((food: Food, idx: number) => (
                     <tr
                       key={idx}
                       className={clsx(
                         selectedFood === food
                           ? "bg-pink-300 text-white"
-                          : "hover:bg-gray-200",
+                          : "hover:bg-gray-200 ",
+                        idx % 2 === 0 ? "bg-white" : "bg-gray-50",
                       )}
                       onClick={() =>
                         setSelectedFood(selectedFood === food ? null : food)
                       }
                     >
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                      <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-light text-gray-900 sm:pl-6">
                         {food.name}
                       </td>
                       <td
                         className={clsx(
                           selectedFood === food ? " text-black" : "",
-                          "whitespace-nowrap py-4 text-sm text-gray-500",
+                          "whitespace-nowrap py-2 text-sm text-gray-500",
                         )}
                       >
                         {food.brand ? food.brand : "generic"}

@@ -13,12 +13,12 @@ const Addbutton: FC<IAddbutton> = ({ link, text, colour = "bg-gro-pink" }) => (
   <Link href={link}>
     <div
       className={clsx(
-        "text-white p-2 rounded-lg flex whitespace-nowrap ml-2",
+        "text-white p-1.5 rounded-lg flex whitespace-nowrap ml-2",
         colour,
       )}
     >
       <p className="my-auto hidden lg:block">{text}</p>
-      <PlusCircleIcon className="w-7 m-0 lg:ml-1 my-auto" />
+      <PlusCircleIcon className="w-6 m-0 lg:ml-1 my-auto" />
     </div>
   </Link>
 );

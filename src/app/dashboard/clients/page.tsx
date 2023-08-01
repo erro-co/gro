@@ -10,6 +10,8 @@ export const metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+
 const ClientIndexPage = async () => {
   const supabase = createServerComponentClient({ cookies });
 
@@ -22,6 +24,7 @@ const ClientIndexPage = async () => {
     // Unauthenticated users will be redirected to the `/login` route.
     redirect("/login");
   }
+
   return <ClientsPage />;
 };
 

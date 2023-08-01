@@ -1,16 +1,18 @@
-import FoodsPage from "@/components/Pages/FoodsPage";
+import EditPlanPage from "@/components/Pages/EditPlanPage";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
-  title: "Gro - Foods",
+  title: "Gro - Edit Plan",
   icons: {
     icon: "/gro_logo.png",
   },
 };
 
-const FoodsIndexPage = async () => {
+const PlansEditIndexPage = async () => {
   const supabase = createServerComponentClient({ cookies });
 
   const {
@@ -22,7 +24,7 @@ const FoodsIndexPage = async () => {
     // Unauthenticated users will be redirected to the `/login` route.
     redirect("/login");
   }
-  return <FoodsPage />;
+  return <EditPlanPage />;
 };
 
-export default FoodsIndexPage;
+export default PlansEditIndexPage;

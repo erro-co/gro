@@ -16,18 +16,18 @@ const SearchBarWithAddButton: FC<ISearchBarWithAddButton> = ({
 }) => {
   return (
     <div className="flex w-full">
-      <div className="border border-gray-100 shadow flex bg-white rounded-lg w-full focus-within:border-gro-indigo">
+      <div className="shadow-sm border border-input placeholder:text-muted-foreground focus:outline-none focus:ring-1 flex bg-white rounded-lg w-full focus-within:border-gro-indigo">
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder={placeholder}
           className={
-            "rounded-l-lg pl-2 py-2 border-none focus:outline-none border-transparent focus:border-transparent focus:ring-0 grow bg-white"
+            "rounded-l-lg pl-2 border-none focus:outline-none border-transparent focus:border-transparent focus:ring-0 grow bg-white text-sm"
           }
         />
         <div className="my-auto pr-2">
-          <MagnifyingGlassIcon className="text-gray-500 w-6" />
+          <MagnifyingGlassIcon className="text-gray-500 w-4" />
         </div>
       </div>
       {button}

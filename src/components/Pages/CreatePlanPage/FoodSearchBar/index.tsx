@@ -22,7 +22,7 @@ const FoodSearchBar: FC<IFoodSearchBar> = ({ searchTerm, setSearchTerm }) => {
           onChange={handleChange}
           className={clsx(
             "rounded-l-lg",
-            "pl-2 py-4 border-none focus:outline-none border-transparent focus:border-transparent focus:ring-0 flex-grow",
+            "pl-2 py-2 border-none focus:outline-none border-transparent focus:border-transparent focus:ring-0 flex-grow",
           )}
         />
         <div className="my-auto pr-2">

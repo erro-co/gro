@@ -1,13 +1,7 @@
 "use client";
-import {
-  ChevronLeftIcon,
-  PlusCircleIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { FC, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import LoadingIcon from "../icons/LoadingIcon";
-import Link from "next/link";
 import EditFoodModal from "../Modals/EditFoodModal";
 import { FoodWithNutrientsAndServing } from "@/lib/schemas";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
@@ -18,21 +12,14 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from "@heroicons/react/20/solid";
+import clsx from "clsx";
+import Loading from "../Loading";
+import ConfirmDeleteActionModal from "../Modals/ConfirmDeleteActionModal";
+import AddButton from "../SearchBarWithAddButton/AddButton";
 
 type SortDirection = "ASC" | "DESC" | null;
 
 const PAGE_SIZE = 10;
-
-const AddFoodButton: FC = () => {
-  return (
-    <Link href="/dashboard/foods/add">
-      <div className="bg-gro-pink text-white p-2 rounded-lg flex whitespace-nowrap ml-2">
-        <p className="my-auto hidden lg:block">New Food</p>
-        <PlusCircleIcon className="w-7 m-0 lg:ml-1 my-auto" />
-      </div>
-    </Link>
-  );
-};
 
 const SortIcon = (sortDirection: SortDirection) => {
   switch (sortDirection) {
@@ -56,7 +43,8 @@ const SortIcon = (sortDirection: SortDirection) => {
 type ReturnedFood = FoodWithNutrientsAndServing & {
   id: number;
 };
-export default function Table() {
+
+const Table: FC = () => {
   const [foods, setFoods] = useState<ReturnedFood[]>([]);
   const [dataFetched, setDataFetched] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -64,6 +52,8 @@ export default function Table() {
   const [openEditFoodModal, setOpenEditFoodModal] = useState<boolean>(false);
   const [selectedFood, setSelectedFood] =
     useState<ReturnedFood>(emptyPlaceholderFood);
+  const [openConfirmDeleteActionModal, setOpenConfirmDeleteActionModal] =
+    useState<boolean>(false);
 
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
@@ -120,15 +110,12 @@ export default function Table() {
     if (error) {
       console.error("Failed to delete food:", error);
     }
+    setSelectedFood(emptyPlaceholderFood);
+    setOpenConfirmDeleteActionModal(false);
     getAllFoods(currentPage);
   };
 
-  if (!dataFetched)
-    return (
-      <div className="w-40 mx-auto mt-20">
-        <LoadingIcon />
-      </div>
-    );
+  if (!dataFetched) return <Loading />;
 
   return (
     <>
@@ -137,23 +124,28 @@ export default function Table() {
         setIsOpen={setOpenEditFoodModal}
         food={selectedFood}
       />
+      <ConfirmDeleteActionModal
+        open={openConfirmDeleteActionModal}
+        setOpen={setOpenConfirmDeleteActionModal}
+        deleteFunction={() => handleDeleteFood(selectedFood.id)}
+      />
       <SearchBarWithAddButton
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         placeholder="Search for food..."
-        button={<AddFoodButton />}
+        button={<AddButton link="/dashboard/nutrition/add" text="Add Food" />}
       />
 
       <div className="mt-2">
         <div className="flow-root">
           <div className="inline-block min-w-full py-2 align-middle">
-            <div className="overflow-hidden shadow-lg ring-1 ring-black ring-opacity-5 rounded-lg">
+            <div className="overflow-hidden ring-1 ring-black ring-opacity-5 rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
-                <thead className="">
+                <thead>
                   <tr>
                     <th
                       scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                     >
                       <button
                         onClick={() => handleSortClick("name")}
@@ -171,7 +163,7 @@ export default function Table() {
                       <>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                         >
                           <button
                             onClick={() => handleSortClick("brand")}
@@ -187,29 +179,29 @@ export default function Table() {
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                         >
-                          Protein
+                          Protein (g)
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                         >
-                          Fats
+                          Fats (g)
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                         >
-                          Carbs
+                          Carbs (g)
                         </th>
                       </>
                     ) : null}
                     <th
                       scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
                     >
-                      Calories
+                      Calories (kcal)
                     </th>
                     <th scope="col" className="">
                       <span className="sr-only">Delete</span>
@@ -218,7 +210,7 @@ export default function Table() {
                     {!isMobile ? (
                       <th
                         scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                        className="relative py-2 pl-3 pr-4 sm:pr-6"
                       >
                         <span className="sr-only">Edit</span>
                       </th>
@@ -227,8 +219,14 @@ export default function Table() {
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {foods?.map((f: ReturnedFood, idx) => (
-                    <tr key={idx}>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                    <tr
+                      key={idx}
+                      className={clsx(
+                        "font-light",
+                        idx % 2 !== 0 ? "bg-gray-50" : "",
+                      )}
+                    >
+                      <td className="whitespace-nowrap py-1 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
                         {f.name}
                         {isMobile ? (
                           <p className="text-gray-400 font-light">{f.brand}</p>
@@ -236,28 +234,28 @@ export default function Table() {
                       </td>
                       {!isMobile ? (
                         <>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
                             <p>{f.brand}</p>
                           </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
                             {f.nutrients?.protein}
                           </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
                             {f.nutrients?.saturated_fat +
                               f.nutrients?.trans_fat}
                           </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
                             {f.nutrients?.fiber + f.nutrients?.sugar}
                           </td>
                         </>
                       ) : null}
 
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
                         {f.nutrients?.calories}
                       </td>
 
                       {!isMobile ? (
-                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                        <td className="relative whitespace-nowrap py-1 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <button
                             onClick={() => editFood(f)}
                             className="text-indigo-600 hover:text-indigo-900"
@@ -266,10 +264,13 @@ export default function Table() {
                           </button>
                         </td>
                       ) : null}
-                      <td className="relative whitespace-nowrap py-2 pr-2 text-right text-sm font-medium">
+                      <td className="relative whitespace-nowrap py-1 pr-2 text-right text-sm font-medium">
                         <button
-                          onClick={(e) => handleDeleteFood(f.id)}
-                          className="text-white p-2 bg-red-500 rounded-md mr-"
+                          onClick={() => {
+                            setSelectedFood(f);
+                            setOpenConfirmDeleteActionModal(true);
+                          }}
+                          className="text-red-500 pt-1"
                         >
                           <TrashIcon className="w-4" />
                         </button>
@@ -281,29 +282,34 @@ export default function Table() {
             </div>
           </div>
         </div>
-        <div className="w-full mt-3 pb-4">
-          <div className="lg:ml-auto flex justify-between lg:justify-center lg:space-x-10">
-            <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className="bg-gro-indigo disabled:bg-gray-500 text-white font-bold p-2 rounded flex cursor-pointer"
-            >
-              <span className="mx-auto flex">
-                <ChevronLeftIcon className="w-6" />
-              </span>
-            </button>
-            <button
-              onClick={handleNextPage}
-              disabled={foods.length < PAGE_SIZE}
-              className="bg-gro-indigo text-white font-bold p-2 rounded flex cursor-pointer"
-            >
-              <span className="mx-auto flex">
-                <ChevronLeftIcon className="w-6 rotate-180" />
-              </span>
-            </button>
+
+        {foods.length > PAGE_SIZE ? (
+          <div className="w-full mt-3 pb-4">
+            <div className="lg:ml-auto flex justify-between lg:justify-center lg:space-x-10">
+              <button
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className="bg-gro-indigo disabled:bg-gray-500 text-white font-bold p-2 rounded flex cursor-pointer"
+              >
+                <span className="mx-auto flex">
+                  <ChevronLeftIcon className="w-6" />
+                </span>
+              </button>
+              <button
+                onClick={handleNextPage}
+                disabled={foods.length < PAGE_SIZE}
+                className="bg-gro-indigo text-white font-bold p-2 rounded flex cursor-pointer"
+              >
+                <span className="mx-auto flex">
+                  <ChevronLeftIcon className="w-6 rotate-180" />
+                </span>
+              </button>
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </>
   );
-}
+};
+
+export default Table;

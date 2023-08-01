@@ -1,14 +1,26 @@
 import { Nutrition } from "@/lib/schemas";
 import { FC } from "react";
-import { PieChart, Pie, Cell } from "recharts";
+import { PieChart, Pie, Cell, Label } from "recharts";
 
 const COLORS = ["#F695A0", "#DC7CDE", "#A351FA"];
 
 export interface IFoodNutrientsPieChart {
   nutrients: Nutrition | null;
+  width?: number;
+  height?: number;
+  innerRadius?: number;
+  outerRadius?: number;
+  text?: string;
 }
 
-const FoodNutrientsPieChart: FC<IFoodNutrientsPieChart> = ({ nutrients }) => {
+const FoodNutrientsPieChart: FC<IFoodNutrientsPieChart> = ({
+  nutrients,
+  width,
+  height,
+  innerRadius,
+  outerRadius,
+  text,
+}) => {
   if (!nutrients) {
     return null;
   }
@@ -28,20 +40,17 @@ const FoodNutrientsPieChart: FC<IFoodNutrientsPieChart> = ({ nutrients }) => {
   ];
 
   return (
-    <PieChart width={180} height={200}>
+    <PieChart width={width} height={height}>
       <Pie
         data={data}
-        cx={90}
-        cy={90}
-        innerRadius={60}
-        outerRadius={80}
-        fill="#8884d8"
-        paddingAngle={4}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
         dataKey="value"
       >
         {data.map((_, index) => (
           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
+        <Label value={text} position="center" className="text-sm" />
       </Pie>
     </PieChart>
   );

@@ -1,4 +1,4 @@
-import ClientsPage from "@/components/Pages/ClientsPage";
+import ClientsPage from "@/components/Pages/ClientPages";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

@@ -1,28 +1,13 @@
 "use client";
 import { FC, useEffect, useState } from "react";
-import MealPlanListTable from "./MealPlanListTable";
+import MealPlanListTable from "./common/MealPlanListTable";
 import { supabase } from "@/lib/supabase";
 import { MealPlan, User } from "@/lib/types";
 import LoadingIcon from "../../icons/LoadingIcon";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
-import { SelectTrainer } from "./SelectTrainer";
+import { SelectTrainer } from "./TrainerViewMealPlanPages/SelectTrainer";
 import AddButton from "@/components/SearchBarWithAddButton/AddButton";
-import useMediaQuery from "@/lib/hooks/useMediaQuery";
-
-const findTrainerIndex = (trainers: User[]) => {
-  if (!trainers || typeof window === "undefined") return 0;
-  const user = localStorage.getItem("user");
-
-  if (user) {
-    const { email } = JSON.parse(user);
-    const trainerIndex = trainers.findIndex(
-      (trainer) => trainer.email === email,
-    );
-    console.log("trainer", trainerIndex);
-    return trainerIndex;
-  }
-  return 0;
-};
+import { findTrainerIndex } from "@/lib/helpers";
 
 const PlansPage: FC = () => {
   const [mealPlans, setMealPlans] = useState<MealPlan[]>([]);
@@ -30,7 +15,6 @@ const PlansPage: FC = () => {
   const [selectedTrainer, setSelectedTrainer] = useState<User | "All">("All");
   const [trainers, setTrainers] = useState<User[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const isMobile = useMediaQuery("(max-width: 640px)");
 
   const fetchData = async () => {
     if (trainers === null) {
@@ -90,7 +74,7 @@ const PlansPage: FC = () => {
   return (
     <>
       <h1 className="text-3xl font-bold mb-12 text-center lg:text-left">
-        My plans
+        Plans
       </h1>
       <div className="w-full flex flex-col-reverse lg:flex-row mb-8">
         <SelectTrainer
@@ -108,6 +92,7 @@ const PlansPage: FC = () => {
       <MealPlanListTable
         mealPlans={mealPlans}
         getAllMealPlans={() => fetchData()}
+        clientView={false}
       />
     </>
   );

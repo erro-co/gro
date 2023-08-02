@@ -1,12 +1,22 @@
 "use client";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import { FC, useState } from "react";
+import { redirect } from "next/navigation";
 
-const AddClients: FC = () => {
+const NewClientPage: FC = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+
+  if (
+    typeof window !== "undefined" ||
+    localStorage.getItem("role") !== "trainer" ||
+    localStorage.getItem("role") !== "admin"
+  ) {
+    redirect("/dashboard/plans");
+  }
+
   return (
     <form>
       <div className="space-y-12 sm:space-y-16">
@@ -110,4 +120,4 @@ const AddClients: FC = () => {
   );
 };
 
-export default AddClients;
+export default NewClientPage;

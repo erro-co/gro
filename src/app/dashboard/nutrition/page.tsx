@@ -1,4 +1,4 @@
-import FoodsPage from "@/components/Pages/FoodsPage";
+import NutritionPage from "@/components/Pages/NutritionPages";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -12,7 +12,7 @@ export const metadata = {
   },
 };
 
-const FoodsIndexPage = async () => {
+const NutritionIndexPage = async () => {
   const supabase = createServerComponentClient({ cookies });
 
   const {
@@ -24,7 +24,7 @@ const FoodsIndexPage = async () => {
     // Unauthenticated users will be redirected to the `/login` route.
     redirect("/login");
   }
-  return <FoodsPage />;
+  return <NutritionPage />;
 };
 
-export default FoodsIndexPage;
+export default NutritionIndexPage;

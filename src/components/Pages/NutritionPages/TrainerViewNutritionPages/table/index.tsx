@@ -2,10 +2,10 @@
 import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { FC, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import EditFoodModal from "../Modals/EditFoodModal";
+import EditFoodModal from "../../../../Modals/EditFoodModal";
 import { FoodWithNutrientsAndServing } from "@/lib/schemas";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import SearchBarWithAddButton from "../SearchBarWithAddButton";
+import SearchBarWithAddButton from "../../../../SearchBarWithAddButton";
 import { emptyPlaceholderFood } from "@/lib/consts";
 import {
   ChevronUpDownIcon,
@@ -13,9 +13,9 @@ import {
   ChevronUpIcon,
 } from "@heroicons/react/20/solid";
 import clsx from "clsx";
-import Loading from "../Loading";
-import ConfirmDeleteActionModal from "../Modals/ConfirmDeleteActionModal";
-import AddButton from "../SearchBarWithAddButton/AddButton";
+import Loading from "../../../../Loading";
+import ConfirmDeleteActionModal from "../../../../Modals/ConfirmDeleteActionModal";
+import AddButton from "../../../../SearchBarWithAddButton/AddButton";
 
 type SortDirection = "ASC" | "DESC" | null;
 

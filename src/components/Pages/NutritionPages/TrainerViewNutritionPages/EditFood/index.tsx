@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from "react";
-import NutritionFactsInput from "../NutritionFactsInput";
-import ComboboxInput from "../forms/AddNewFood/ComboBoxInput";
+import NutritionFactsInput from "../../../../NutritionFactsInput";
+import ComboboxInput from "../../../../forms/AddNewFood/ComboBoxInput";
 import { FoodCategory } from "@/lib/types";
 import { supabase } from "@/lib/supabase";
 import { useFormContext } from "react-hook-form";
-import AddServingInput from "../forms/AddNewFood/AddServingInput";
+import AddServingInput from "../../../../forms/AddNewFood/AddServingInput";
 import { CompleteFood } from "@/lib/schemas";
 
 export interface IEditFood {

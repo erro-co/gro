@@ -1,6 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Nutrition } from "../schemas";
 import { supabase } from "../supabase";
+import { User } from "../types";
 
 export const joinClassNames = (
   ...classes: (string | boolean | undefined)[]
@@ -113,4 +114,19 @@ export const getUserRole = async (email: string, supabase: SupabaseClient) => {
     throw error || new Error("No user data returned");
   }
   return data;
+};
+
+export const findTrainerIndex = (trainers: User[]) => {
+  if (!trainers || typeof window === "undefined") return 0;
+  const user = localStorage.getItem("user");
+
+  if (user) {
+    const { email } = JSON.parse(user);
+    const trainerIndex = trainers.findIndex(
+      (trainer) => trainer.email === email,
+    );
+    console.log("trainer", trainerIndex);
+    return trainerIndex;
+  }
+  return 0;
 };

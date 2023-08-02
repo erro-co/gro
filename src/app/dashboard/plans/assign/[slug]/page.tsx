@@ -1,4 +1,4 @@
-import AssignUserToPlan from "@/components/Pages/CreatePlanPage/AssignUserToPlan";
+import AssignUserToPlan from "@/components/Pages/MealPlanPages/TrainerViewMealPlanPages/CreatePlanPage/AssignUserToPlan";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

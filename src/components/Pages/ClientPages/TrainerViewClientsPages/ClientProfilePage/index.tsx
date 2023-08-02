@@ -1,13 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { FC, useEffect, useState } from "react";
+import { redirect, usePathname } from "next/navigation";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { supabase } from "@/lib/supabase";
 import { User } from "@/lib/types";
 import { capitalizeFirstLetter } from "@/lib/helpers";
 import Loading from "@/components/Loading";
 
-const DisplayClientPage = () => {
+const ClientProfilePage: FC = () => {
   const path = usePathname();
   const clientId = path.split("/")[3];
   const [client, setClient] = useState<User>();
@@ -26,6 +26,14 @@ const DisplayClientPage = () => {
   useEffect(() => {
     fetchClient();
   }, []);
+
+  if (
+    typeof window !== "undefined" ||
+    localStorage.getItem("role") !== "trainer" ||
+    localStorage.getItem("role") !== "admin"
+  ) {
+    redirect("/dashboard/plans");
+  }
 
   if (isLoading) {
     return <Loading />;
@@ -64,4 +72,4 @@ const DisplayClientPage = () => {
   );
 };
 
-export default DisplayClientPage;
+export default ClientProfilePage;

@@ -2,8 +2,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { FC, Fragment } from "react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { Client } from "@/components/Pages/ClientsPage";
 import { capitalizeFirstLetter } from "@/lib/helpers";
+import { Client } from "..";
 
 export interface ISuccessfulAddNewFoodModal {
   isOpen: boolean;

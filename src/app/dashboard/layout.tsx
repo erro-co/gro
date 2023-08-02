@@ -78,10 +78,13 @@ const clientNavigation = [
 
 let navigation: any[];
 
-if (typeof window !== "undefined" && localStorage.getItem("role") === "admin") {
-  navigation = adminNavigation;
-} else {
+if (
+  typeof window !== "undefined" &&
+  localStorage.getItem("role") === "client"
+) {
   navigation = clientNavigation;
+} else {
+  navigation = adminNavigation;
 }
 export interface IDashboardLayout {
   children: React.ReactNode;

@@ -1,7 +1,6 @@
 "use client";
 import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { FC, useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import EditFoodModal from "../../../../Modals/EditFoodModal";
 import { FoodWithNutrientsAndServing } from "@/lib/schemas";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
@@ -16,6 +15,8 @@ import clsx from "clsx";
 import Loading from "../../../../Loading";
 import ConfirmDeleteActionModal from "../../../../Modals/ConfirmDeleteActionModal";
 import AddButton from "../../../../SearchBarWithAddButton/AddButton";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/lib/types/supabase";
 
 type SortDirection = "ASC" | "DESC" | null;
 
@@ -54,6 +55,7 @@ const Table: FC = () => {
     useState<ReturnedFood>(emptyPlaceholderFood);
   const [openConfirmDeleteActionModal, setOpenConfirmDeleteActionModal] =
     useState<boolean>(false);
+  const supabase = createClientComponentClient<Database>();
 
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);

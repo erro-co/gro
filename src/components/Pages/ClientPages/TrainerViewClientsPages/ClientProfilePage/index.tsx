@@ -2,16 +2,19 @@
 import { FC, useEffect, useState } from "react";
 import { redirect, usePathname } from "next/navigation";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
-import { supabase } from "@/lib/supabase";
 import { User } from "@/lib/types";
 import { capitalizeFirstLetter } from "@/lib/helpers";
 import Loading from "@/components/Loading";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/lib/types/supabase";
 
 const ClientProfilePage: FC = () => {
   const path = usePathname();
   const clientId = path.split("/")[3];
   const [client, setClient] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);
+
+  const supabase = createClientComponentClient<Database>();
 
   const fetchClient = async () => {
     const { data } = await supabase.from("user").select("*").eq("id", clientId);

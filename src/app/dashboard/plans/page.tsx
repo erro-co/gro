@@ -1,4 +1,4 @@
-import PlansPage from "@/components/Pages/MealPlanPages";
+import MealPlanPages from "@/components/Pages/MealPlanPages";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -24,7 +24,7 @@ const PlansIndexPage = async () => {
     // Unauthenticated users will be redirected to the `/login` route.
     redirect("/login");
   }
-  return <PlansPage />;
+  return <MealPlanPages />;
 };
 
 export default PlansIndexPage;

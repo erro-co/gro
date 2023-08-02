@@ -8,6 +8,14 @@ import { User } from "@/lib/types";
 export interface IClientList {
   clients: User[];
 }
+function formatDate(input: string): string {
+  const date = new Date(input);
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // January is 0!
+  const year = date.getUTCFullYear();
+
+  return `${day}/${month}/${year}`;
+}
 
 const ClientsList: FC<IClientList> = ({ clients }) => {
   return (
@@ -33,9 +41,9 @@ const ClientsList: FC<IClientList> = ({ clients }) => {
               </p>
             </div>
             <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
-              {/* <p className="whitespace-nowrap">
-                Joined {new Date(client.created_at).toLocaleDateString()}
-              </p> */}
+              <p className="whitespace-nowrap">
+                Joined: {formatDate(client.created_at || "")}
+              </p>
               {client.trainer ? (
                 <>
                   <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">

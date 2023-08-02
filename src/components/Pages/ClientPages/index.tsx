@@ -12,8 +12,8 @@ import { Database } from "@/lib/types/supabase";
 
 export enum ClientStatus {
   Complete = "Active",
-  InProgress = "In progress",
-  Archived = "Archived",
+  InProgress = "Not verified",
+  Archived = "Paused",
 }
 const statuses: Record<ClientStatus, string> = {
   [ClientStatus.Complete]: "text-green-700 bg-green-50 ring-green-600/20",

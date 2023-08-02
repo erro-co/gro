@@ -21,9 +21,6 @@ const AddNewMealPlan: FC = () => {
   const { control, watch, register, handleSubmit, reset } = useFormContext();
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [loaded, setLoaded] = useState(false);
-  const [loadingView, setLoadingView] = useState<
-    "loaded" | "loading" | "confirmed"
-  >("loading");
 
   const mealPlan = watch();
 
@@ -62,6 +59,7 @@ const AddNewMealPlan: FC = () => {
       console.error("Error inserting food:", new_meal_plan_error);
       return;
     }
+    console.log("New meal plan:", new_meal_plan);
     setMealPlanId(new_meal_plan[0].id);
 
     const { data: new_meals, error: new_meals_error } = await supabase
@@ -77,6 +75,7 @@ const AddNewMealPlan: FC = () => {
       console.error("Error inserting food_serving:", new_meals_error);
       return;
     }
+    console.log("New meals:", new_meals);
 
     function getMealIdByName(meals: any[], newMeal: Meal) {
       const meal = meals.find((m) => m.name === newMeal.name);
@@ -104,6 +103,7 @@ const AddNewMealPlan: FC = () => {
           console.error("Error inserting food:", new_meal_food_serving_error);
           return;
         }
+        console.log("New food:", new_food);
 
         const {
           data: meal_plan_food_serving_user,
@@ -123,6 +123,7 @@ const AddNewMealPlan: FC = () => {
           );
           return;
         }
+        console.log("New food:", meal_plan_food_serving_user);
       }
     });
     setLoaded(true);

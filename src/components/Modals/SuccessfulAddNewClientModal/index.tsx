@@ -55,14 +55,14 @@ const SuccessfulAddNewClientModal: FC<ISuccessfulAddNewClientModal> = ({
                     </Dialog.Title>
                   </div>
                 </div>
-                <div className="mt-5 sm:mt-6">
+                {/* <div className="mt-5 sm:mt-6">
                   <button
                     onClick={() => setIsOpen(false)}
                     className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     Email Client invite link
                   </button>
-                </div>
+                </div> */}
                 <div className="mt-2">
                   <Link
                     href={"/dashboard/clients"}

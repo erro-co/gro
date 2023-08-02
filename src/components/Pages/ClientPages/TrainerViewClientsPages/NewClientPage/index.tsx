@@ -16,6 +16,7 @@ import {
   SelectItem,
   SelectLabel,
 } from "@/components/ui/select";
+import { capitalizeFirstLetter } from "@/lib/helpers";
 
 const NewClientPage: FC = () => {
   const [firstname, setFirstname] = useState("");
@@ -57,6 +58,7 @@ const NewClientPage: FC = () => {
         user_type: 2,
         organisation: 1,
         trainer: selectedTrainer?.id,
+        status: "not verified",
       },
     ]);
 
@@ -196,7 +198,8 @@ const NewClientPage: FC = () => {
                       <SelectItem value="no trainer">No trainer</SelectItem>
                       {trainers?.map((trainer) => (
                         <SelectItem key={trainer.id} value={trainer.email}>
-                          {trainer.first_name} {trainer.last_name}
+                          {capitalizeFirstLetter(trainer.first_name)}{" "}
+                          {capitalizeFirstLetter(trainer.last_name)}
                         </SelectItem>
                       ))}
                     </SelectGroup>

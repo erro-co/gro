@@ -1,14 +1,14 @@
 "use client";
 import ClientsList from "./TrainerViewClientsPages/ClientsList";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
-import { supabase } from "@/lib/supabase";
 import { FC, useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import AddButton from "@/components/SearchBarWithAddButton/AddButton";
 import { User } from "@/lib/types";
 import { SelectTrainer } from "../MealPlanPages/TrainerViewMealPlanPages/SelectTrainer";
-import { findTrainerIndex } from "@/lib/helpers";
 import { redirect } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/lib/types/supabase";
 
 export enum ClientStatus {
   Complete = "Active",
@@ -27,6 +27,7 @@ const ClientPage: FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedTrainer, setSelectedTrainer] = useState<User | "All">("All");
   const [trainers, setTrainers] = useState<User[] | null>(null);
+  const supabase = createClientComponentClient<Database>();
 
   const getAllClients = async () => {
     if (trainers === null) {
@@ -42,8 +43,6 @@ const ClientPage: FC = () => {
       }
       console.log("trainers", trainers);
       setTrainers(trainers as User[]);
-      console.log("findTrainerIndex", findTrainerIndex(trainers));
-      setSelectedTrainer(trainers[findTrainerIndex(trainers)]);
     }
 
     const { data: clients, error } = await supabase
@@ -65,9 +64,8 @@ const ClientPage: FC = () => {
   }, []);
 
   if (
-    typeof window !== "undefined" ||
-    localStorage.getItem("role") !== "trainer" ||
-    localStorage.getItem("role") !== "admin"
+    typeof window !== "undefined" &&
+    localStorage.getItem("role") === "client"
   ) {
     redirect("/dashboard/plans");
   }

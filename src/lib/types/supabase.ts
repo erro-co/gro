@@ -66,16 +66,19 @@ export interface Database {
           created_at: string | null;
           id: number;
           name: string;
+          notes: string | null;
         };
         Insert: {
           created_at?: string | null;
           id?: number;
           name: string;
+          notes?: string | null;
         };
         Update: {
           created_at?: string | null;
           id?: number;
           name?: string;
+          notes?: string | null;
         };
         Relationships: [];
       };
@@ -134,6 +137,7 @@ export interface Database {
           id: number;
           name: string;
           template: boolean;
+          trainer: number | null;
           user: number | null;
         };
         Insert: {
@@ -141,6 +145,7 @@ export interface Database {
           id?: number;
           name: string;
           template: boolean;
+          trainer?: number | null;
           user?: number | null;
         };
         Update: {
@@ -148,9 +153,16 @@ export interface Database {
           id?: number;
           name?: string;
           template?: boolean;
+          trainer?: number | null;
           user?: number | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "meal_plan_trainer_fkey";
+            columns: ["trainer"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "meal_plan_user_fkey";
             columns: ["user"];
@@ -347,6 +359,8 @@ export interface Database {
           id: number;
           last_name: string;
           organisation: number;
+          phone: string | null;
+          status: Database["public"]["Enums"]["status"] | null;
           trainer: number | null;
           user_type: number;
         };
@@ -357,6 +371,8 @@ export interface Database {
           id?: number;
           last_name: string;
           organisation: number;
+          phone?: string | null;
+          status?: Database["public"]["Enums"]["status"] | null;
           trainer?: number | null;
           user_type: number;
         };
@@ -367,6 +383,8 @@ export interface Database {
           id?: number;
           last_name?: string;
           organisation?: number;
+          phone?: string | null;
+          status?: Database["public"]["Enums"]["status"] | null;
           trainer?: number | null;
           user_type?: number;
         };
@@ -445,7 +463,7 @@ export interface Database {
       [_ in never]: never;
     };
     Enums: {
-      [_ in never]: never;
+      status: "active" | "not verified" | "paused";
     };
     CompositeTypes: {
       [_ in never]: never;

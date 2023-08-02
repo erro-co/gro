@@ -16,7 +16,7 @@ const SearchBarWithAddButton: FC<ISearchBarWithAddButton> = ({
 }) => {
   return (
     <div className="flex w-full">
-      <div className="shadow-sm border border-input placeholder:text-muted-foreground focus:outline-none focus:ring-1 flex bg-white rounded-lg w-full focus-within:border-gro-indigo">
+      <div className="py-1 shadow-sm border border-input placeholder:text-muted-foreground focus:outline-none focus:ring-1 flex bg-white rounded-lg w-full focus-within:border-gro-indigo">
         <input
           type="text"
           value={searchTerm}

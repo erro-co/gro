@@ -6,6 +6,7 @@ import LoadingIcon from "@/components/icons/LoadingIcon";
 import GroLogo from "@/components/icons/Logo";
 import { getUserRole, supabaseValueExists } from "@/lib/helpers";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
+import clsx from "clsx";
 
 type LoginViews =
   | "sign-in"
@@ -56,6 +57,7 @@ export default function Login() {
       },
     });
     setView("check-email");
+    setLoading(false);
   };
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -93,14 +95,40 @@ export default function Login() {
     router.refresh();
   };
 
+  if (view === "check-email") {
+    return (
+      <div
+        className={clsx(
+          "bg-indigo-200",
+          "flex min-h-full flex-1 flex-col justify-center sm:px-6 lg:px-8 h-screen",
+        )}
+      >
+        <div className="sm:mx-auto sm:w-full sm:max-w-2xl">
+          <div className="bg-gro-pink w-40 rounded-lg mx-auto">
+            <GroLogo />
+          </div>
+          <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            Please follow the instructions sent to your email address.
+          </h2>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center sm:px-6 lg:px-8 bg-gray-100 h-screen">
+    <div
+      className={clsx(
+        view === "sign-in" ? "bg-gray-100" : "bg-indigo-200",
+        "flex min-h-full flex-1 flex-col justify-center sm:px-6 lg:px-8 h-screen",
+      )}
+    >
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-gro-pink w-40 rounded-lg mx-auto">
           <GroLogo />
         </div>
         <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
+          {view === "sign-in" ? <p>Sign in to your account</p> : null}
+          {view === "sign-up" ? <p>Create your account!</p> : null}
         </h2>
       </div>
       <div className="mt-10 max-w-[480px] md:min-w-[480px] sm:mx-auto px-10 py-8 bg-white shadow md:rounded-lg">

@@ -1,24 +1,102 @@
 "use client";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { redirect } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/lib/types/supabase";
+import { User } from "@/lib/types";
+import Loading from "@/components/Loading";
+import SuccessfulAddNewClientModal from "@/components/Modals/SuccessfulAddNewClientModal";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+  SelectLabel,
+} from "@/components/ui/select";
 
 const NewClientPage: FC = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const supabase = createClientComponentClient<Database>();
+  const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedTrainer, setSelectedTrainer] = useState<User | null>(null);
+  const [trainers, setTrainers] = useState<User[] | null>(null);
 
   if (
-    typeof window !== "undefined" ||
-    localStorage.getItem("role") !== "trainer" ||
-    localStorage.getItem("role") !== "admin"
+    typeof window !== "undefined" &&
+    localStorage.getItem("role") === "client"
   ) {
     redirect("/dashboard/plans");
   }
 
+  const handleSelectTrainer = (email: string) => {
+    if (email === "no trainer") {
+      setSelectedTrainer(null);
+    }
+    const trainer = trainers?.find((trainer) => trainer.email === email);
+    if (trainer) {
+      setSelectedTrainer(trainer);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
+    e.preventDefault();
+    const { data: newClient, error } = await supabase.from("user").insert([
+      {
+        first_name: firstname.toLocaleLowerCase(),
+        last_name: lastname.toLocaleLowerCase(),
+        email: email.toLocaleLowerCase(),
+        phone: phone,
+        user_type: 2,
+        organisation: 1,
+        trainer: selectedTrainer?.id,
+      },
+    ]);
+
+    if (error) {
+      console.log(error);
+    }
+    setLoading(false);
+    setOpenModal(true);
+  };
+
+  const getTrainers = async () => {
+    const { data: trainers, error } = await supabase
+      .from("user")
+      .select("*")
+      .eq("user_type", 1)
+      .order("first_name", { ascending: true });
+
+    if (error) {
+      console.log("Error getting trainers:", error);
+      return;
+    }
+    console.log("trainers", trainers);
+    setTrainers(trainers as User[]);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getTrainers();
+  }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
+      <SuccessfulAddNewClientModal
+        isOpen={openModal}
+        setIsOpen={setOpenModal}
+      />
       <div className="space-y-12 sm:space-y-16">
         <div>
           <div className="flex w-full">
@@ -36,10 +114,11 @@ const NewClientPage: FC = () => {
                 htmlFor="food-name"
                 className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
               >
-                First name
+                First name<span className="text-red-500 font-bold">*</span>
               </label>
               <div className="mt-2 sm:col-span-2 sm:mt-0">
                 <input
+                  required
                   value={firstname}
                   onChange={(e) => setFirstname(e.target.value)}
                   type="text"
@@ -53,7 +132,7 @@ const NewClientPage: FC = () => {
                 htmlFor="food-brand"
                 className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
               >
-                Last Name
+                Last Name<span className="text-red-500 font-bold">*</span>
               </label>
               <div className="mt-2 sm:col-span-2 sm:mt-0">
                 <input
@@ -70,7 +149,7 @@ const NewClientPage: FC = () => {
                 htmlFor="food-brand"
                 className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
               >
-                Email
+                Email<span className="text-red-500 font-bold">*</span>
               </label>
               <div className="mt-2 sm:col-span-2 sm:mt-0">
                 <input
@@ -97,6 +176,32 @@ const NewClientPage: FC = () => {
                   name="phone"
                   className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 />
+              </div>
+            </div>
+            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+              <label
+                htmlFor="food-brand"
+                className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+              >
+                Trainer
+              </label>
+              <div className="mt-2 sm:col-span-2 sm:mt-0">
+                <Select onValueChange={(value) => handleSelectTrainer(value)}>
+                  <SelectTrigger className="w-full max-w-xs">
+                    <SelectValue placeholder="Select a trainer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Trainers</SelectLabel>
+                      <SelectItem value="no trainer">No trainer</SelectItem>
+                      {trainers?.map((trainer) => (
+                        <SelectItem key={trainer.id} value={trainer.email}>
+                          {trainer.first_name} {trainer.last_name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>

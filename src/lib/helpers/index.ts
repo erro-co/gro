@@ -1,7 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Nutrition } from "../schemas";
 import { supabase } from "../supabase";
-import { User } from "../types";
 
 export const joinClassNames = (
   ...classes: (string | boolean | undefined)[]
@@ -116,17 +115,7 @@ export const getUserRole = async (email: string, supabase: SupabaseClient) => {
   return data;
 };
 
-export const findTrainerIndex = (trainers: User[]) => {
-  if (!trainers || typeof window === "undefined") return 0;
-  const user = localStorage.getItem("user");
-
-  if (user) {
-    const { email } = JSON.parse(user);
-    const trainerIndex = trainers.findIndex(
-      (trainer) => trainer.email === email,
-    );
-    console.log("trainer", trainerIndex);
-    return trainerIndex;
-  }
-  return 0;
+export const isValidAustralianPhoneNumber = (phoneNumber: string): boolean => {
+  const pattern = /^(?:\+61|0)[2-9]\d{8}$/;
+  return pattern.test(phoneNumber);
 };

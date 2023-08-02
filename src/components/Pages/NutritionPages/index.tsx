@@ -1,12 +1,12 @@
+"use client";
 import { redirect } from "next/navigation";
 import Table from "./TrainerViewNutritionPages/table";
 import { FC } from "react";
 
 const NutritionPage: FC = () => {
   if (
-    typeof window !== "undefined" ||
-    localStorage.getItem("role") !== "trainer" ||
-    localStorage.getItem("role") !== "admin"
+    typeof window !== "undefined" &&
+    localStorage.getItem("role") === "client"
   ) {
     redirect("/dashboard/plans");
   }

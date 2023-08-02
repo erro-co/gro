@@ -11,11 +11,12 @@ import { emptyPlaceholderMealPlan } from "@/lib/consts";
 export interface IMealPlanListTable {
   mealPlans: MealPlan[];
   getAllMealPlans: () => void;
-  clientView?: boolean;
+  clientView: boolean;
 }
 const MealPlanListTable: FC<IMealPlanListTable> = ({
   mealPlans,
   getAllMealPlans,
+  clientView,
 }) => {
   const [openConfirmDeleteActionModal, setOpenConfirmDeleteActionModal] =
     useState<boolean>(false);
@@ -43,7 +44,7 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
         setOpen={setOpenConfirmDeleteActionModal}
         deleteFunction={() => handleDeleteMealPlan(selectedMealPlan.id)}
       />
-      <div className="mt-4">
+      <div className="mt-4 pb-8">
         <div className="ring-1 ring-gray-300 rounded-lg">
           <table className="min-w-full divide-y divide-gray-300">
             <thead>
@@ -56,7 +57,11 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                 </th>
                 <th
                   scope="col"
-                  className="hidden px-3 py-2 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                  className={clsx(
+                    clientView
+                      ? "hidden"
+                      : "hidden px-3 py-2 text-left text-sm font-semibold text-gray-900 lg:table-cell",
+                  )}
                 >
                   Client
                 </th>
@@ -68,7 +73,11 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                 </th>
                 <th
                   scope="col"
-                  className="hidden px-3 py-2 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                  className={clsx(
+                    clientView
+                      ? "hidden"
+                      : "hidden px-3 py-2 text-left text-sm font-semibold text-gray-900 lg:table-cell",
+                  )}
                 >
                   Template
                 </th>
@@ -82,7 +91,10 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                 <th scope="col" className="relative py-2 pl-3 pr-4 sm:pr-6">
                   <span className="sr-only">Select</span>
                 </th>
-                <th scope="col" className="relative pr-2">
+                <th
+                  scope="col"
+                  className={clsx(clientView ? "hidden" : "relative pr-2")}
+                >
                   <span className="sr-only">Delete</span>
                 </th>
               </tr>
@@ -92,53 +104,55 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                 <tr
                   key={planIdx}
                   className={clsx(
-                    "font-light",
+                    "font-light divide-gray-50",
                     planIdx % 2 !== 0 ? "bg-gray-50" : "",
+                    planIdx === mealPlans.length - 1 ? "rounded-b-lg" : "",
                   )}
                 >
                   <td
                     className={clsx(
-                      planIdx === 0 ? "" : "border-t border-transparent",
                       "relative py-2 pl-4 pr-3 text-sm sm:pl-6",
+                      planIdx === mealPlans.length - 1 ? "rounded-bl-lg" : "",
                     )}
                   >
-                    <div className="font-medium text-gray-900">{plan.name}</div>
+                    <div className="font-light text-gray-900">{plan.name}</div>
                   </td>
+
+                  {clientView ? null : (
+                    <td
+                      className={clsx(
+                        "hidden px-3 py-2 text-sm text-gray-500 lg:table-cell",
+                      )}
+                    >
+                      {plan.user}
+                    </td>
+                  )}
                   <td
                     className={clsx(
-                      planIdx === 0 ? "" : "border-t border-gray-200",
-                      "hidden px-3 py-2 text-sm text-gray-500 lg:table-cell",
-                    )}
-                  >
-                    {plan.name}
-                  </td>
-                  <td
-                    className={clsx(
-                      planIdx === 0 ? "" : "border-t border-gray-200",
                       "hidden px-3 py-2 text-sm text-gray-500 lg:table-cell",
                     )}
                   >
                     {parseSupabaseDate(plan.created_at || "", "date")}
                   </td>
+                  {clientView ? null : (
+                    <td
+                      className={clsx(
+                        "hidden px-3 py-2 text-sm text-gray-500 lg:table-cell",
+                      )}
+                    >
+                      {plan.template ? "Yes" : "No"}
+                    </td>
+                  )}
                   <td
                     className={clsx(
-                      planIdx === 0 ? "" : "border-t border-gray-200",
-                      "hidden px-3 py-2 text-sm text-gray-500 lg:table-cell",
-                    )}
-                  >
-                    {/* {plan.template ? "Yes" : "No"} */} No
-                  </td>
-                  <td
-                    className={clsx(
-                      planIdx === 0 ? "" : "border-t border-gray-200",
                       " px-3 py-2 text-sm text-gray-500 lg:table-cell",
                     )}
                   ></td>
 
                   <td
                     className={clsx(
-                      planIdx === 0 ? "" : "border-t border-gray-200",
                       "relative py-2 pl-3 pr-4 text-right text-sm font-medium",
+                      planIdx === mealPlans.length - 1 ? "rounded-br-lg" : "",
                     )}
                   >
                     <Link href={`/dashboard/plans/${plan.id}`}>
@@ -154,22 +168,24 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                       <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
                     ) : null}
                   </td>
-                  <td
-                    className={clsx(
-                      planIdx === 0 ? "" : "border-t border-gray-200",
-                      "hidden text-sm text-gray-500 lg:table-cell pr-2",
-                    )}
-                  >
-                    <button
-                      onClick={(_e) => {
-                        setSelectedMealPlan(plan);
-                        setOpenConfirmDeleteActionModal(true);
-                      }}
-                      className="text-red-500"
+                  {clientView ? null : (
+                    <td
+                      className={clsx(
+                        "hidden text-sm text-gray-500 lg:table-cell pr-2",
+                        planIdx === mealPlans.length - 1 ? "rounded-br-lg" : "",
+                      )}
                     >
-                      <TrashIcon className="w-4 pt-1" />
-                    </button>
-                  </td>
+                      <button
+                        onClick={(_e) => {
+                          setSelectedMealPlan(plan);
+                          setOpenConfirmDeleteActionModal(true);
+                        }}
+                        className="text-red-500"
+                      >
+                        <TrashIcon className="w-4 pt-1" />
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

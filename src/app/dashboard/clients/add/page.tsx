@@ -1,4 +1,4 @@
-import AddClients from "@/components/Pages/AddClients";
+import NewClientPage from "@/components/Pages/ClientPages/TrainerViewClientsPages/NewClientPage";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -24,7 +24,7 @@ const AddClientIndexPage = async () => {
     // Unauthenticated users will be redirected to the `/login` route.
     redirect("/login");
   }
-  return <AddClients />;
+  return <NewClientPage />;
 };
 
 export default AddClientIndexPage;

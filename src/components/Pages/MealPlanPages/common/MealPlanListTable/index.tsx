@@ -11,6 +11,7 @@ import { emptyPlaceholderMealPlan } from "@/lib/consts";
 export interface IMealPlanListTable {
   mealPlans: MealPlan[];
   getAllMealPlans: () => void;
+  clientView?: boolean;
 }
 const MealPlanListTable: FC<IMealPlanListTable> = ({
   mealPlans,

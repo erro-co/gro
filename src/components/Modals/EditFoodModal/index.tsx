@@ -6,7 +6,7 @@ import {
   FoodWithNutrientsAndServingAndIdSchema,
   CompleteFood,
 } from "@/lib/schemas";
-import EditFood from "@/components/EditFood";
+import EditFood from "@/components/Pages/NutritionPages/TrainerViewNutritionPages/EditFood";
 
 export interface IEditFoodModal {
   isOpen: boolean;

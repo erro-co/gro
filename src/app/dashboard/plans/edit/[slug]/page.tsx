@@ -1,4 +1,4 @@
-import EditPlanPage from "@/components/Pages/EditPlanPage";
+import EditPlanPage from "@/components/Pages/MealPlanPages/TrainerViewMealPlanPages/EditPlanPage";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

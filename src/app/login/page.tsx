@@ -84,7 +84,12 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(sign_in.user));
     }
 
-    router.push("/dashboard");
+    // @ts-ignore
+    if (role.user_type.name === "admin") {
+      router.push("/dashboard/");
+    } else {
+      router.push("/dashboard/plans");
+    }
     router.refresh();
   };
 

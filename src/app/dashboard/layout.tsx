@@ -54,7 +54,7 @@ const adminNavigation = [
 ];
 
 const clientNavigation = [
-  { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
+  // { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
 
   {
     name: " My Plans",
@@ -62,18 +62,18 @@ const clientNavigation = [
     icon: TableCellsIcon,
     current: false,
   },
-  {
-    name: "My Schedule",
-    href: "/dashboard/schedule",
-    icon: CalendarIcon,
-    current: false,
-  },
-  {
-    name: "Settings",
-    href: "/dashboard/settings",
-    icon: Cog6ToothIcon,
-    current: false,
-  },
+  // {
+  //   name: "My Schedule",
+  //   href: "/dashboard/schedule",
+  //   icon: CalendarIcon,
+  //   current: false,
+  // },
+  // {
+  //   name: "Settings",
+  //   href: "/dashboard/settings",
+  //   icon: Cog6ToothIcon,
+  //   current: false,
+  // },
 ];
 
 let navigation: any[];

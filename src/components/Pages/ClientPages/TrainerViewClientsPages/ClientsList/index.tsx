@@ -3,10 +3,10 @@ import Link from "next/link";
 import clsx from "clsx";
 import { FC } from "react";
 import { capitalizeFirstLetter } from "@/lib/helpers";
-import { Client } from "../Pages/ClientsPage";
+import { User } from "@/lib/types";
 
 export interface IClientList {
-  clients: Client[];
+  clients: User[];
 }
 
 const ClientsList: FC<IClientList> = ({ clients }) => {
@@ -33,18 +33,18 @@ const ClientsList: FC<IClientList> = ({ clients }) => {
               </p>
             </div>
             <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
-              <p className="whitespace-nowrap">
+              {/* <p className="whitespace-nowrap">
                 Joined {new Date(client.created_at).toLocaleDateString()}
-              </p>
+              </p> */}
               {client.trainer ? (
                 <>
                   <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
                     <circle cx={1} cy={1} r={1} />
                   </svg>
-                  <p className="truncate">
-                    Trainer: {capitalizeFirstLetter(client.trainer.first_name)}{" "}
+                  {/* <p className="truncate">
+                    Trainer: {capitalizeFirstLetter(client.trainer)}{" "}
                     {capitalizeFirstLetter(client.trainer.last_name)}
-                  </p>
+                  </p> */}
                 </>
               ) : null}
             </div>

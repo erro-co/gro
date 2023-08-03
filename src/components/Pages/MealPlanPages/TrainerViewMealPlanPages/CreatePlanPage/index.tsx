@@ -6,21 +6,22 @@ import {
   PencilIcon,
   PlusCircleIcon,
 } from "@heroicons/react/20/solid";
-import { supabase } from "@/lib/supabase";
 import { Meal, newMealPlanSchema } from "@/lib/schemas";
 import { MealIndexProvider } from "@/lib/context/SelectedMealIndexContext";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import AddFoodModal from "./AddFoodModal";
 import AddMealTable from "./AddMealTable";
 import ConfirmationModal from "./ConfirmationModal";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/lib/types/supabase";
 
 const AddNewMealPlan: FC = () => {
   const [showFoodSearchModal, setShowFoodSearchModal] =
     useState<boolean>(false);
-  const [mealPlanId, setMealPlanId] = useState<string>("");
   const { control, watch, register, handleSubmit, reset } = useFormContext();
   const isMobile = useMediaQuery("(max-width: 640px)");
-  const [loaded, setLoaded] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
+  const supabase = createClientComponentClient<Database>();
 
   const mealPlan = watch();
 
@@ -41,11 +42,7 @@ const AddNewMealPlan: FC = () => {
   };
 
   const onSubmit = async (data: any) => {
-    setLoaded(false);
-    if (validateForm(data) === false) {
-      return;
-    }
-
+    setShowLoading(true);
     const { data: new_meal_plan, error: new_meal_plan_error } = await supabase
       .from("meal_plan")
       .insert([
@@ -60,7 +57,6 @@ const AddNewMealPlan: FC = () => {
       return;
     }
     console.log("New meal plan:", new_meal_plan);
-    setMealPlanId(new_meal_plan[0].id);
 
     const { data: new_meals, error: new_meals_error } = await supabase
       .from("meal")
@@ -86,7 +82,7 @@ const AddNewMealPlan: FC = () => {
       return meal.id;
     }
 
-    data.meals.forEach(async (meal: Meal) => {
+    for (const meal of data.meals) {
       for (const food of meal.foods) {
         const { data: new_food, error: new_meal_food_serving_error } =
           await supabase
@@ -99,10 +95,12 @@ const AddNewMealPlan: FC = () => {
               template: false,
             })
             .select("*");
+
         if (new_meal_food_serving_error) {
           console.error("Error inserting food:", new_meal_food_serving_error);
           return;
         }
+
         console.log("New food:", new_food);
 
         const {
@@ -115,7 +113,7 @@ const AddNewMealPlan: FC = () => {
             meal_food_serving: new_food[0].id,
             user: 2,
           })
-          .select();
+          .select("*");
         if (meal_plan_food_serving_user_error) {
           console.error(
             "Error inserting food:",
@@ -123,16 +121,17 @@ const AddNewMealPlan: FC = () => {
           );
           return;
         }
-        console.log("New food:", meal_plan_food_serving_user);
+        console.log("New food_serving_user:", meal_plan_food_serving_user);
       }
-    });
-    setLoaded(true);
+    }
+
     reset();
+    setShowLoading(false);
   };
 
   return (
     <>
-      <ConfirmationModal isOpen={loaded} setIsOpen={setLoaded} />
+      <ConfirmationModal isOpen={showLoading} setIsOpen={setShowLoading} />
       <form className="flex flex-col h-full" onSubmit={handleSubmit(onSubmit)}>
         <MealIndexProvider>
           <AddFoodModal

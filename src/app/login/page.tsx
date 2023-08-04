@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
-import { redirect } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import GroLogo from "@/components/icons/Logo";
 import { getUserRole, supabaseValueExists } from "@/lib/helpers";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 type LoginViews =
   | "sign-in"
@@ -38,6 +38,7 @@ export default function Login() {
   const [view, setView] = useState<LoginViews>("sign-in");
   const supabase = createClientComponentClient();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -122,7 +123,8 @@ export default function Login() {
   const redirectToDashboard = (userRole: string) => {
     const targetPath =
       userRole === "admin" ? "/dashboard/" : "/dashboard/plans";
-    redirect(targetPath);
+    router.push(targetPath);
+    router.refresh();
   };
 
   if (view === "check-email") {

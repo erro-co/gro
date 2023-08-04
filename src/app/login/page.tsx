@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import GroLogo from "@/components/icons/Logo";
@@ -20,79 +20,109 @@ type LoginErrors =
   | "Invalid Login Credentials"
   | "Please enter password"
   | "Please enter email"
+  | "Account already exists"
+  | "Failed to sign up, please try again."
+  | "An unexpected error occurred, please try again."
   | null;
+
+type RoleType = {
+  user_type: {
+    name: string;
+  };
+};
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState<LoginErrors>(null);
   const [view, setView] = useState<LoginViews>("sign-in");
-  const router = useRouter();
   const supabase = createClientComponentClient();
   const [loading, setLoading] = useState(false);
-
-  const createUser = async (email: string) => {
-    const { data, error } = await supabase.from("user").insert([{ email }]);
-    if (error) {
-      throw error;
-    }
-
-    return data;
-  };
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    if (!(await supabaseValueExists("user", "email", email))) {
+
+    try {
+      const emailExists = await isEmailAlreadyExists("user", "email", email);
+
+      if (emailExists) {
+        setLoginError("Account already exists");
+        return;
+      }
+
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setLoginError("Failed to sign up, please try again.");
+        return;
+      }
+
+      setView("check-email");
+    } catch (error) {
+      console.error(error);
+      setLoginError("An unexpected error occurred, please try again.");
+    } finally {
       setLoading(false);
-      console.log("no account");
-      setLoginError("No account");
-      return;
     }
-    await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
-      },
-    });
-    setView("check-email");
-    setLoading(false);
+  };
+
+  const isEmailAlreadyExists = async (
+    table: string,
+    column: string,
+    value: string,
+  ) => {
+    // Implementation for checking if the email exists in the database
+    return await supabaseValueExists(table, column, value);
   };
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    const { data: sign_in, error: sign_in_error } =
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+    try {
+      const { data: signInData, error: signInError } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-    if (sign_in_error) {
+      if (signInError || !signInData?.user) {
+        setLoading(false);
+        setLoginError("Invalid Login Credentials");
+        return;
+      }
+
+      const role = (await getUserRole(
+        signInData.user.email?.toLowerCase() as string,
+        supabase,
+      )) as unknown as RoleType;
+
+      storeUserDetails(role, signInData.user);
+      redirectToDashboard(role.user_type.name);
+    } catch (error) {
+      console.error(error);
       setLoading(false);
-      setLoginError("Invalid Login Credentials");
-      return;
     }
-    const role = await getUserRole(
-      sign_in.user.email?.toLowerCase() as string,
-      supabase,
-    );
+  };
 
+  const storeUserDetails = (role: RoleType, user: any) => {
     if (typeof window !== "undefined") {
-      // @ts-ignore
       localStorage.setItem("role", role.user_type.name);
-      localStorage.setItem("user", JSON.stringify(sign_in.user));
+      localStorage.setItem("user", JSON.stringify(user));
     }
+  };
 
-    // @ts-ignore
-    if (role.user_type.name === "admin") {
-      router.push("/dashboard/");
-    } else {
-      router.push("/dashboard/plans");
-    }
-    router.refresh();
+  const redirectToDashboard = (userRole: string) => {
+    const targetPath =
+      userRole === "admin" ? "/dashboard/" : "/dashboard/plans";
+    redirect(targetPath);
   };
 
   if (view === "check-email") {

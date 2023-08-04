@@ -17,26 +17,31 @@ const ClientProfilePage: FC = () => {
   const supabase = createClientComponentClient<Database>();
 
   const fetchClient = async () => {
-    const { data } = await supabase.from("user").select("*").eq("id", clientId);
-
-    if (data && data.length > 0) {
-      console.log(data);
-      setClient(data[0] as User);
+    try {
+      const { data, error } = await supabase
+        .from("user")
+        .select("*")
+        .eq("id", clientId);
+      if (error) throw error;
+      if (data && data.length > 0) {
+        setClient(data[0] as User);
+      }
+    } catch (error) {
+      console.error("Error fetching client data:", error);
+    } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      localStorage.getItem("role") === "client"
+    ) {
+      redirect("/dashboard/plans");
+    }
     fetchClient();
   }, []);
-
-  if (
-    typeof window !== "undefined" ||
-    localStorage.getItem("role") !== "trainer" ||
-    localStorage.getItem("role") !== "admin"
-  ) {
-    redirect("/dashboard/plans");
-  }
 
   if (isLoading) {
     return <Loading />;
@@ -55,7 +60,7 @@ const ClientProfilePage: FC = () => {
           {capitalizeFirstLetter(client?.last_name || "")}
         </h1>
 
-        {/* <div className="pt-2">
+        <div className="pt-2">
           <label
             htmlFor="email"
             className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
@@ -69,7 +74,7 @@ const ClientProfilePage: FC = () => {
             placeholder="example@example.com"
             className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
           />
-        </div> */}
+        </div>
       </div>
     </div>
   );

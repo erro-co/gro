@@ -1,5 +1,5 @@
 "use client";
-import AddNewFoodForm from "@/components/forms/AddNewFood";
+import AddNewFoodForm from "@/components/Pages/NutritionPages/TrainerViewNutritionPages/AddNewFood";
 import { FC } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +12,7 @@ const AddNewFoodPage: FC = () => {
   const methods = useForm<FoodWithNutrientsAndServing>({
     resolver: zodResolver(FoodWithNutrientsAndServingSchema),
     defaultValues: {
-      serving: [{ name: "", weight: undefined }],
+      serving: [{ name: "Serving", weight: 100 }],
     },
   });
   return (

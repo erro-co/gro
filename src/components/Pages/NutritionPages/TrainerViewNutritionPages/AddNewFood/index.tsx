@@ -13,6 +13,7 @@ import { convertToBase100 } from "@/lib/helpers";
 import QuickAddFoodModal from "@/components/Modals/QuickAddFoodModal";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { BoltIcon } from "@heroicons/react/20/solid";
+import { redirect } from "next/navigation";
 
 const AddNewFoodForm: FC = () => {
   const {
@@ -22,7 +23,7 @@ const AddNewFoodForm: FC = () => {
     reset,
   } = useFormContext();
   const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([]);
-  const [dataFetched, setDataFetched] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showSuccessfulAddNewFoodModal, setShowSuccessfulAddNewFoodModal] =
     useState(false);
   const [selectedFoodCategory, setSelectedFoodCategory] =
@@ -38,12 +39,8 @@ const AddNewFoodForm: FC = () => {
       console.log("Failed to fetch error:", error);
     }
     setFoodCategories((food_category as FoodCategory[]) || []);
-    setDataFetched(true);
+    setLoading(false);
   };
-
-  useEffect(() => {
-    fetchFoodCategories();
-  }, []);
 
   //TODO: Add delete on error, base 100 values, and serving type toggle
   const validateForm = (data: any) => {
@@ -105,8 +102,19 @@ const AddNewFoodForm: FC = () => {
     setShowSuccessfulAddNewFoodModal(true);
   };
 
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      localStorage.getItem("role") === "client"
+    ) {
+      redirect("/dashboard/plans");
+    }
+    fetchFoodCategories();
+  }, []);
+
   console.log({ errors });
-  if (!dataFetched) {
+
+  if (loading) {
     return <Loading />;
   }
   return (
@@ -130,7 +138,7 @@ const AddNewFoodForm: FC = () => {
               />
               <button
                 onClick={() => setShowQuickAddFoodModal(true)}
-                className="bg-gro-indigo p-2 text-white rounded-lg"
+                className="bg-gray-500 p-2 text-white rounded-lg"
               >
                 {isMobile ? (
                   <div className="w-8">
@@ -194,7 +202,7 @@ const AddNewFoodForm: FC = () => {
 
             <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
               <label
-                htmlFor="last-name"
+                htmlFor="serving"
                 className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
               >
                 Serving

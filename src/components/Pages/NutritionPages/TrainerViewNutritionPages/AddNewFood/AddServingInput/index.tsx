@@ -1,4 +1,4 @@
-import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/20/solid";
+import { PlusCircleIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { FC } from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { isValueEmpty } from "@/lib/helpers";
@@ -35,7 +35,7 @@ const AddServingInput: FC = () => {
   };
 
   return (
-    <div className="mt-2 sm:mt-0 w-full lg:w-fit">
+    <div className="w-full lg:max-w-xs">
       <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
         <table className="divide-y divide-gray-300">
           <thead className="">
@@ -58,7 +58,7 @@ const AddServingInput: FC = () => {
               >
                 Grams
               </th>
-              <th scope="col" className="relative py-1 pl-3 pr-4 sm:pr-6">
+              <th scope="col" className="py-2 pr-1">
                 <span className="sr-only">Delete</span>
               </th>
             </tr>
@@ -66,33 +66,33 @@ const AddServingInput: FC = () => {
           <tbody className="divide-y divide-gray-200 bg-white">
             {fields.map((field, index: number) => (
               <tr key={field.id}>
-                <td className="px-3 py-3.5 whitespace-nowrap text-sm font-medium text-gray-900">
+                <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
                   {index + 1}
                 </td>
-                <td className="px-3 py-2.5 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
                   <input
                     id="serving-name"
                     {...register(`serving.${index}.name`)}
-                    className="py-1 pl-2"
+                    className="pl-2"
                     type="text"
                     placeholder="Serving"
                   />
                 </td>
-                <td className="py-2.5 whitespace-nowrap text-sm text-gray-500">
+                <td className="py-2 whitespace-nowrap text-sm text-gray-500">
                   <input
                     {...register(`serving.${index}.weight`, {
                       valueAsNumber: true,
                     })}
-                    className="py-1 pl-2 w-16"
+                    className="pl-2 w-16"
                     type="number"
                     placeholder="n/a"
                     id="serving-weight"
                   />
                 </td>
-                <td className="flex">
+                <td className="flex py-2">
                   {checkIfServingEmpty(index, "or") ? (
                     <button onClick={() => handleClear(index)} className="">
-                      <XCircleIcon className="w-8 text-red-500 mt-2 mx-4" />
+                      <XMarkIcon className="w-6 text-red-500" />
                     </button>
                   ) : null}
                 </td>
@@ -101,12 +101,12 @@ const AddServingInput: FC = () => {
           </tbody>
         </table>
         {checkIfServingEmpty(fields.length - 1, "and") ? (
-          <div className="w-full flex border-t">
+          <div className="flex border-t">
             <button
-              className="py-2 mx-auto"
+              className="py-1 mx-auto"
               onClick={() => append({ name: undefined, weight: undefined })}
             >
-              <PlusCircleIcon className="text-green-500 w-10" />
+              <PlusCircleIcon className="text-gray-500 w-8" />
             </button>
           </div>
         ) : null}

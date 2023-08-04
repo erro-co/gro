@@ -60,15 +60,14 @@ const ClientPage: FC = () => {
   };
 
   useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      localStorage.getItem("role") === "client"
+    ) {
+      redirect("/dashboard/plans");
+    }
     getAllClients();
   }, []);
-
-  if (
-    typeof window !== "undefined" &&
-    localStorage.getItem("role") === "client"
-  ) {
-    redirect("/dashboard/plans");
-  }
 
   if (loading) {
     return <Loading />;

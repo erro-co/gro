@@ -1,14 +1,14 @@
 "use client";
-import { useForm, FormProvider } from "react-hook-form";
-import AddNewMealPlan from "@/components/Pages/MealPlanPages/TrainerViewMealPlanPages/CreatePlanPage";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { newMealPlanSchema } from "@/lib/schemas";
-import { z } from "zod";
-import { FC, useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-import { usePathname } from "next/navigation";
 import Loading from "@/components/Loading";
+import AddNewMealPlan from "@/components/Pages/MealPlanPages/TrainerViewMealPlanPages/CreatePlanPage";
+import { newMealPlanSchema } from "@/lib/schemas";
+import { supabase } from "@/lib/supabase";
 import { MealPlan } from "@/lib/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { usePathname } from "next/navigation";
+import { FC, useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
 
 export type FormSchemaType = z.infer<typeof newMealPlanSchema>;
 
@@ -64,7 +64,7 @@ const EditPlanPage: FC = () => {
       .select(
         "meal_plan(*), meal_food_serving(meal(id, name, notes), quantity, serving(name, weight), food(brand, name, food_category(id, name), nutrients(*)))",
       )
-      .eq("meal_plan_id", pathId);
+      .eq("meal_plan", pathId);
 
     if (error) {
       console.error("Error getting meal plan from supabase:", error);

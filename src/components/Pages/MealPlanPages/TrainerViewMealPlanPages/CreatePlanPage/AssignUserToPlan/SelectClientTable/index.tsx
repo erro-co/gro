@@ -1,29 +1,43 @@
 "use client";
-import { FC } from "react";
 import { capitalizeFirstLetter } from "@/lib/helpers";
+import { User } from "@/lib/types";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import { Client } from "../index";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { FC } from "react";
 
 export interface ISelectClientList {
-  clients: Client[];
-  setSelectedClient: (client: Client) => void;
+  clients: User[];
+  setSelectedClient: (client: User) => void;
   setShowModal: (showModal: boolean) => void;
+  planId: number | null;
+  supabase: SupabaseClient;
 }
 
 const SelectClientList: FC<ISelectClientList> = ({
   clients,
   setSelectedClient,
   setShowModal,
+  planId,
+  supabase,
 }) => {
-  const handleAssignUser = (client: Client) => {
+  const handleAssignUser = async (client: User) => {
+    try {
+      const { data: assignedPlan, error } = await supabase
+        .from("meal_plan")
+        .update({
+          user: client.id,
+        })
+        .eq("id", planId);
+    } catch (error) {
+      console.error(error);
+    }
     setSelectedClient(client);
     setShowModal(true);
-    console.log("Assigning user", client.id);
   };
   return (
     <div className="mt-4 mx-auto rounded-lg border border-gray-200 shadow-lg w-full p-2 lg:w-2/3">
       <ul role="list" className="divide-y divide-gray-100">
-        {clients?.map((client: Client, idx: number) => (
+        {clients?.map((client: User, idx: number) => (
           <li
             key={idx}
             className="flex items-center justify-between gap-x-6 py-2"
@@ -32,7 +46,7 @@ const SelectClientList: FC<ISelectClientList> = ({
               <div className="flex items-start gap-x-3">
                 <p className="text-sm leading-6 text-gray-900">
                   {capitalizeFirstLetter(client.first_name)}{" "}
-                  {capitalizeFirstLetter(client.last_name)}
+                  {client.last_name && capitalizeFirstLetter(client.last_name)}
                 </p>
                 {/* <p
                   className={clsx(

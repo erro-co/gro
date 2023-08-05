@@ -16,7 +16,6 @@ export interface Database {
           food_category: number;
           id: number;
           name: string;
-          tags: string | null;
         };
         Insert: {
           brand?: string | null;
@@ -24,7 +23,6 @@ export interface Database {
           food_category: number;
           id?: number;
           name: string;
-          tags?: string | null;
         };
         Update: {
           brand?: string | null;
@@ -32,7 +30,6 @@ export interface Database {
           food_category?: number;
           id?: number;
           name?: string;
-          tags?: string | null;
         };
         Relationships: [
           {
@@ -99,7 +96,7 @@ export interface Database {
           meal: number;
           quantity: number;
           serving: number;
-          template: boolean;
+          template?: boolean;
         };
         Update: {
           created_at?: string | null;
@@ -133,67 +130,73 @@ export interface Database {
       };
       meal_plan: {
         Row: {
+          client: string | null;
           created_at: string | null;
           id: number;
           name: string;
           template: boolean;
-          trainer: number | null;
-          user: number | null;
+          trainer: string | null;
         };
         Insert: {
+          client?: string | null;
           created_at?: string | null;
           id?: number;
           name: string;
           template: boolean;
-          trainer?: number | null;
-          user?: number | null;
+          trainer?: string | null;
         };
         Update: {
+          client?: string | null;
           created_at?: string | null;
           id?: number;
           name?: string;
           template?: boolean;
-          trainer?: number | null;
-          user?: number | null;
+          trainer?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "meal_plan_trainer_fkey";
-            columns: ["trainer"];
-            referencedRelation: "user";
+            foreignKeyName: "meal_plan_client_fkey";
+            columns: ["client"];
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "meal_plan_user_fkey";
-            columns: ["user"];
-            referencedRelation: "user";
+            foreignKeyName: "meal_plan_trainer_fkey";
+            columns: ["trainer"];
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
         ];
       };
       meal_plan_food_serving_user: {
         Row: {
+          client: string | null;
           created_at: string | null;
           id: number;
           meal_food_serving: number;
-          meal_plan_id: number | null;
-          user: number;
+          meal_plan: number | null;
         };
         Insert: {
+          client?: string | null;
           created_at?: string | null;
           id?: number;
           meal_food_serving: number;
-          meal_plan_id?: number | null;
-          user: number;
+          meal_plan?: number | null;
         };
         Update: {
+          client?: string | null;
           created_at?: string | null;
           id?: number;
           meal_food_serving?: number;
-          meal_plan_id?: number | null;
-          user?: number;
+          meal_plan?: number | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "meal_plan_food_serving_user_client_fkey";
+            columns: ["client"];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "meal_plan_food_serving_user_meal_food_serving_fkey";
             columns: ["meal_food_serving"];
@@ -201,15 +204,9 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "meal_plan_food_serving_user_meal_plan_id_fkey";
-            columns: ["meal_plan_id"];
+            foreignKeyName: "meal_plan_food_serving_user_meal_plan_fkey";
+            columns: ["meal_plan"];
             referencedRelation: "meal_plan";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "meal_plan_food_serving_user_user_fkey";
-            columns: ["user"];
-            referencedRelation: "user";
             referencedColumns: ["id"];
           },
         ];
@@ -221,7 +218,7 @@ export interface Database {
           cholesterol: number;
           created_at: string | null;
           fiber: number;
-          food_id: number;
+          food: number;
           iron: number;
           potassium: number;
           protein: number;
@@ -239,7 +236,7 @@ export interface Database {
           cholesterol: number;
           created_at?: string | null;
           fiber: number;
-          food_id?: number;
+          food?: number;
           iron: number;
           potassium: number;
           protein: number;
@@ -257,7 +254,7 @@ export interface Database {
           cholesterol?: number;
           created_at?: string | null;
           fiber?: number;
-          food_id?: number;
+          food?: number;
           iron?: number;
           potassium?: number;
           protein?: number;
@@ -271,30 +268,64 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: "nutrients_food_id_fkey";
-            columns: ["food_id"];
+            foreignKeyName: "nutrients_food_fkey";
+            columns: ["food"];
             referencedRelation: "food";
             referencedColumns: ["id"];
           },
         ];
       };
-      organisation: {
+      profiles: {
         Row: {
           created_at: string | null;
-          id: number;
-          name: string;
+          email: string;
+          first_name: string;
+          id: string;
+          last_name: string | null;
+          phone: string | null;
+          role: string | null;
+          status: Database["public"]["Enums"]["status"];
+          trainer: string | null;
+          type: Database["public"]["Enums"]["profile_type"] | null;
         };
         Insert: {
           created_at?: string | null;
-          id?: number;
-          name: string;
+          email: string;
+          first_name: string;
+          id: string;
+          last_name?: string | null;
+          phone?: string | null;
+          role?: string | null;
+          status: Database["public"]["Enums"]["status"];
+          trainer?: string | null;
+          type?: Database["public"]["Enums"]["profile_type"] | null;
         };
         Update: {
           created_at?: string | null;
-          id?: number;
-          name?: string;
+          email?: string;
+          first_name?: string;
+          id?: string;
+          last_name?: string | null;
+          phone?: string | null;
+          role?: string | null;
+          status?: Database["public"]["Enums"]["status"];
+          trainer?: string | null;
+          type?: Database["public"]["Enums"]["profile_type"] | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey";
+            columns: ["id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "profiles_trainer_fkey";
+            columns: ["trainer"];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       serving: {
         Row: {
@@ -327,134 +358,6 @@ export interface Database {
           },
         ];
       };
-      trainer: {
-        Row: {
-          created_at: string | null;
-          email: string;
-          first_name: string;
-          id: number;
-          last_name: string | null;
-        };
-        Insert: {
-          created_at?: string | null;
-          email: string;
-          first_name: string;
-          id?: number;
-          last_name?: string | null;
-        };
-        Update: {
-          created_at?: string | null;
-          email?: string;
-          first_name?: string;
-          id?: number;
-          last_name?: string | null;
-        };
-        Relationships: [];
-      };
-      user: {
-        Row: {
-          created_at: string | null;
-          email: string;
-          first_name: string;
-          id: number;
-          last_name: string;
-          organisation: number;
-          phone: string | null;
-          status: Database["public"]["Enums"]["status"] | null;
-          trainer: number | null;
-          user_type: number;
-        };
-        Insert: {
-          created_at?: string | null;
-          email: string;
-          first_name: string;
-          id?: number;
-          last_name: string;
-          organisation: number;
-          phone?: string | null;
-          status?: Database["public"]["Enums"]["status"] | null;
-          trainer?: number | null;
-          user_type: number;
-        };
-        Update: {
-          created_at?: string | null;
-          email?: string;
-          first_name?: string;
-          id?: number;
-          last_name?: string;
-          organisation?: number;
-          phone?: string | null;
-          status?: Database["public"]["Enums"]["status"] | null;
-          trainer?: number | null;
-          user_type?: number;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "user_organisation_fkey";
-            columns: ["organisation"];
-            referencedRelation: "organisation";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "user_trainer_fkey";
-            columns: ["trainer"];
-            referencedRelation: "trainer";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "user_user_type_fkey";
-            columns: ["user_type"];
-            referencedRelation: "user_type";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      user_permissions: {
-        Row: {
-          created_at: string | null;
-          id: number;
-          name: string;
-          user_type: number;
-        };
-        Insert: {
-          created_at?: string | null;
-          id?: number;
-          name: string;
-          user_type: number;
-        };
-        Update: {
-          created_at?: string | null;
-          id?: number;
-          name?: string;
-          user_type?: number;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "user_permissions_user_type_fkey";
-            columns: ["user_type"];
-            referencedRelation: "user_type";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      user_type: {
-        Row: {
-          created_at: string | null;
-          id: number;
-          name: string;
-        };
-        Insert: {
-          created_at?: string | null;
-          id?: number;
-          name: string;
-        };
-        Update: {
-          created_at?: string | null;
-          id?: number;
-          name?: string;
-        };
-        Relationships: [];
-      };
     };
     Views: {
       [_ in never]: never;
@@ -463,6 +366,7 @@ export interface Database {
       [_ in never]: never;
     };
     Enums: {
+      profile_type: "admin" | "client" | "trainer";
       status: "active" | "not verified" | "paused";
     };
     CompositeTypes: {

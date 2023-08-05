@@ -45,7 +45,7 @@ export const emptyPlaceholderMealPlan: MealPlan = {
   id: 0,
   name: "",
   created_at: null,
-  user: 0,
+  client: "",
   template: false,
-  trainer: 0,
+  trainer: "",
 };

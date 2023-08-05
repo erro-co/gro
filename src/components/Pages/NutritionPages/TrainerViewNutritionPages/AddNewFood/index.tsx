@@ -1,19 +1,20 @@
 "use client";
-import NutritionLabelInput from "@/components/NutritionFactsInput";
-import { supabase } from "@/lib/supabase";
-import { FC, useEffect, useState } from "react";
-import { FoodCategory } from "@/lib/types";
 import Loading from "@/components/Loading";
-import ComboboxInput from "./ComboBoxInput";
+import QuickAddFoodModal from "@/components/Modals/QuickAddFoodModal";
+import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodModal";
+import NutritionLabelInput from "@/components/NutritionFactsInput";
+import { convertToBase100 } from "@/lib/helpers";
+import useMediaQuery from "@/lib/hooks/useMediaQuery";
+import { FoodWithNutrientsAndServingSchema, Serving } from "@/lib/schemas";
+import { FoodCategory } from "@/lib/types";
+import { Database } from "@/lib/types/supabase";
+import { BoltIcon } from "@heroicons/react/20/solid";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { redirect } from "next/navigation";
+import { FC, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import AddServingInput from "./AddServingInput";
-import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodModal";
-import { FoodWithNutrientsAndServingSchema, Serving } from "@/lib/schemas";
-import { convertToBase100 } from "@/lib/helpers";
-import QuickAddFoodModal from "@/components/Modals/QuickAddFoodModal";
-import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { BoltIcon } from "@heroicons/react/20/solid";
-import { redirect } from "next/navigation";
+import ComboboxInput from "./ComboBoxInput";
 
 const AddNewFoodForm: FC = () => {
   const {
@@ -30,6 +31,8 @@ const AddNewFoodForm: FC = () => {
     useState<FoodCategory | null>(null);
   const [showQuickAddFoodModal, setShowQuickAddFoodModal] = useState(false);
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const supabase = createClientComponentClient<Database>();
+
   const fetchFoodCategories = async () => {
     const { data: food_category, error } = await supabase
       .from("food_category")
@@ -87,7 +90,7 @@ const AddNewFoodForm: FC = () => {
 
     const base100NutrientsWithId = {
       ...convertToBase100(data.nutrients, data.serving[0].weight),
-      food_id: new_food[0].id,
+      food: new_food[0].id,
     };
 
     const { error: nutrients_error } = await supabase

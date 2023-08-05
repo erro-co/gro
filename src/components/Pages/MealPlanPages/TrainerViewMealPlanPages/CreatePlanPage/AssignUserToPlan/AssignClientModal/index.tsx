@@ -1,14 +1,14 @@
+import { capitalizeFirstLetter } from "@/lib/helpers";
+import { User } from "@/lib/types";
 import { Dialog, Transition } from "@headlessui/react";
-import { FC, Fragment } from "react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { capitalizeFirstLetter } from "@/lib/helpers";
-import { Client } from "..";
+import { FC, Fragment } from "react";
 
 export interface ISuccessfulAddNewFoodModal {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  selectedClient: Client | null;
+  selectedClient: User | null;
 }
 
 const AssignClientModal: FC<ISuccessfulAddNewFoodModal> = ({

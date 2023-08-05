@@ -1,7 +1,8 @@
 "use client";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import GroLogo from "@/components/icons/Logo";
-import { getUserRole, supabaseValueExists } from "@/lib/helpers";
+import { supabaseValueExists } from "@/lib/helpers";
+import { Database } from "@/lib/types/supabase";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
@@ -36,7 +37,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState<LoginErrors>(null);
   const [view, setView] = useState<LoginViews>("sign-in");
-  const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient<Database>();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -52,7 +53,7 @@ export default function Login() {
         return;
       }
 
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -100,13 +101,14 @@ export default function Login() {
         return;
       }
 
-      const role = (await getUserRole(
-        signInData.user.email?.toLowerCase() as string,
-        supabase,
-      )) as unknown as RoleType;
+      // const role = (await getUserRole(
+      //   signInData.user.email?.toLowerCase() as string,
+      //   supabase,
+      // )) as unknown as RoleType;
 
-      storeUserDetails(role, signInData.user);
-      redirectToDashboard(role.user_type.name);
+      // storeUserDetails(role, signInData.user);
+      // redirectToDashboard(role.user_type.name);
+      router.push("/dashboard/plans");
     } catch (error) {
       console.error(error);
       setLoading(false);

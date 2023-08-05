@@ -1,24 +1,24 @@
 "use client";
-import { UserPlusIcon } from "@heroicons/react/24/outline";
-import { FC, useEffect, useState } from "react";
-import { redirect } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/lib/types/supabase";
-import { User } from "@/lib/types";
 import Loading from "@/components/Loading";
 import SuccessfulAddNewClientModal from "@/components/Modals/SuccessfulAddNewClientModal";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectGroup,
-  SelectTrigger,
-  SelectValue,
   SelectItem,
   SelectLabel,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { capitalizeFirstLetter } from "@/lib/helpers";
+import { User } from "@/lib/types";
+import { Database } from "@/lib/types/supabase";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
+import { redirect } from "next/navigation";
+import { FC, useEffect, useState } from "react";
 
 const NewClientPage: FC = () => {
   const [firstname, setFirstname] = useState("");
@@ -196,7 +196,8 @@ const NewClientPage: FC = () => {
                       {trainers?.map((trainer) => (
                         <SelectItem key={trainer.id} value={trainer.email}>
                           {capitalizeFirstLetter(trainer.first_name)}{" "}
-                          {capitalizeFirstLetter(trainer.last_name)}
+                          {trainer.last_name &&
+                            capitalizeFirstLetter(trainer.last_name)}
                         </SelectItem>
                       ))}
                     </SelectGroup>

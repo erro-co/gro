@@ -1,11 +1,11 @@
-import { FC, useEffect, useState } from "react";
-import NutritionFactsInput from "../../../../NutritionFactsInput";
-import ComboboxInput from "../AddNewFood/ComboBoxInput";
-import { FoodCategory } from "@/lib/types";
-import { supabase } from "@/lib/supabase";
-import { useFormContext } from "react-hook-form";
-import AddServingInput from "../AddNewFood/AddServingInput";
 import { CompleteFood } from "@/lib/schemas";
+import { supabase } from "@/lib/supabase";
+import { FoodCategory } from "@/lib/types";
+import { FC, useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
+import NutritionFactsInput from "../../../../NutritionFactsInput";
+import AddServingInput from "../AddNewFood/AddServingInput";
+import ComboboxInput from "../AddNewFood/ComboBoxInput";
 
 export interface IEditFood {
   food: CompleteFood;
@@ -82,7 +82,7 @@ const EditFood: FC<IEditFood> = ({ food }) => {
       await supabase
         .from("nutrients")
         .update(updateFood.nutrients)
-        .eq("food_id", updateFood.id)
+        .eq("food", updateFood.id)
         .select();
     if (updated_nutrients_error) {
       console.log("Failed to update food:", updated_nutrients_error);

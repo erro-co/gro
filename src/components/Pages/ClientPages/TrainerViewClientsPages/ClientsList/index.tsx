@@ -1,9 +1,9 @@
 "use client";
-import Link from "next/link";
-import clsx from "clsx";
-import { FC } from "react";
 import { capitalizeFirstLetter } from "@/lib/helpers";
 import { User } from "@/lib/types";
+import clsx from "clsx";
+import Link from "next/link";
+import { FC } from "react";
 
 export interface IClientList {
   clients: User[];
@@ -29,7 +29,7 @@ const ClientsList: FC<IClientList> = ({ clients }) => {
             <div className="flex items-start gap-x-3">
               <p className="text-sm font-semibold leading-6 text-gray-900">
                 {capitalizeFirstLetter(client.first_name)}{" "}
-                {capitalizeFirstLetter(client.last_name)}
+                {capitalizeFirstLetter(client.last_name || "")}
               </p>
               <p
                 className={clsx(

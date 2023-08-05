@@ -44,6 +44,6 @@ export type Serving = Database["public"]["Tables"]["serving"]["Row"];
 export type ServingUpdate = Database["public"]["Tables"]["serving"]["Update"];
 export type ServingInsert = Database["public"]["Tables"]["serving"]["Insert"];
 
-export type User = Database["public"]["Tables"]["user"]["Row"];
-export type UserUpdate = Database["public"]["Tables"]["user"]["Update"];
-export type UserInsert = Database["public"]["Tables"]["user"]["Insert"];
+export type User = Database["public"]["Tables"]["profiles"]["Row"];
+export type UserUpdate = Database["public"]["Tables"]["profiles"]["Update"];
+export type UserInsert = Database["public"]["Tables"]["profiles"]["Insert"];

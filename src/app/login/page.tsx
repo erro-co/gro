@@ -69,8 +69,6 @@ export default function Login() {
             first_name: firstName,
             last_name: lastName,
             phone: phone,
-            status: "active",
-            type: "client",
           },
         },
       });

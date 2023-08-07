@@ -1,13 +1,12 @@
-import { Food } from "@/lib/types";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import FoodNutrientsPieChart from "@/components/Charts/FoodNutrientsPieChart";
+import LoadingIcon from "@/components/icons/LoadingIcon";
+import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
 import { Meal, Nutrition, Serving } from "@/lib/schemas";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import AddFoodServingInput from "../Inputs/AddFoodServingInput";
 import SelectMealInput from "../Inputs/SelectMealInput";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
-import LoadingIcon from "@/components/icons/LoadingIcon";
 
 export interface IAddFoodMetaDataForm {
   selectedFood: Food | null;
@@ -48,13 +47,15 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
     control,
   });
 
+  const supabase = createClientComponentClient<Database>();
+
   const getSelectedFoodMacros = async () => {
     setLoaded(false);
     if (selectedFood) {
       const { data: macros, error } = await supabase
         .from("nutrients")
         .select("*")
-        .eq("food_id", selectedFood.id);
+        .eq("food", selectedFood.id);
 
       if (error) {
         console.log("Failed to fetch error:", error);

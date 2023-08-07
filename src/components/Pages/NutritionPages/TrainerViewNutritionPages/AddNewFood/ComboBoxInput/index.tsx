@@ -1,8 +1,7 @@
-import { FC, useState } from "react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { Combobox } from "@headlessui/react";
-import { FoodCategory } from "@/lib/types";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
+import { FC, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 export interface IComboboxInput {

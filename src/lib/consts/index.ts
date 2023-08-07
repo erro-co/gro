@@ -1,5 +1,4 @@
 import { CompleteFood } from "../schemas";
-import { MealPlan } from "../types";
 
 export const foodCategories: string[] = [
   "fruits",
@@ -45,7 +44,7 @@ export const emptyPlaceholderMealPlan: MealPlan = {
   id: 0,
   name: "",
   created_at: null,
-  user: 0,
+  client: "",
   template: false,
-  trainer: 0,
+  trainer: "",
 };

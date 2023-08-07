@@ -1,22 +1,22 @@
 "use client";
-import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { FC, useEffect, useState } from "react";
-import EditFoodModal from "../../../../Modals/EditFoodModal";
-import { FoodWithNutrientsAndServing } from "@/lib/schemas";
-import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import SearchBarWithAddButton from "../../../../SearchBarWithAddButton";
 import { emptyPlaceholderFood } from "@/lib/consts";
+import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import {
-  ChevronUpDownIcon,
   ChevronDownIcon,
+  ChevronUpDownIcon,
   ChevronUpIcon,
 } from "@heroicons/react/20/solid";
+import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
+import { FC, useEffect, useState } from "react";
 import Loading from "../../../../Loading";
 import ConfirmDeleteActionModal from "../../../../Modals/ConfirmDeleteActionModal";
+import EditFoodModal from "../../../../Modals/EditFoodModal";
+import SearchBarWithAddButton from "../../../../SearchBarWithAddButton";
 import AddButton from "../../../../SearchBarWithAddButton/AddButton";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/lib/types/supabase";
+
+import type { FoodWithNutrientsAndServing } from "@/lib/schemas";
 
 type SortDirection = "ASC" | "DESC" | null;
 
@@ -65,7 +65,7 @@ const Table: FC = () => {
     const offset = (page - 1) * PAGE_SIZE;
     const { data, error } = await supabase
       .from("food")
-      .select(`*, nutrients(*, food_id), serving(*, food)`)
+      .select(`*, nutrients(*, food), serving(*, food)`)
       .ilike("name", `%${searchTerm}%`)
       .range(offset, offset + PAGE_SIZE - 1)
       .order(sortColumn || "name", {
@@ -285,7 +285,7 @@ const Table: FC = () => {
           </div>
         </div>
 
-        {foods.length > PAGE_SIZE ? (
+        {foods?.length > PAGE_SIZE ? (
           <div className="w-full mt-3 pb-4">
             <div className="lg:ml-auto flex justify-between lg:justify-center lg:space-x-10">
               <button

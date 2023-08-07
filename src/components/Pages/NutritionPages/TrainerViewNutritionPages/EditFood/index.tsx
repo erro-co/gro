@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from "react";
-import NutritionFactsInput from "../../../../NutritionFactsInput";
-import ComboboxInput from "../../../../forms/AddNewFood/ComboBoxInput";
-import { FoodCategory } from "@/lib/types";
-import { supabase } from "@/lib/supabase";
 import { useFormContext } from "react-hook-form";
-import AddServingInput from "../../../../forms/AddNewFood/AddServingInput";
-import { CompleteFood } from "@/lib/schemas";
+import NutritionFactsInput from "../../../../NutritionFactsInput";
+import AddServingInput from "../AddNewFood/AddServingInput";
+import ComboboxInput from "../AddNewFood/ComboBoxInput";
+
+import type { CompleteFood } from "@/lib/schemas";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export interface IEditFood {
   food: CompleteFood;
@@ -22,6 +22,8 @@ const EditFood: FC<IEditFood> = ({ food }) => {
   const [dataFetched, setDataFetched] = useState(false);
   const [selectedFoodCategory, setSelectedFoodCategory] =
     useState<FoodCategory | null>(null);
+
+  const supabase = createClientComponentClient<Database>();
 
   const fetchFoodCategories = async () => {
     setDataFetched(false);
@@ -82,7 +84,7 @@ const EditFood: FC<IEditFood> = ({ food }) => {
       await supabase
         .from("nutrients")
         .update(updateFood.nutrients)
-        .eq("food_id", updateFood.id)
+        .eq("food", updateFood.id)
         .select();
     if (updated_nutrients_error) {
       console.log("Failed to update food:", updated_nutrients_error);

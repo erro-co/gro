@@ -1,19 +1,23 @@
 "use client";
-import { FC, useState } from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import Loading from "@/components/Loading";
+import { MealIndexProvider } from "@/lib/context/SelectedMealIndexContext";
+import useMediaQuery from "@/lib/hooks/useMediaQuery";
+import { Meal, newMealPlanSchema } from "@/lib/schemas";
 import {
   CheckIcon,
   PencilIcon,
   PlusCircleIcon,
 } from "@heroicons/react/20/solid";
-import { Meal, newMealPlanSchema } from "@/lib/schemas";
-import { MealIndexProvider } from "@/lib/context/SelectedMealIndexContext";
-import useMediaQuery from "@/lib/hooks/useMediaQuery";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { redirect } from "next/navigation";
+import { FC, useEffect, useState } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import AddFoodModal from "./AddFoodModal";
 import AddMealTable from "./AddMealTable";
+import AssignUserToPlan from "./AssignUserToPlan";
 import ConfirmationModal from "./ConfirmationModal";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/lib/types/supabase";
+
+type views = "creatPlan" | "loading" | "assignPlan" | "success";
 
 const AddNewMealPlan: FC = () => {
   const [showFoodSearchModal, setShowFoodSearchModal] =
@@ -21,6 +25,8 @@ const AddNewMealPlan: FC = () => {
   const { control, watch, register, handleSubmit, reset } = useFormContext();
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [showLoading, setShowLoading] = useState(false);
+  const [view, setView] = useState<views>("creatPlan");
+  const [planId, setPlanId] = useState<number | null>(null);
   const supabase = createClientComponentClient<Database>();
 
   const mealPlan = watch();
@@ -42,13 +48,17 @@ const AddNewMealPlan: FC = () => {
   };
 
   const onSubmit = async (data: any) => {
-    setShowLoading(true);
+    setView("loading");
+
+    const { data: trainer } = await supabase.auth.getUser();
+
     const { data: new_meal_plan, error: new_meal_plan_error } = await supabase
       .from("meal_plan")
       .insert([
         {
           name: data.name,
           template: false,
+          // trainer: trainer?.user?.id,
         },
       ])
       .select();
@@ -109,9 +119,8 @@ const AddNewMealPlan: FC = () => {
         } = await supabase
           .from("meal_plan_food_serving_user")
           .insert({
-            meal_plan_id: new_meal_plan[0].id,
+            meal_plan: new_meal_plan[0].id,
             meal_food_serving: new_food[0].id,
-            user: 2,
           })
           .select("*");
         if (meal_plan_food_serving_user_error) {
@@ -126,70 +135,97 @@ const AddNewMealPlan: FC = () => {
     }
 
     reset();
-    setShowLoading(false);
+    setView("assignPlan");
   };
 
-  return (
-    <>
-      <ConfirmationModal isOpen={showLoading} setIsOpen={setShowLoading} />
-      <form className="flex flex-col h-full" onSubmit={handleSubmit(onSubmit)}>
-        <MealIndexProvider>
-          <AddFoodModal
-            open={showFoodSearchModal}
-            setOpen={setShowFoodSearchModal}
-          />
-          <div className="w-full flex">
-            <div className="w-full lg:w-fit lg:mx-auto shadow border border-gray-200 rounded-lg flex p-2 focus-within:border-indigo-500">
-              <input
-                type="text"
-                {...register("name")}
-                className="text-normal lg:text-2xl font-semibold focus:outline-none w-full"
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      localStorage.getItem("role") === "client"
+    ) {
+      redirect("/dashboard/plans");
+    }
+  }, []);
+
+  switch (view) {
+    case "creatPlan":
+      return (
+        <>
+          <ConfirmationModal isOpen={showLoading} setIsOpen={setShowLoading} />
+          <form
+            className="flex flex-col h-full"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <MealIndexProvider>
+              <AddFoodModal
+                open={showFoodSearchModal}
+                setOpen={setShowFoodSearchModal}
               />
-              <PencilIcon className="w-6 text-gray-400" />
-            </div>
-          </div>
-
-          {fields.map((meal, idx) => (
-            <AddMealTable
-              key={meal.id}
-              mealIndex={idx}
-              setShowFoodSearchModal={setShowFoodSearchModal}
-              removeMeal={remove}
-            />
-          ))}
-          <div className="flex">
-            <div className="ml-auto flex">
-              <button
-                onClick={() => append({ name: `Meal ${fields.length + 1}` })}
-                className="bg-gro-indigo text-white flex p-2 rounded-md"
-              >
-                <PlusCircleIcon className="w-6" />
-                {isMobile ? (
-                  <p className="my-auto text-xs mx-2">Meal</p>
-                ) : (
-                  <p className="my-auto text-xs lg:text-base mx-2">Add Meal</p>
-                )}
-              </button>
-            </div>
-          </div>
-          <div className="mt-auto flex w-full mb-4">
-            {validateForm(mealPlan) ? (
-              <button
-                type="submit"
-                className="mx-auto flex border px-4 py-2 lg:py-4 rounded-md  text-white bg-green-500 disabled:opacity-70"
-              >
-                {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
-
-                <div className="ml-2">
-                  <CheckIcon className="w-6" />
+              <div className="w-full flex">
+                <div className="w-full lg:w-fit lg:mx-auto shadow border border-gray-200 rounded-lg flex p-2 focus-within:border-indigo-500">
+                  <input
+                    type="text"
+                    {...register("name")}
+                    className="text-normal lg:text-2xl font-semibold focus:outline-none w-full"
+                  />
+                  <PencilIcon className="w-6 text-gray-400" />
                 </div>
-              </button>
-            ) : null}
-          </div>
-        </MealIndexProvider>
-      </form>
-    </>
-  );
+              </div>
+
+              {fields.map((meal, idx) => (
+                <AddMealTable
+                  key={meal.id}
+                  mealIndex={idx}
+                  setShowFoodSearchModal={setShowFoodSearchModal}
+                  removeMeal={remove}
+                />
+              ))}
+              <div className="flex">
+                <div className="ml-auto flex">
+                  <button
+                    onClick={() =>
+                      append({ name: `Meal ${fields.length + 1}` })
+                    }
+                    className="bg-gro-indigo text-white flex p-2 rounded-md"
+                  >
+                    <PlusCircleIcon className="w-6" />
+                    {isMobile ? (
+                      <p className="my-auto text-xs mx-2">Meal</p>
+                    ) : (
+                      <p className="my-auto text-xs lg:text-base mx-2">
+                        Add Meal
+                      </p>
+                    )}
+                  </button>
+                </div>
+              </div>
+              <div className="mt-auto flex w-full mb-4">
+                {validateForm(mealPlan) ? (
+                  <button
+                    type="submit"
+                    className="mx-auto flex border px-4 py-2 lg:py-4 rounded-md  text-white bg-green-500 disabled:opacity-70"
+                  >
+                    {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
+
+                    <div className="ml-2">
+                      <CheckIcon className="w-6" />
+                    </div>
+                  </button>
+                ) : null}
+              </div>
+            </MealIndexProvider>
+          </form>
+        </>
+      );
+    case "loading":
+      return <Loading />;
+    case "assignPlan":
+      return <AssignUserToPlan planId={planId} />;
+    case "success":
+      return <></>;
+    default:
+      return <></>;
+  }
 };
 
 export default AddNewMealPlan;

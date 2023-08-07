@@ -1,8 +1,8 @@
 "use client";
-import { supabase } from "@/lib/supabase";
-import { FC, useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import LoadingIcon from "@/components/icons/LoadingIcon";
+import { supabase } from "@/lib/supabase";
+import { usePathname } from "next/navigation";
+import { FC, useEffect, useState } from "react";
 import DisplayTable from "./DisplayTable";
 import MacroSummaryCard from "./MacroSummaryCard";
 
@@ -71,7 +71,7 @@ const DisplayMealPage: FC = () => {
       .select(
         "meal_food_serving(meal(id, name, notes), quantity, serving(name, weight), food(brand, name, food_category(name), nutrients(*)))",
       )
-      .eq("meal_plan_id", mealPlanId);
+      .eq("meal_plan", mealPlanId);
     if (error) {
       console.error("Error getting meal plan from supabase:", error);
       return;

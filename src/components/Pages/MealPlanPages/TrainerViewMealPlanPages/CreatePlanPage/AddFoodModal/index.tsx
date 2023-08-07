@@ -1,3 +1,6 @@
+import { Dialog, Transition } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import {
   Dispatch,
   FC,
@@ -6,14 +9,10 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useFormContext } from "react-hook-form";
+import AddFoodMetaDataForm from "../AddFoodMetaDataForm";
 import FoodSearchBar from "../FoodSearchBar";
 import FoodSearchHitsTable from "../FoodSearchHitsTable";
-import { supabase } from "@/lib/supabase";
-import { Food } from "@/lib/types";
-import AddFoodMetaDataForm from "../AddFoodMetaDataForm";
-import { useFormContext } from "react-hook-form";
 
 export interface IAddFoodModal {
   open: boolean;
@@ -25,6 +24,7 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [dataFetched, setDataFetched] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
+  const supabase = createClientComponentClient<Database>();
 
   const { watch } = useFormContext();
 

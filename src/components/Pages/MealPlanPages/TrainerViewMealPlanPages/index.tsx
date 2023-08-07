@@ -1,12 +1,11 @@
 "use client";
-import { FC, useEffect, useState } from "react";
-import MealPlanListTable from "../common/MealPlanListTable";
-import { supabase } from "@/lib/supabase";
-import { MealPlan, User } from "@/lib/types";
-import LoadingIcon from "../../../icons/LoadingIcon";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
-import { SelectTrainer } from "./SelectTrainer";
 import AddButton from "@/components/SearchBarWithAddButton/AddButton";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { FC, useEffect, useState } from "react";
+import LoadingIcon from "../../../icons/LoadingIcon";
+import MealPlanListTable from "../common/MealPlanListTable";
+import { SelectTrainer } from "./SelectTrainer";
 
 type MealPlanUser = MealPlan & { user: User };
 
@@ -16,6 +15,7 @@ const TrainerViewMealPlanPage: FC = () => {
   const [selectedTrainer, setSelectedTrainer] = useState<User | "All">("All");
   const [trainers, setTrainers] = useState<User[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const supabase = createClientComponentClient<Database>();
 
   const findTrainerId = (trainers: User[]) => {
     if (!trainers || typeof window === "undefined") return;
@@ -39,9 +39,9 @@ const TrainerViewMealPlanPage: FC = () => {
   const fetchData = async () => {
     if (trainers === null) {
       const { data: trainers, error } = await supabase
-        .from("user")
+        .from("profiles")
         .select("*")
-        .eq("user_type", 1)
+        .eq("type", "trainer")
         .order("first_name", { ascending: true });
 
       if (error) {

@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { Switch } from "@headlessui/react";
+import { useState } from "react";
 
 export default function ServingTypeToggle() {
   const [enabled, setEnabled] = useState(false);

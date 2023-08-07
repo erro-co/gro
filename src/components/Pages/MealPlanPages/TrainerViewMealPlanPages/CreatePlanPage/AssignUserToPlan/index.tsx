@@ -1,40 +1,24 @@
 "use client";
-import SelectClientList from "./SelectClientTable";
-import { supabase } from "@/lib/supabase";
-import { FC, useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
 import Addbutton from "@/components/SearchBarWithAddButton/AddButton";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
+import { FC, useEffect, useState } from "react";
 import AssignClientModal from "./AssignClientModal";
+import SelectClientList from "./SelectClientTable";
 
-export interface Client {
-  id: number;
-  created_at: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone: string;
-  trainer: {
-    first_name: string;
-    last_name: string;
-    email: string;
-  };
-  status: ClientStatus;
+export interface IAssignUserToPlan {
+  planId: number | null;
 }
 
-enum ClientStatus {
-  Complete = "Active",
-  InProgress = "In progress",
-  Archived = "Archived",
-}
-
-const AssignUserToPlan: FC = () => {
-  const [clients, setClients] = useState<Client[]>([]);
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+const AssignUserToPlan: FC<IAssignUserToPlan> = ({ planId }) => {
+  const [clients, setClients] = useState<User[]>([]);
+  const [selectedClient, setSelectedClient] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const supabase = createClientComponentClient<Database>();
 
   const getAllClients = async () => {
     const { data: clients, error } = await supabase
@@ -47,7 +31,7 @@ const AssignUserToPlan: FC = () => {
       console.log(error);
       return null;
     } else {
-      setClients(clients as Client[]);
+      setClients(clients as User[]);
       setLoading(false);
     }
   };
@@ -81,6 +65,8 @@ const AssignUserToPlan: FC = () => {
         clients={clients}
         setSelectedClient={setSelectedClient}
         setShowModal={setShowModal}
+        planId={planId}
+        supabase={supabase}
       />
       <Link
         href={"/dashboard/plans"}

@@ -1,18 +1,18 @@
 "use client";
-import NutritionLabelInput from "@/components/NutritionFactsInput";
-import { supabase } from "@/lib/supabase";
-import { FC, useEffect, useState } from "react";
-import { FoodCategory } from "@/lib/types";
 import Loading from "@/components/Loading";
-import ComboboxInput from "./ComboBoxInput";
+import QuickAddFoodModal from "@/components/Modals/QuickAddFoodModal";
+import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodModal";
+import NutritionLabelInput from "@/components/NutritionFactsInput";
+import { convertToBase100 } from "@/lib/helpers";
+import useMediaQuery from "@/lib/hooks/useMediaQuery";
+import { FoodWithNutrientsAndServingSchema, Serving } from "@/lib/schemas";
+import { BoltIcon } from "@heroicons/react/20/solid";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { redirect } from "next/navigation";
+import { FC, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import AddServingInput from "./AddServingInput";
-import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodModal";
-import { FoodWithNutrientsAndServingSchema, Serving } from "@/lib/schemas";
-import { convertToBase100 } from "@/lib/helpers";
-import QuickAddFoodModal from "@/components/Modals/QuickAddFoodModal";
-import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { BoltIcon } from "@heroicons/react/20/solid";
+import ComboboxInput from "./ComboBoxInput";
 
 const AddNewFoodForm: FC = () => {
   const {
@@ -22,13 +22,15 @@ const AddNewFoodForm: FC = () => {
     reset,
   } = useFormContext();
   const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([]);
-  const [dataFetched, setDataFetched] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showSuccessfulAddNewFoodModal, setShowSuccessfulAddNewFoodModal] =
     useState(false);
   const [selectedFoodCategory, setSelectedFoodCategory] =
     useState<FoodCategory | null>(null);
   const [showQuickAddFoodModal, setShowQuickAddFoodModal] = useState(false);
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const supabase = createClientComponentClient<Database>();
+
   const fetchFoodCategories = async () => {
     const { data: food_category, error } = await supabase
       .from("food_category")
@@ -38,12 +40,8 @@ const AddNewFoodForm: FC = () => {
       console.log("Failed to fetch error:", error);
     }
     setFoodCategories((food_category as FoodCategory[]) || []);
-    setDataFetched(true);
+    setLoading(false);
   };
-
-  useEffect(() => {
-    fetchFoodCategories();
-  }, []);
 
   //TODO: Add delete on error, base 100 values, and serving type toggle
   const validateForm = (data: any) => {
@@ -90,7 +88,7 @@ const AddNewFoodForm: FC = () => {
 
     const base100NutrientsWithId = {
       ...convertToBase100(data.nutrients, data.serving[0].weight),
-      food_id: new_food[0].id,
+      food: new_food[0].id,
     };
 
     const { error: nutrients_error } = await supabase
@@ -105,8 +103,19 @@ const AddNewFoodForm: FC = () => {
     setShowSuccessfulAddNewFoodModal(true);
   };
 
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      localStorage.getItem("role") === "client"
+    ) {
+      redirect("/dashboard/plans");
+    }
+    fetchFoodCategories();
+  }, []);
+
   console.log({ errors });
-  if (!dataFetched) {
+
+  if (loading) {
     return <Loading />;
   }
   return (
@@ -130,7 +139,7 @@ const AddNewFoodForm: FC = () => {
               />
               <button
                 onClick={() => setShowQuickAddFoodModal(true)}
-                className="bg-gro-indigo p-2 text-white rounded-lg"
+                className="bg-gray-500 p-2 text-white rounded-lg"
               >
                 {isMobile ? (
                   <div className="w-8">
@@ -194,7 +203,7 @@ const AddNewFoodForm: FC = () => {
 
             <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
               <label
-                htmlFor="last-name"
+                htmlFor="serving"
                 className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
               >
                 Serving

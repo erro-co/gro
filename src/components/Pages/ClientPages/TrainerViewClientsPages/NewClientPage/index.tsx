@@ -1,22 +1,22 @@
 "use client";
-import { UserPlusIcon } from "@heroicons/react/24/outline";
-import { FC, useEffect, useState } from "react";
-import { redirect } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/lib/types/supabase";
-import { User } from "@/lib/types";
 import Loading from "@/components/Loading";
 import SuccessfulAddNewClientModal from "@/components/Modals/SuccessfulAddNewClientModal";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectGroup,
-  SelectTrigger,
-  SelectValue,
   SelectItem,
   SelectLabel,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { capitalizeFirstLetter } from "@/lib/helpers";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { FC, useEffect, useState } from "react";
 
 const NewClientPage: FC = () => {
   const [firstname, setFirstname] = useState("");
@@ -28,13 +28,6 @@ const NewClientPage: FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<User | null>(null);
   const [trainers, setTrainers] = useState<User[] | null>(null);
-
-  if (
-    typeof window !== "undefined" &&
-    localStorage.getItem("role") === "client"
-  ) {
-    redirect("/dashboard/plans");
-  }
 
   const handleSelectTrainer = (email: string) => {
     if (email === "no trainer") {
@@ -86,6 +79,12 @@ const NewClientPage: FC = () => {
   };
 
   useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      localStorage.getItem("role") === "client"
+    ) {
+      redirect("/dashboard/plans");
+    }
     getTrainers();
   }, []);
 
@@ -110,7 +109,7 @@ const NewClientPage: FC = () => {
             </div>
           </div>
 
-          <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
+          <div className="mt-10 space-y-8 border-b border-gray-900/15 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/15 sm:border-t sm:pb-0">
             <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
               <label
                 htmlFor="food-name"
@@ -118,14 +117,13 @@ const NewClientPage: FC = () => {
               >
                 First name<span className="text-red-500 font-bold">*</span>
               </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <input
+              <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
+                <Input
                   required
                   value={firstname}
                   onChange={(e) => setFirstname(e.target.value)}
                   type="text"
                   name="firstname"
-                  className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -136,13 +134,12 @@ const NewClientPage: FC = () => {
               >
                 Last Name<span className="text-red-500 font-bold">*</span>
               </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <input
+              <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
+                <Input
                   value={lastname}
                   onChange={(e) => setLastname(e.target.value)}
                   type="text"
                   name="lastname"
-                  className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -153,13 +150,12 @@ const NewClientPage: FC = () => {
               >
                 Email<span className="text-red-500 font-bold">*</span>
               </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <input
+              <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
+                <Input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   name="email"
-                  className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -170,13 +166,12 @@ const NewClientPage: FC = () => {
               >
                 Phone
               </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <input
+              <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
+                <Input
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   type="phone"
                   name="phone"
-                  className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -189,7 +184,7 @@ const NewClientPage: FC = () => {
               </label>
               <div className="mt-2 sm:col-span-2 sm:mt-0">
                 <Select onValueChange={(value) => handleSelectTrainer(value)}>
-                  <SelectTrigger className="w-full max-w-xs">
+                  <SelectTrigger className="w-full max-w-sm">
                     <SelectValue placeholder="Select a trainer" />
                   </SelectTrigger>
                   <SelectContent>
@@ -199,7 +194,8 @@ const NewClientPage: FC = () => {
                       {trainers?.map((trainer) => (
                         <SelectItem key={trainer.id} value={trainer.email}>
                           {capitalizeFirstLetter(trainer.first_name)}{" "}
-                          {capitalizeFirstLetter(trainer.last_name)}
+                          {trainer.last_name &&
+                            capitalizeFirstLetter(trainer.last_name)}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -211,12 +207,12 @@ const NewClientPage: FC = () => {
         </div>
       </div>
       <div className="mt-6 flex items-center justify-end gap-x-6 pb-12">
-        <button
-          type="button"
+        <Link
+          href={"/dashboard/clients"}
           className="text-sm font-semibold leading-6 text-gray-900"
         >
           Cancel
-        </button>
+        </Link>
         <button
           type="submit"
           className="disabled:bg-gray-500 inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

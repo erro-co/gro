@@ -1,49 +1,48 @@
-import { Database } from "./supabase";
+import type { Database as DB } from "./database.types";
 
-export type Food = Database["public"]["Tables"]["food"]["Row"];
-export type FoodUpdate = Database["public"]["Tables"]["food"]["Update"];
-export type FoodInsert = Database["public"]["Tables"]["food"]["Insert"];
+declare global {
+  type Database = DB;
+  export type Food = DB["public"]["Tables"]["food"]["Row"];
+  export type FoodUpdate = DB["public"]["Tables"]["food"]["Update"];
+  export type FoodInsert = DB["public"]["Tables"]["food"]["Insert"];
 
-export type FoodCategory = Database["public"]["Tables"]["food_category"]["Row"];
-export type FoodCategoryUpdate =
-  Database["public"]["Tables"]["food_category"]["Update"];
-export type FoodCategoryInsert =
-  Database["public"]["Tables"]["food_category"]["Insert"];
+  export type FoodCategory = DB["public"]["Tables"]["food_category"]["Row"];
+  export type FoodCategoryUpdate =
+    DB["public"]["Tables"]["food_category"]["Update"];
+  export type FoodCategoryInsert =
+    DB["public"]["Tables"]["food_category"]["Insert"];
 
-export type Meal = Database["public"]["Tables"]["meal"]["Row"];
-export type MealUpdate = Database["public"]["Tables"]["meal"]["Update"];
-export type MealInsert = Database["public"]["Tables"]["meal"]["Insert"];
+  export type Meal = DB["public"]["Tables"]["meal"]["Row"];
+  export type MealUpdate = DB["public"]["Tables"]["meal"]["Update"];
+  export type MealInsert = DB["public"]["Tables"]["meal"]["Insert"];
 
-export type MealFoodServing =
-  Database["public"]["Tables"]["meal_food_serving"]["Row"];
-export type MealFoodServingUpdate =
-  Database["public"]["Tables"]["meal_food_serving"]["Update"];
-export type MealFoodServingInsert =
-  Database["public"]["Tables"]["meal_food_serving"]["Insert"];
+  export type MealFoodServing =
+    DB["public"]["Tables"]["meal_food_serving"]["Row"];
+  export type MealFoodServingUpdate =
+    DB["public"]["Tables"]["meal_food_serving"]["Update"];
+  export type MealFoodServingInsert =
+    DB["public"]["Tables"]["meal_food_serving"]["Insert"];
 
-export type MealPlan = Database["public"]["Tables"]["meal_plan"]["Row"];
-export type MealPlanUpdate =
-  Database["public"]["Tables"]["meal_plan"]["Update"];
-export type MealPlanInsert =
-  Database["public"]["Tables"]["meal_plan"]["Insert"];
+  export type MealPlan = DB["public"]["Tables"]["meal_plan"]["Row"];
+  export type MealPlanUpdate = DB["public"]["Tables"]["meal_plan"]["Update"];
+  export type MealPlanInsert = DB["public"]["Tables"]["meal_plan"]["Insert"];
 
-export type MealPlanFoodServingUser =
-  Database["public"]["Tables"]["meal_plan_food_serving_user"]["Row"];
-export type MealPlanFoodServingUserUpdate =
-  Database["public"]["Tables"]["meal_plan_food_serving_user"]["Update"];
-export type MealPlanFoodServingUserInsert =
-  Database["public"]["Tables"]["meal_plan_food_serving_user"]["Insert"];
+  export type MealPlanFoodServingUser =
+    DB["public"]["Tables"]["meal_plan_food_serving_user"]["Row"];
+  export type MealPlanFoodServingUserUpdate =
+    DB["public"]["Tables"]["meal_plan_food_serving_user"]["Update"];
+  export type MealPlanFoodServingUserInsert =
+    DB["public"]["Tables"]["meal_plan_food_serving_user"]["Insert"];
 
-export type Nutrients = Database["public"]["Tables"]["nutrients"]["Row"];
-export type NutrientsUpdate =
-  Database["public"]["Tables"]["nutrients"]["Update"];
-export type NutrientsInsert =
-  Database["public"]["Tables"]["nutrients"]["Insert"];
+  export type Nutrients = DB["public"]["Tables"]["nutrients"]["Row"];
+  export type NutrientsUpdate = DB["public"]["Tables"]["nutrients"]["Update"];
+  export type NutrientsInsert = DB["public"]["Tables"]["nutrients"]["Insert"];
 
-export type Serving = Database["public"]["Tables"]["serving"]["Row"];
-export type ServingUpdate = Database["public"]["Tables"]["serving"]["Update"];
-export type ServingInsert = Database["public"]["Tables"]["serving"]["Insert"];
+  export type Serving = DB["public"]["Tables"]["serving"]["Row"];
+  export type ServingUpdate = DB["public"]["Tables"]["serving"]["Update"];
+  export type ServingInsert = DB["public"]["Tables"]["serving"]["Insert"];
 
-export type User = Database["public"]["Tables"]["user"]["Row"];
-export type UserUpdate = Database["public"]["Tables"]["user"]["Update"];
-export type UserInsert = Database["public"]["Tables"]["user"]["Insert"];
+  export type User = DB["public"]["Tables"]["profiles"]["Row"];
+  export type UserUpdate = DB["public"]["Tables"]["profiles"]["Update"];
+  export type UserInsert = DB["public"]["Tables"]["profiles"]["Insert"];
+}

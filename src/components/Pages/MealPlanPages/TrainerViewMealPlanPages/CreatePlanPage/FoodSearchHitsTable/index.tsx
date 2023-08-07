@@ -1,4 +1,3 @@
-import { Food } from "@/lib/types";
 import clsx from "clsx";
 import { Dispatch, FC, SetStateAction } from "react";
 

@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/select";
 import { capitalizeFirstLetter } from "@/lib/helpers";
 import { FC } from "react";
-import { User } from "@/lib/types";
 
 export interface ISelectTrainer {
   trainers: User[] | null;

@@ -1,5 +1,4 @@
 import { FC } from "react";
-import ServingTypeToggle from "./ServingTypeToggle";
 import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
 
@@ -248,13 +247,13 @@ const NutritionFactsInput: FC = () => {
         <div className="border-t-4 border-black flex leading-none text-xs pt-2 pb-1"></div>
       </div>
 
-      <div className="flex w-full">
+      {/* <div className="flex w-full">
         <div className="flex mx-auto space-x-2">
           <p className="my-auto text-sm">Per Serve</p>
           <ServingTypeToggle />
           <p className="my-auto text-sm">per 100g</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

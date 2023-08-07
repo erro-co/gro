@@ -1,13 +1,13 @@
 "use client";
 import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
+import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { MealPlanFoodItem } from "@/lib/schemas";
 import { PencilIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import AddNotesModal from "../AddNotesModal";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
+import { Dispatch, FC, SetStateAction, useState } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import AddNotesModal from "../AddNotesModal";
 
 import {
   DropdownMenu,

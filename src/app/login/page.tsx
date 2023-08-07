@@ -26,12 +26,6 @@ type LoginErrors =
   | "An unexpected error occurred, please try again."
   | null;
 
-type RoleType = {
-  user_type: {
-    name: string;
-  };
-};
-
 export default function Login() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -47,7 +41,6 @@ export default function Login() {
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       const emailExists = await isEmailAlreadyExists(
         "profiles",
@@ -59,8 +52,7 @@ export default function Login() {
         setLoginError("Account already exists");
         return;
       }
-
-      const { data, error } = await supabase.auth.signUp({
+      await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -72,8 +64,6 @@ export default function Login() {
           },
         },
       });
-      console.log(data, error);
-
       setView("check-email");
     } catch (error) {
       console.error(error);
@@ -97,40 +87,44 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const { data: signInData, error: signInError } =
-        await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+      const {
+        data: { user },
+        error: signInError,
+      } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-      if (signInError || !signInData?.user) {
+      if (signInError || !user) {
         setLoading(false);
         setLoginError("Invalid Login Credentials");
         return;
       }
+      console.log("User", user);
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
 
-      // const role = (await getUserRole(
-      //   signInData.user.email?.toLowerCase() as string,
-      //   supabase,
-      // )) as unknown as RoleType;
+      console.log("Profile", profile);
 
-      // storeUserDetails(role, signInData.user);
-      // redirectToDashboard(role.user_type.name);
-      router.push("/dashboard/plans");
+      profile && storeUserDetails(profile);
+      profile && profile.type && redirectToDashboard(profile.type);
     } catch (error) {
       console.error(error);
       setLoading(false);
     }
   };
 
-  const storeUserDetails = (role: RoleType, user: any) => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("role", role.user_type.name);
+  const storeUserDetails = (user: User) => {
+    if (typeof window !== "undefined" && user && user.type) {
+      localStorage.setItem("role", user.type);
       localStorage.setItem("user", JSON.stringify(user));
     }
   };
 
-  const redirectToDashboard = (userRole: string) => {
+  const redirectToDashboard = (userRole: string | null) => {
     const targetPath =
       userRole === "admin" ? "/dashboard/" : "/dashboard/plans";
     router.push(targetPath);

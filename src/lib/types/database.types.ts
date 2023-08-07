@@ -281,33 +281,33 @@ export interface Database {
           email: string;
           first_name: string;
           id: string;
-          last_name: string | null;
+          last_name: string;
           phone: string | null;
-          status: Database["public"]["Enums"]["status"];
+          status: Database["public"]["Enums"]["status"] | null;
           trainer: string | null;
-          type: Database["public"]["Enums"]["profile_type"] | null;
+          type: Database["public"]["Enums"]["profile_type"];
         };
         Insert: {
           created_at?: string | null;
           email: string;
           first_name: string;
           id: string;
-          last_name?: string | null;
+          last_name: string;
           phone?: string | null;
-          status: Database["public"]["Enums"]["status"];
+          status?: Database["public"]["Enums"]["status"] | null;
           trainer?: string | null;
-          type?: Database["public"]["Enums"]["profile_type"] | null;
+          type?: Database["public"]["Enums"]["profile_type"];
         };
         Update: {
           created_at?: string | null;
           email?: string;
           first_name?: string;
           id?: string;
-          last_name?: string | null;
+          last_name?: string;
           phone?: string | null;
-          status?: Database["public"]["Enums"]["status"];
+          status?: Database["public"]["Enums"]["status"] | null;
           trainer?: string | null;
-          type?: Database["public"]["Enums"]["profile_type"] | null;
+          type?: Database["public"]["Enums"]["profile_type"];
         };
         Relationships: [
           {
@@ -351,31 +351,6 @@ export interface Database {
             foreignKeyName: "serving_food_fkey";
             columns: ["food"];
             referencedRelation: "food";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tp: {
-        Row: {
-          created_at: string | null;
-          id: string;
-          name: string | null;
-        };
-        Insert: {
-          created_at?: string | null;
-          id: string;
-          name?: string | null;
-        };
-        Update: {
-          created_at?: string | null;
-          id?: string;
-          name?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tp_id_fkey";
-            columns: ["id"];
-            referencedRelation: "users";
             referencedColumns: ["id"];
           },
         ];

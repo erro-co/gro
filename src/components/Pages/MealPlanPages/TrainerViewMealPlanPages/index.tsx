@@ -41,7 +41,7 @@ const TrainerViewMealPlanPage: FC = () => {
       const { data: trainers, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq("type", "trainer")
+        .neq("type", "client")
         .order("first_name", { ascending: true });
 
       if (error) {

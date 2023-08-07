@@ -22,8 +22,8 @@ const AssignUserToPlan: FC<IAssignUserToPlan> = ({ planId }) => {
 
   const getAllClients = async () => {
     const { data: clients, error } = await supabase
-      .from("user")
-      .select("*, trainer(*)")
+      .from("profiles")
+      .select("*")
       .ilike("first_name", `%${searchTerm}%`)
       .order("id", { ascending: true });
 

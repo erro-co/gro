@@ -34,7 +34,7 @@ export const SelectTrainer: FC<ISelectTrainer> = ({
       defaultValue={selectedTrainer === "All" ? "All" : selectedTrainer?.email}
       onValueChange={(value) => handleSelectTrainer(value)}
     >
-      <SelectTrigger className="w-full lg:w-fit mt-2 lg:mt-0 lg:mr-2">
+      <SelectTrigger className="w-full lg:max-w-fit mt-2 lg:mt-0 lg:mr-2">
         <SelectValue placeholder="Trainer" />
       </SelectTrigger>
       <SelectContent>
@@ -44,7 +44,8 @@ export const SelectTrainer: FC<ISelectTrainer> = ({
           </SelectItem>
           {trainers?.map((trainer) => (
             <SelectItem key={trainer.email} value={trainer.email}>
-              {capitalizeFirstLetter(trainer.first_name)}
+              {capitalizeFirstLetter(trainer.first_name)}{" "}
+              {trainer.last_name && capitalizeFirstLetter(trainer.last_name)}
             </SelectItem>
           ))}
         </SelectGroup>

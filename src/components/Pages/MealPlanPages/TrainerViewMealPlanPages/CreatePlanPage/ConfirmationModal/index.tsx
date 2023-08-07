@@ -1,6 +1,6 @@
+import LoadingIcon from "@/components/icons/LoadingIcon";
 import { Dialog, Transition } from "@headlessui/react";
 import { FC, Fragment } from "react";
-import LoadingIcon from "@/components/icons/LoadingIcon";
 
 export interface ISuccessfulAddNewFoodModal {
   isOpen: boolean;

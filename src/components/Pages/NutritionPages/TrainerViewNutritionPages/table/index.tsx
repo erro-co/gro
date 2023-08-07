@@ -1,8 +1,6 @@
 "use client";
 import { emptyPlaceholderFood } from "@/lib/consts";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { FoodWithNutrientsAndServing } from "@/lib/schemas";
-import { Database } from "@/lib/types/supabase";
 import {
   ChevronDownIcon,
   ChevronUpDownIcon,
@@ -17,6 +15,8 @@ import ConfirmDeleteActionModal from "../../../../Modals/ConfirmDeleteActionModa
 import EditFoodModal from "../../../../Modals/EditFoodModal";
 import SearchBarWithAddButton from "../../../../SearchBarWithAddButton";
 import AddButton from "../../../../SearchBarWithAddButton/AddButton";
+
+import type { FoodWithNutrientsAndServing } from "@/lib/schemas";
 
 type SortDirection = "ASC" | "DESC" | null;
 

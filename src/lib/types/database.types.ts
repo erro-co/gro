@@ -283,7 +283,6 @@ export interface Database {
           id: string;
           last_name: string | null;
           phone: string | null;
-          role: string | null;
           status: Database["public"]["Enums"]["status"];
           trainer: string | null;
           type: Database["public"]["Enums"]["profile_type"] | null;
@@ -295,7 +294,6 @@ export interface Database {
           id: string;
           last_name?: string | null;
           phone?: string | null;
-          role?: string | null;
           status: Database["public"]["Enums"]["status"];
           trainer?: string | null;
           type?: Database["public"]["Enums"]["profile_type"] | null;
@@ -307,7 +305,6 @@ export interface Database {
           id?: string;
           last_name?: string | null;
           phone?: string | null;
-          role?: string | null;
           status?: Database["public"]["Enums"]["status"];
           trainer?: string | null;
           type?: Database["public"]["Enums"]["profile_type"] | null;
@@ -354,6 +351,31 @@ export interface Database {
             foreignKeyName: "serving_food_fkey";
             columns: ["food"];
             referencedRelation: "food";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tp: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          name: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          id: string;
+          name?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string;
+          name?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tp_id_fkey";
+            columns: ["id"];
+            referencedRelation: "users";
             referencedColumns: ["id"];
           },
         ];

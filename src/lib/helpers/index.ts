@@ -1,6 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Nutrition } from "../schemas";
-import { supabase } from "../supabase";
 
 export const joinClassNames = (
   ...classes: (string | boolean | undefined)[]
@@ -76,6 +75,7 @@ export const supabaseValueExists = async (
   table: string,
   column: string,
   value: any,
+  supabase: SupabaseClient,
 ): Promise<boolean> => {
   try {
     const { data, error } = await supabase

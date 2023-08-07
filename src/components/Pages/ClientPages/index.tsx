@@ -1,14 +1,12 @@
 "use client";
-import ClientsList from "./TrainerViewClientsPages/ClientsList";
-import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
-import { FC, useEffect, useState } from "react";
 import Loading from "@/components/Loading";
+import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
 import AddButton from "@/components/SearchBarWithAddButton/AddButton";
-import { User } from "@/lib/types";
-import { SelectTrainer } from "../MealPlanPages/TrainerViewMealPlanPages/SelectTrainer";
-import { redirect } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/lib/types/supabase";
+import { redirect } from "next/navigation";
+import { FC, useEffect, useState } from "react";
+import { SelectTrainer } from "../MealPlanPages/TrainerViewMealPlanPages/SelectTrainer";
+import ClientsList from "./TrainerViewClientsPages/ClientsList";
 
 export enum ClientStatus {
   Complete = "Active",

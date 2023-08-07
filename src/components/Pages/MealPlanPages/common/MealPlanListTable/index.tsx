@@ -1,9 +1,8 @@
 import ConfirmDeleteActionModal from "@/components/Modals/ConfirmDeleteActionModal";
 import { emptyPlaceholderMealPlan } from "@/lib/consts";
 import { parseSupabaseDate } from "@/lib/helpers";
-import { supabase } from "@/lib/supabase";
-import { MealPlan } from "@/lib/types";
 import { ArrowRightCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
 import Link from "next/link";
 import { FC, useState } from "react";
@@ -23,6 +22,7 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
   const [selectedMealPlan, setSelectedMealPlan] = useState<MealPlan>(
     emptyPlaceholderMealPlan,
   );
+  const supabase = createClientComponentClient<Database>();
 
   const handleDeleteMealPlan = async (id: number) => {
     const { error } = await supabase

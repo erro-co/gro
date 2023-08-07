@@ -6,8 +6,6 @@ import NutritionLabelInput from "@/components/NutritionFactsInput";
 import { convertToBase100 } from "@/lib/helpers";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { FoodWithNutrientsAndServingSchema, Serving } from "@/lib/schemas";
-import { FoodCategory } from "@/lib/types";
-import { Database } from "@/lib/types/supabase";
 import { BoltIcon } from "@heroicons/react/20/solid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";

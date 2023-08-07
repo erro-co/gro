@@ -1,10 +1,9 @@
 "use client";
-import { FC, useEffect, useState } from "react";
-import MealPlanListTable from "../common/MealPlanListTable";
-import { MealPlan } from "@/lib/types";
-import LoadingIcon from "../../../icons/LoadingIcon";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
-import { Database } from "@/lib/types/supabase";
+import { FC, useEffect, useState } from "react";
+import LoadingIcon from "../../../icons/LoadingIcon";
+import MealPlanListTable from "../common/MealPlanListTable";
+
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const ClientViewMealPlanPage: FC = () => {

@@ -2,8 +2,7 @@ import FoodNutrientsPieChart from "@/components/Charts/FoodNutrientsPieChart";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
 import { Meal, Nutrition, Serving } from "@/lib/schemas";
-import { supabase } from "@/lib/supabase";
-import { Food } from "@/lib/types";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import AddFoodServingInput from "../Inputs/AddFoodServingInput";
@@ -47,6 +46,8 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
     name: `meals.${selectedMealIndex}.foods`,
     control,
   });
+
+  const supabase = createClientComponentClient<Database>();
 
   const getSelectedFoodMacros = async () => {
     setLoaded(false);

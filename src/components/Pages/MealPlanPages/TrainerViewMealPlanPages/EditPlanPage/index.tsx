@@ -2,9 +2,8 @@
 import Loading from "@/components/Loading";
 import AddNewMealPlan from "@/components/Pages/MealPlanPages/TrainerViewMealPlanPages/CreatePlanPage";
 import { newMealPlanSchema } from "@/lib/schemas";
-import { supabase } from "@/lib/supabase";
-import { MealPlan } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { usePathname } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -57,6 +56,7 @@ const EditPlanPage: FC = () => {
   const pathId = usePathname().split("/")[4];
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any[]>([]);
+  const supabase = createClientComponentClient<Database>();
 
   const fetchMealPlan = async () => {
     const { data: meal_plan, error } = await supabase

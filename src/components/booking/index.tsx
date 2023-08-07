@@ -1,6 +1,6 @@
 "use client";
-import React, { FC, useEffect } from "react";
 import axios from "axios";
+import { FC, useEffect } from "react";
 
 const Booking: FC = () => {
   const getBooking = async () => {

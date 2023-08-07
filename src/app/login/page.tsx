@@ -1,8 +1,8 @@
 "use client";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import GroLogo from "@/components/icons/Logo";
+import { Input } from "@/components/ui/input";
 import { supabaseValueExists } from "@/lib/helpers";
-import { Database } from "@/lib/types/supabase";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
@@ -33,6 +33,9 @@ type RoleType = {
 };
 
 export default function Login() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState<LoginErrors>(null);
@@ -46,7 +49,11 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const emailExists = await isEmailAlreadyExists("user", "email", email);
+      const emailExists = await isEmailAlreadyExists(
+        "profiles",
+        "email",
+        email,
+      );
 
       if (emailExists) {
         setLoginError("Account already exists");
@@ -58,13 +65,16 @@ export default function Login() {
         password,
         options: {
           emailRedirectTo: `${location.origin}/auth/callback`,
+          data: {
+            first_name: firstName,
+            last_name: lastName,
+            phone: phone,
+            status: "active",
+            type: "client",
+          },
         },
       });
-
-      if (error) {
-        setLoginError("Failed to sign up, please try again.");
-        return;
-      }
+      console.log(data, error);
 
       setView("check-email");
     } catch (error) {
@@ -81,7 +91,7 @@ export default function Login() {
     value: string,
   ) => {
     // Implementation for checking if the email exists in the database
-    return await supabaseValueExists(table, column, value);
+    return await supabaseValueExists(table, column, value, supabase);
   };
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -152,7 +162,7 @@ export default function Login() {
   return (
     <div
       className={clsx(
-        view === "sign-in" ? "bg-gray-100" : "bg-indigo-200",
+        "bg-gray-100",
         "flex min-h-full flex-1 flex-col justify-center sm:px-6 lg:px-8 h-screen",
       )}
     >
@@ -165,7 +175,7 @@ export default function Login() {
           {view === "sign-up" ? <p>Create your account!</p> : null}
         </h2>
       </div>
-      <div className="mt-10 max-w-[480px] md:min-w-[480px] sm:mx-auto px-10 py-8 bg-white shadow md:rounded-lg">
+      <div className="mt-4 max-w-[480px] md:min-w-[480px] sm:mx-auto px-10 py-8 bg-white shadow md:rounded-lg">
         <div>
           {loading ? (
             <div className="w-20 mx-auto">
@@ -185,25 +195,72 @@ export default function Login() {
                   </div>
                 </div>
               ) : null}
-              <div>
+
+              {view === "sign-up" ? (
+                <>
+                  <div className="pt-4">
+                    <label
+                      htmlFor="first_name"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      First Name
+                    </label>
+                    <Input
+                      type="text"
+                      name="first_name"
+                      onChange={(e) => setFirstName(e.target.value)}
+                      value={firstName}
+                      required
+                    />
+                  </div>
+                  <div className="pt-4">
+                    <label
+                      htmlFor="last_name"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Last Name
+                    </label>
+                    <Input
+                      type="text"
+                      name="last_name"
+                      onChange={(e) => setLastName(e.target.value)}
+                      value={lastName}
+                      required
+                    />
+                  </div>
+                  <div className="pt-4">
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Phone
+                    </label>
+                    <Input
+                      type="phone"
+                      name="phone"
+                      onChange={(e) => setPhone(e.target.value)}
+                      value={phone}
+                    />
+                  </div>
+                </>
+              ) : null}
+
+              <div className="pt-4">
                 <label
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Email address
+                  Email
                 </label>
-                <div className="mt-2">
-                  <input
-                    name="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                    placeholder="you@example.com"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                  />
-                </div>
+                <Input
+                  name="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  placeholder="you@example.com"
+                  type="email"
+                  autoComplete="email"
+                  required
+                />
               </div>
               <div className="pt-4">
                 <label
@@ -212,19 +269,18 @@ export default function Login() {
                 >
                   Password
                 </label>
-                <div className="mt-2">
-                  <input
-                    type="password"
-                    name="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    placeholder="••••••••"
-                    autoComplete="password"
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                  />
-                </div>
+
+                <Input
+                  type="password"
+                  name="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  placeholder="••••••••"
+                  autoComplete="password"
+                  required
+                />
               </div>
+
               {view === "sign-in" && (
                 <>
                   <button className="bg-gro-indigo rounded px-4 py-2 text-white mb-6 w-full mt-4">

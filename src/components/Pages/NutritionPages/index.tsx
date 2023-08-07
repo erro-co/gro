@@ -1,7 +1,7 @@
 "use client";
 import { redirect } from "next/navigation";
-import Table from "./TrainerViewNutritionPages/table";
 import { FC, useEffect } from "react";
+import Table from "./TrainerViewNutritionPages/table";
 
 const NutritionPage: FC = () => {
   useEffect(() => {

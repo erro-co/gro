@@ -12,8 +12,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { capitalizeFirstLetter } from "@/lib/helpers";
-import { User } from "@/lib/types";
-import { Database } from "@/lib/types/supabase";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";

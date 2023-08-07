@@ -3,7 +3,6 @@ import Loading from "@/components/Loading";
 import { MealIndexProvider } from "@/lib/context/SelectedMealIndexContext";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { Meal, newMealPlanSchema } from "@/lib/schemas";
-import { Database } from "@/lib/types/supabase";
 import {
   CheckIcon,
   PencilIcon,

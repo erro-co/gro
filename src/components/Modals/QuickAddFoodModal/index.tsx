@@ -1,10 +1,10 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { FC, Fragment, useState } from "react";
-import { CheckIcon, PlusIcon } from "@heroicons/react/20/solid";
-import WoolworthsIcon from "@/components/icons/WoolworthsIcon";
 import LoadingIcon from "@/components/icons/LoadingIcon";
-import { useFormContext } from "react-hook-form";
+import WoolworthsIcon from "@/components/icons/WoolworthsIcon";
+import { Dialog, Transition } from "@headlessui/react";
+import { CheckIcon, PlusIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
+import { FC, Fragment, useState } from "react";
+import { useFormContext } from "react-hook-form";
 
 export interface IQuickAddFoodModal {
   isOpen: boolean;

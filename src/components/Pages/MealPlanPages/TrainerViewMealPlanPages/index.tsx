@@ -1,8 +1,6 @@
 "use client";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
 import AddButton from "@/components/SearchBarWithAddButton/AddButton";
-import { MealPlan, User } from "@/lib/types";
-import { Database } from "@/lib/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { FC, useEffect, useState } from "react";
 import LoadingIcon from "../../../icons/LoadingIcon";

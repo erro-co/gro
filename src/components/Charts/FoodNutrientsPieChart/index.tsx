@@ -1,6 +1,6 @@
 import { Nutrition } from "@/lib/schemas";
 import { FC } from "react";
-import { PieChart, Pie, Cell, Label } from "recharts";
+import { Cell, Label, Pie, PieChart } from "recharts";
 
 const COLORS = ["#F695A0", "#DC7CDE", "#A351FA"];
 

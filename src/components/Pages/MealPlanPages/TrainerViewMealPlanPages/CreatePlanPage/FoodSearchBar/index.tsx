@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { ChangeEvent, FC, Dispatch } from "react";
+import { ChangeEvent, Dispatch, FC } from "react";
 
 export interface IFoodSearchBar {
   searchTerm: string;

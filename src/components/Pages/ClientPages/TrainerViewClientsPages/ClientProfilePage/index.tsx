@@ -1,12 +1,10 @@
 "use client";
-import { FC, useEffect, useState } from "react";
-import { redirect, usePathname } from "next/navigation";
-import { UserCircleIcon } from "@heroicons/react/24/outline";
-import { User } from "@/lib/types";
-import { capitalizeFirstLetter } from "@/lib/helpers";
 import Loading from "@/components/Loading";
+import { capitalizeFirstLetter } from "@/lib/helpers";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/lib/types/supabase";
+import { redirect, usePathname } from "next/navigation";
+import { FC, useEffect, useState } from "react";
 
 const ClientProfilePage: FC = () => {
   const path = usePathname();

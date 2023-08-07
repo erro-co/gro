@@ -1,9 +1,9 @@
 "use client";
 import { capitalizeFirstLetter } from "@/lib/helpers";
-import { User } from "@/lib/types";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import { SupabaseClient } from "@supabase/supabase-js";
 import { FC } from "react";
+
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export interface ISelectClientList {
   clients: User[];

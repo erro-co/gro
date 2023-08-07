@@ -1,11 +1,11 @@
-import { CompleteFood } from "@/lib/schemas";
-import { supabase } from "@/lib/supabase";
-import { FoodCategory } from "@/lib/types";
 import { FC, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import NutritionFactsInput from "../../../../NutritionFactsInput";
 import AddServingInput from "../AddNewFood/AddServingInput";
 import ComboboxInput from "../AddNewFood/ComboBoxInput";
+
+import type { CompleteFood } from "@/lib/schemas";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export interface IEditFood {
   food: CompleteFood;
@@ -22,6 +22,8 @@ const EditFood: FC<IEditFood> = ({ food }) => {
   const [dataFetched, setDataFetched] = useState(false);
   const [selectedFoodCategory, setSelectedFoodCategory] =
     useState<FoodCategory | null>(null);
+
+  const supabase = createClientComponentClient<Database>();
 
   const fetchFoodCategories = async () => {
     setDataFetched(false);

@@ -1,6 +1,5 @@
 "use client";
 import { capitalizeFirstLetter } from "@/lib/helpers";
-import { User } from "@/lib/types";
 import clsx from "clsx";
 import Link from "next/link";
 import { FC } from "react";

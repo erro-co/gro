@@ -27,32 +27,24 @@ const ClientPage: FC = () => {
   const [trainers, setTrainers] = useState<User[] | null>(null);
   const supabase = createClientComponentClient<Database>();
 
-  const getAllClients = async () => {
-    if (trainers === null) {
-      const { data: trainers, error } = await supabase
-        .from("user")
-        .select("*")
-        .eq("user_type", 1)
-        .order("first_name", { ascending: true });
+  const handleUserTypes = (users: User[]) => {
+    const clients = users.filter((user) => user.type === "client");
+    const trainers = users.filter(
+      (user) => user.type === "trainer" || user.type === "admin",
+    );
+    setClients(clients);
+    setTrainers(trainers);
+  };
 
-      if (error) {
-        console.log("Error getting trainers:", error);
-        return;
-      }
-      console.log("trainers", trainers);
-      setTrainers(trainers as User[]);
+  const getAllUsers = async () => {
+    const { data: users, error: getAllUsers } = await supabase
+      .from("profiles")
+      .select("*");
+    if (getAllUsers) {
+      console.log(getAllUsers);
     }
-
-    const { data: clients, error } = await supabase
-      .from("user")
-      .select("*, trainer(*)")
-      .order("id", { ascending: true });
-
-    if (error) {
-      console.error(error);
-      return null;
-    } else {
-      setClients(clients as User[]);
+    if (users) {
+      handleUserTypes(users);
       setLoading(false);
     }
   };
@@ -64,7 +56,7 @@ const ClientPage: FC = () => {
     ) {
       redirect("/dashboard/plans");
     }
-    getAllClients();
+    getAllUsers();
   }, []);
 
   if (loading) {

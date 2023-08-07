@@ -1,21 +1,21 @@
 "use client";
-import React, { Fragment, useState, FC } from "react";
+import LogoutButton from "@/components/LogoutButton";
+import GroLogo from "@/components/icons/Logo";
 import { Dialog, Transition } from "@headlessui/react";
-import clsx from "clsx";
 import {
   Bars3Icon,
-  HomeIcon,
-  XMarkIcon,
-  FireIcon,
-  TableCellsIcon,
-  UsersIcon,
   CalendarIcon,
   Cog6ToothIcon,
+  FireIcon,
+  HomeIcon,
+  TableCellsIcon,
+  UsersIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
-import GroLogo from "@/components/icons/Logo";
+import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import LogoutButton from "@/components/LogoutButton";
+import React, { FC, Fragment, useState } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -54,26 +54,12 @@ const adminNavigation = [
 ];
 
 const clientNavigation = [
-  // { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
-
   {
     name: " My Plans",
     href: "/dashboard/plans",
     icon: TableCellsIcon,
     current: false,
   },
-  // {
-  //   name: "My Schedule",
-  //   href: "/dashboard/schedule",
-  //   icon: CalendarIcon,
-  //   current: false,
-  // },
-  // {
-  //   name: "Settings",
-  //   href: "/dashboard/settings",
-  //   icon: Cog6ToothIcon,
-  //   current: false,
-  // },
 ];
 
 let navigation: any[];
@@ -193,12 +179,6 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
                             className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
                           >
                             <span className="sr-only">Your profile</span>
-                            {/* <button
-                              className="p-2 bg-red-500 text-white rounded-lg ml-auto"
-                              onClick={signOut}
-                            >
-                              Sign out
-                            </button> */}
                             <LogoutButton />
                           </a>
                         </li>

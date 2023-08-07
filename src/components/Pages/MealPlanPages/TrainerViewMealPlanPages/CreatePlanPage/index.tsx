@@ -50,7 +50,9 @@ const AddNewMealPlan: FC = () => {
   const onSubmit = async (data: any) => {
     setView("loading");
 
-    const { data: trainer } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
     const { data: new_meal_plan, error: new_meal_plan_error } = await supabase
       .from("meal_plan")
@@ -58,7 +60,7 @@ const AddNewMealPlan: FC = () => {
         {
           name: data.name,
           template: false,
-          // trainer: trainer?.user?.id,
+          trainer: user?.id ?? null,
         },
       ])
       .select();

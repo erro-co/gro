@@ -11,7 +11,7 @@ export default function LogoutButton() {
   const signOut = async () => {
     await supabase.auth.signOut();
     if (typeof window !== "undefined") {
-      localStorage.removeItem("user");
+      localStorage.clear();
     }
     router.refresh();
   };

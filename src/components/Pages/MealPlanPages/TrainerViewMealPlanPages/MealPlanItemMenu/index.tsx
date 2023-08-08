@@ -11,19 +11,20 @@ import {
   UserPlusIcon,
 } from "@heroicons/react/24/outline";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-
 import { FC } from "react";
 
 export interface IMealPlanItemMenu {
   plan: MealPlan;
   setSelectedMealPlan: (plan: MealPlan) => void;
   setOpenConfirmDeleteActionModal: (show: boolean) => void;
+  setOpenAssignClientModal: (show: boolean) => void;
 }
 
 const MealPlanItemMenu: FC<IMealPlanItemMenu> = ({
   plan,
   setSelectedMealPlan,
   setOpenConfirmDeleteActionModal,
+  setOpenAssignClientModal,
 }) => {
   return (
     <DropdownMenu>
@@ -35,19 +36,17 @@ const MealPlanItemMenu: FC<IMealPlanItemMenu> = ({
           <PencilSquareIcon className="w-5 mr-2" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          {plan.client ? (
-            <>
-              <UserMinusIcon className="w-5 mr-2" />
-              Unassign
-            </>
-          ) : (
-            <>
-              <UserPlusIcon className="w-5 mr-2" />
-              Assign
-            </>
-          )}
-        </DropdownMenuItem>
+        {plan.client ? (
+          <DropdownMenuItem>
+            <UserMinusIcon className="w-5 mr-2" />
+            Unassign
+          </DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem onClick={() => setOpenAssignClientModal(true)}>
+            <UserPlusIcon className="w-5 mr-2" />
+            Assign
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem
           onClick={() => {
             setSelectedMealPlan(plan);

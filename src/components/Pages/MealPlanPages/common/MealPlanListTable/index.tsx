@@ -6,6 +6,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
 import Link from "next/link";
 import { FC, useState } from "react";
+import AssignPlanModal from "../../TrainerViewMealPlanPages/AssignPlanModal";
 import MealPlanItemMenu from "../../TrainerViewMealPlanPages/MealPlanItemMenu";
 
 export interface IMealPlanListTable {
@@ -24,6 +25,9 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
   const [selectedMealPlan, setSelectedMealPlan] = useState<MealPlan>(
     emptyPlaceholderMealPlan,
   );
+
+  const [openAssignClientModal, setOpenAssignClientModal] =
+    useState<boolean>(false);
   const supabase = createClientComponentClient<Database>();
 
   const handleDeleteMealPlan = async (id: number) => {
@@ -45,6 +49,11 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
         open={openConfirmDeleteActionModal}
         setOpen={setOpenConfirmDeleteActionModal}
         deleteFunction={() => handleDeleteMealPlan(selectedMealPlan.id)}
+      />
+      <AssignPlanModal
+        open={openAssignClientModal}
+        setOpen={setOpenAssignClientModal}
+        planId={selectedMealPlan.id}
       />
       <div className="mt-4 pb-8">
         <div className="ring-1 ring-gray-300 rounded-lg">
@@ -97,7 +106,7 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                   scope="col"
                   className={clsx(clientView ? "hidden" : "relative")}
                 >
-                  <span className="sr-only">Delete</span>
+                  <span className="sr-only">menu</span>
                 </th>
               </tr>
             </thead>
@@ -173,7 +182,7 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                   {clientView ? null : (
                     <td
                       className={clsx(
-                        "hidden text-sm text-gray-500 lg:table-cell",
+                        "text-sm text-gray-500 ",
                         planIdx === mealPlans.length - 1 ? "rounded-br-lg" : "",
                       )}
                     >
@@ -192,6 +201,7 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                         setOpenConfirmDeleteActionModal={
                           setOpenConfirmDeleteActionModal
                         }
+                        setOpenAssignClientModal={setOpenAssignClientModal}
                       />
                     </td>
                   )}

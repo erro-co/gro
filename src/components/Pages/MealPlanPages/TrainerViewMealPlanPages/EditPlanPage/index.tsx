@@ -1,12 +1,11 @@
 "use client";
 import Loading from "@/components/Loading";
-import AddNewMealPlan from "@/components/Pages/MealPlanPages/TrainerViewMealPlanPages/CreatePlanPage";
 import { newMealPlanSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { usePathname } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export type FormSchemaType = z.infer<typeof newMealPlanSchema>;
@@ -64,14 +63,14 @@ const EditPlanPage: FC = () => {
       .select(
         "meal_plan(*), meal_food_serving(meal(id, name, notes), quantity, serving(name, weight), food(brand, name, food_category(id, name), nutrients(*)))",
       )
-      .eq("meal_plan", pathId);
+      .eq("meal_plan", pathId)
+      .single();
 
     if (error) {
       console.error("Error getting meal plan from supabase:", error);
       return;
     }
     console.log("meal_plan", meal_plan);
-    setData(meal_plan);
     setLoading(false);
   };
 
@@ -86,9 +85,12 @@ const EditPlanPage: FC = () => {
   if (loading) return <Loading />;
 
   return (
-    <FormProvider {...methods}>
-      <AddNewMealPlan />
-    </FormProvider>
+    // <FormProvider {...methods}>
+    //   <AddNewMealPlan />
+    // </FormProvider>
+    <>
+      <p>t</p>
+    </>
   );
 };
 

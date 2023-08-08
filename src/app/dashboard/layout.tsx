@@ -86,7 +86,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
-            className="relative z-40 lg:hidden"
+            className="relative z-40 lg:hidden print:hidden"
             onClose={setSidebarOpen}
           >
             <Transition.Child
@@ -192,7 +192,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:z-40 lg:flex lg:w-72 lg:flex-col">
+        <div className="hidden lg:fixed print:hidden lg:inset-y-0 lg:z-40 lg:flex lg:w-72 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pt-6">
             <div className="w-16 mx-auto bg-gro-pink rounded-md">
@@ -242,7 +242,7 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
           </div>
         </div>
 
-        <div className="sticky top-0 z-30 flex items-center gap-x-6 bg-gro-pink px-4 py-4 shadow-sm sm:px-6 lg:hidden">
+        <div className="sticky print:hidden top-0 z-30 flex items-center gap-x-6 bg-gro-pink px-4 py-4 shadow-sm sm:px-6 lg:hidden">
           <button
             type="button"
             className="-m-2.5 p-2.5 text-gray-700 lg:hidden"

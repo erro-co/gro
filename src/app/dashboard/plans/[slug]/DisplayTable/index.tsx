@@ -1,8 +1,8 @@
-import { FC } from "react";
-import { MealFoodServing } from "../page";
+import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/24/outline";
-import useMediaQuery from "@/lib/hooks/useMediaQuery";
+import { FC } from "react";
+import { MealFoodServing } from "../page";
 
 interface IDisplayTable {
   foods: MealFoodServing[];
@@ -62,7 +62,7 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
                 scope="col"
                 className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
               >
-                Calories {isMobile ? null : "(kca)"}
+                Calories {isMobile ? null : "(kcal)"}
               </th>
               <th
                 scope="col"
@@ -134,7 +134,7 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
                 />
               </Disclosure.Button>
               <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                {foods[0].meal.notes}
               </Disclosure.Panel>
             </>
           )}

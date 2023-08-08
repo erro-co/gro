@@ -158,7 +158,7 @@ const AddMealTable: FC<IAddMealTable> = ({
                     <td colSpan={7} className="text-center">
                       <DropdownMenu>
                         <DropdownMenuTrigger>
-                          <div className="p-2 mt-1 rounded-lg shadow-sm text-white bg-gro-purple">
+                          <div className="p-2 mt-1 rounded-lg shadow-sm text-white bg-gro-indigo">
                             <PlusCircleIcon
                               className="w-5"
                               aria-hidden="true"

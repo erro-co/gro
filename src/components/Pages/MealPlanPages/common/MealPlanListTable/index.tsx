@@ -1,17 +1,19 @@
 import ConfirmDeleteActionModal from "@/components/Modals/ConfirmDeleteActionModal";
 import { emptyPlaceholderMealPlan } from "@/lib/consts";
 import { parseSupabaseDate } from "@/lib/helpers";
-import { ArrowRightCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { ArrowRightCircleIcon } from "@heroicons/react/24/outline";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
 import Link from "next/link";
 import { FC, useState } from "react";
+import MealPlanItemMenu from "../../TrainerViewMealPlanPages/MealPlanItemMenu";
 
 export interface IMealPlanListTable {
   mealPlans: MealPlan[];
   getAllMealPlans: () => void;
   clientView: boolean;
 }
+
 const MealPlanListTable: FC<IMealPlanListTable> = ({
   mealPlans,
   getAllMealPlans,
@@ -93,7 +95,7 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                 </th>
                 <th
                   scope="col"
-                  className={clsx(clientView ? "hidden" : "relative pr-2")}
+                  className={clsx(clientView ? "hidden" : "relative")}
                 >
                   <span className="sr-only">Delete</span>
                 </th>
@@ -171,11 +173,11 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                   {clientView ? null : (
                     <td
                       className={clsx(
-                        "hidden text-sm text-gray-500 lg:table-cell pr-2",
+                        "hidden text-sm text-gray-500 lg:table-cell",
                         planIdx === mealPlans.length - 1 ? "rounded-br-lg" : "",
                       )}
                     >
-                      <button
+                      {/* <button
                         onClick={(_e) => {
                           setSelectedMealPlan(plan);
                           setOpenConfirmDeleteActionModal(true);
@@ -183,7 +185,14 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                         className="text-red-500"
                       >
                         <TrashIcon className="w-4 pt-1" />
-                      </button>
+                      </button> */}
+                      <MealPlanItemMenu
+                        plan={plan}
+                        setSelectedMealPlan={setSelectedMealPlan}
+                        setOpenConfirmDeleteActionModal={
+                          setOpenConfirmDeleteActionModal
+                        }
+                      />
                     </td>
                   )}
                 </tr>

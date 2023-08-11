@@ -4,7 +4,6 @@ import { supabase } from "@/lib/supabase";
 import { usePathname } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import DisplayTable from "./DisplayTable";
-import MacroSummaryCard from "./MacroSummaryCard";
 
 export interface MealFoodServing {
   meal: {
@@ -59,6 +58,7 @@ function sortMealFoodServing(mealFoodServings: MealFoodServing[]) {
 
 const DisplayMealPage: FC = () => {
   const [mealPlan, setMealPlan] = useState<MealFoodServing[]>();
+  const [mealPlanName, setMealPlanName] = useState<string>("");
   const [meals, setMeals] = useState<MealFoodServing[][]>();
   const [loading, setLoading] = useState(true);
 
@@ -69,7 +69,7 @@ const DisplayMealPage: FC = () => {
     const { data: meal_plan, error } = await supabase
       .from("meal_plan_food_serving_user")
       .select(
-        "meal_food_serving(meal(id, name, notes), quantity, serving(name, weight), food(brand, name, food_category(name), nutrients(*)))",
+        "meal_plan(*), meal_food_serving(meal(id, name, notes), quantity, serving(name, weight), food(brand, name, food_category(name), nutrients(*)))",
       )
       .eq("meal_plan", mealPlanId);
     if (error) {
@@ -77,6 +77,9 @@ const DisplayMealPage: FC = () => {
       return;
     }
     console.log("meal_plan", meal_plan);
+
+    // @ts-ignore
+    setMealPlanName(meal_plan[0].meal_plan.name);
 
     const formattedMeals = meal_plan.map((meal: any) => meal.meal_food_serving);
 
@@ -103,10 +106,11 @@ const DisplayMealPage: FC = () => {
 
   return (
     <div className="-mt-8">
-      {mealPlan && <MacroSummaryCard mealPlan={mealPlan} />}
+      <h2 className="text-3xl text-center font-semibold">{mealPlanName}</h2>
       {meals?.map((meal: MealFoodServing[], index: number) => (
         <DisplayTable key={index} foods={meal} />
       ))}
+      {/* {mealPlan && <MacroSummaryCard mealPlan={mealPlan} />} */}
     </div>
   );
 };

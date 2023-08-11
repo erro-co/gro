@@ -100,14 +100,12 @@ export default function Login() {
         setLoginError("Invalid Login Credentials");
         return;
       }
-      console.log("User", user);
+
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", user.id)
         .single();
-
-      console.log("Profile", profile);
 
       profile && storeUserDetails(profile);
       profile && profile.type && redirectToDashboard(profile.type);

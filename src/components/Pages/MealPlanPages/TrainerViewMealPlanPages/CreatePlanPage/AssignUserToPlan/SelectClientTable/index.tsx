@@ -22,10 +22,10 @@ const SelectClientList: FC<ISelectClientList> = ({
 }) => {
   const handleAssignUser = async (client: User) => {
     try {
-      const { data: assignedPlan, error } = await supabase
+      await supabase
         .from("meal_plan")
         .update({
-          user: client.id,
+          client: client.id,
         })
         .eq("id", planId);
     } catch (error) {
@@ -35,7 +35,7 @@ const SelectClientList: FC<ISelectClientList> = ({
     setShowModal(true);
   };
   return (
-    <div className="mt-4 mx-auto rounded-lg border border-gray-200 shadow-lg w-full p-2 lg:w-2/3">
+    <div className="mt-4 mx-auto rounded-lg border border-gray-200 shadow-lg w-full p-2">
       <ul role="list" className="divide-y divide-gray-100">
         {clients?.map((client: User, idx: number) => (
           <li
@@ -48,14 +48,6 @@ const SelectClientList: FC<ISelectClientList> = ({
                   {capitalizeFirstLetter(client.first_name)}{" "}
                   {client.last_name && capitalizeFirstLetter(client.last_name)}
                 </p>
-                {/* <p
-                  className={clsx(
-                    "text-green-700 bg-green-50 ring-green-600/20",
-                    "rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset",
-                  )}
-                >
-                  Active
-                </p> */}
               </div>
             </div>
             <div className="flex flex-none items-center gap-x-4">

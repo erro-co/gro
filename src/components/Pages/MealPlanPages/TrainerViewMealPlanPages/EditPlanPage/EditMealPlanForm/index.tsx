@@ -12,10 +12,10 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import AddFoodModal from "./AddFoodModal";
-import AddMealTable from "./AddMealTable";
-import AssignUserToPlan from "./AssignUserToPlan";
-import ConfirmationModal from "./ConfirmationModal";
+import AddFoodModal from "../../CreatePlanPage/AddFoodModal";
+import AddMealTable from "../../CreatePlanPage/AddMealTable";
+import AssignUserToPlan from "../../CreatePlanPage/AssignUserToPlan";
+import ConfirmationModal from "../../CreatePlanPage/ConfirmationModal";
 
 type views = "createPlan" | "loading" | "assignPlan" | "success";
 
@@ -37,7 +37,6 @@ const AddNewMealPlan: FC = () => {
   });
 
   const validateForm = (data: any) => {
-    console.log("Data:", data);
     try {
       newMealPlanSchema.parse(data);
       console.log("Valid form");
@@ -155,7 +154,7 @@ const AddNewMealPlan: FC = () => {
         <>
           <ConfirmationModal isOpen={showLoading} setIsOpen={setShowLoading} />
           <form
-            className="flex flex-col h-full -mt-6"
+            className="flex flex-col h-full"
             onSubmit={handleSubmit(onSubmit)}
           >
             <MealIndexProvider>

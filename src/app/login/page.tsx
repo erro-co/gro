@@ -123,8 +123,7 @@ export default function Login() {
   };
 
   const redirectToDashboard = (userRole: string | null) => {
-    const targetPath =
-      userRole === "admin" ? "/dashboard/" : "/dashboard/plans";
+    const targetPath = userRole === "admin" ? "/app/" : "/app/plans";
     router.push(targetPath);
     router.refresh();
   };

@@ -1,7 +1,6 @@
 "use client";
 import Loading from "@/components/Loading";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
-import AddButton from "@/components/SearchBarWithAddButton/AddButton";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 import { FC, useEffect, useState } from "react";
@@ -54,7 +53,7 @@ const ClientPage: FC = () => {
       typeof window !== "undefined" &&
       localStorage.getItem("role") === "client"
     ) {
-      redirect("/dashboard/plans");
+      redirect("/app/plans");
     }
     getAllUsers();
   }, []);
@@ -76,7 +75,7 @@ const ClientPage: FC = () => {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           placeholder="Search plans"
-          button={<AddButton link="/dashboard/clients/add" text="New Client" />}
+          // button={<AddButton link="/app/clients/add" text="New Client" />}
         />
       </div>
       <ClientsList clients={clients} />

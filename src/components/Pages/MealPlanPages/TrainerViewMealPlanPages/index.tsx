@@ -104,7 +104,7 @@ const TrainerViewMealPlanPage: FC = () => {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           placeholder="Search plans"
-          button={<AddButton link="/dashboard/plans/add" text="New Plan" />}
+          button={<AddButton link="/app/plans/add" text="New Plan" />}
         />
       </div>
       <MealPlanListTable

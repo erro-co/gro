@@ -43,7 +43,7 @@ const CountdownTimer: FC = () => {
         <div className="w-40 mx-auto bg-gro-pink rounded-lg mb-12">
           <GroLogo />
         </div>
-        <div className="flex space-x-4 ">
+        {/* <div className="flex space-x-4 ">
           <div className="md:text-6xl text-3xl">
             {days} <span className="md:text-4xl text-xl">Days</span>
           </div>
@@ -56,7 +56,7 @@ const CountdownTimer: FC = () => {
           <div className="md:text-6xl text-3xl">
             {seconds} <span className="md:text-4xl text-xl">Seconds</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -145,7 +145,7 @@ const AddNewMealPlan: FC = () => {
       typeof window !== "undefined" &&
       localStorage.getItem("role") === "client"
     ) {
-      redirect("/dashboard/plans");
+      redirect("/app/plans");
     }
   }, []);
 

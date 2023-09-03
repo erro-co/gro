@@ -22,7 +22,7 @@ export default async function Index() {
           <div>
             {user ? (
               <div className="flex items-center gap-4">
-                <Link href={"/dashboard"} className="border p-2 rounded">
+                <Link href={"/app"} className="border p-2 rounded">
                   Dashboard
                 </Link>
                 <LogoutButton />

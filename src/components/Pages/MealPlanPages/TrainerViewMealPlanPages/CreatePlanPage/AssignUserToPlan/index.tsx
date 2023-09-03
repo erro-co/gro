@@ -58,7 +58,7 @@ const AssignUserToPlan: FC<IAssignUserToPlan> = ({ planId }) => {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           placeholder="Search for a client..."
-          button={<Addbutton text="Add Client" link="/dashboard/client/add" />}
+          button={<Addbutton text="Add Client" link="/app/client/add" />}
         />
       </div>
       <SelectClientList
@@ -69,7 +69,7 @@ const AssignUserToPlan: FC<IAssignUserToPlan> = ({ planId }) => {
         supabase={supabase}
       />
       <Link
-        href={"/dashboard/plans"}
+        href={"/app/plans"}
         className="flex mx-auto w-full lg:w-2/3 p-2 bg-gray-400 font-bold text-white rounded-lg mt-4"
       >
         <p className="mx-auto">Skip</p>

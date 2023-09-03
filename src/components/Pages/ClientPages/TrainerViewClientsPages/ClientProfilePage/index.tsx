@@ -57,7 +57,7 @@ const ViewClientPage: FC = () => {
       typeof window !== "undefined" &&
       localStorage.getItem("role") === "client"
     ) {
-      redirect("/dashboard/plans");
+      redirect("/app/plans");
     }
     fetchUsers();
   }, []);
@@ -162,7 +162,7 @@ const ViewClientPage: FC = () => {
       </div>
       <div className="mt-6 flex items-center justify-end gap-x-6 pb-12">
         <Link
-          href={"/dashboard/clients"}
+          href={"/app/clients"}
           className="text-sm font-semibold leading-6 text-gray-900"
         >
           Cancel

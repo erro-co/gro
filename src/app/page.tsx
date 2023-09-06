@@ -17,6 +17,8 @@ export default async function Index() {
     <div className="w-full flex flex-col items-center">
       <nav className="w-full flex justify-center h-16">
         <div className="w-full max-w-5xl flex justify-between items-center p-3 text-sm text-foreground">
+          {/* Keep this Div for spacing */}
+          <div />
           {user ? (
             <div className="flex items-center gap-4">
               <Link href={"/app"} className="border p-2 rounded">

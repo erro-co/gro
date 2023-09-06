@@ -51,7 +51,7 @@ const SuccessfulAddNewClientModal: FC<ISuccessfulAddNewClientModal> = ({
                       as="h3"
                       className="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Client added successfully!
+                      Client Updated successfully!
                     </Dialog.Title>
                   </div>
                 </div>

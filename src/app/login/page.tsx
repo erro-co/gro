@@ -143,6 +143,9 @@ export default function Login() {
           <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Please follow the instructions sent to your email address.
           </h2>
+          <h3 className="text-center text-xl font-bold leading-9 tracking-tight text-gray-900">
+            (Check your spam or junk folder if you don&apos;t see the email)
+          </h3>
         </div>
       </div>
     );

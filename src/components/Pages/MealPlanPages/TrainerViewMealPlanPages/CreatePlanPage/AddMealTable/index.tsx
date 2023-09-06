@@ -71,7 +71,7 @@ const AddMealTable: FC<IAddMealTable> = ({
                   <tr className="">
                     <th
                       scope="col"
-                      className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
+                      className="px-3 lg:w-[500px] py-2 text-left text-sm font-semibold text-gray-900"
                     >
                       Food
                     </th>
@@ -126,7 +126,7 @@ const AddMealTable: FC<IAddMealTable> = ({
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {foodList?.map((f: MealPlanFoodItem, idx: number) => (
                     <tr key={idx} className="font-light">
-                      <td className="whitespace-nowrap py-1 px-3 text-sm text-gray-900">
+                      <td className="lg:w-[500px] whitespace-nowrap py-1 px-3 text-sm text-gray-900">
                         <p>{f.food.name}</p>
                         {isMobile ? (
                           <p className="text-xs font-normal text-gray-400">

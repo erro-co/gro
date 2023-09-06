@@ -11,6 +11,7 @@ import {
   TableCellsIcon,
   UsersIcon,
   XMarkIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
@@ -20,34 +21,40 @@ import React, { FC, Fragment, useState } from "react";
 export const dynamic = "force-dynamic";
 
 const adminNavigation = [
-  { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
+  { name: "Dashboard", href: "/app", icon: HomeIcon, current: true },
   {
     name: "Nutrition",
-    href: "/dashboard/nutrition",
+    href: "/app/nutrition",
     icon: FireIcon,
     current: false,
   },
   {
     name: "Plans",
-    href: "/dashboard/plans",
+    href: "/app/plans",
     icon: TableCellsIcon,
     current: false,
   },
   {
     name: "Clients",
-    href: "/dashboard/clients",
+    href: "/app/clients",
     icon: UsersIcon,
     current: false,
   },
   {
+    name: "Trainers",
+    href: "/app/trainers",
+    icon: UserIcon,
+    current: false,
+  },
+  {
     name: "Schedule",
-    href: "/dashboard/schedule",
+    href: "/app/schedule",
     icon: CalendarIcon,
     current: false,
   },
   {
     name: "Settings",
-    href: "/dashboard/settings",
+    href: "/app/settings",
     icon: Cog6ToothIcon,
     current: false,
   },
@@ -56,7 +63,7 @@ const adminNavigation = [
 const clientNavigation = [
   {
     name: " My Plans",
-    href: "/dashboard/plans",
+    href: "/app/plans",
     icon: TableCellsIcon,
     current: false,
   },

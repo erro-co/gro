@@ -58,7 +58,7 @@ const ClientsList: FC<IClientList> = ({ clients }) => {
           </div>
           <div className="flex flex-none items-center gap-x-4">
             <Link
-              href={`/dashboard/clients/${client.id}`}
+              href={`/app/clients/${client.id}`}
               className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
             >
               View profile<span className="sr-only">, {client.first_name}</span>

@@ -94,7 +94,7 @@ const AssignPlanModal: FC<IAddFoodModal> = ({ open, setOpen, planId }) => {
                   planId={planId}
                 />
                 <Link
-                  href={"/dashboard/plans"}
+                  href={"/app/plans"}
                   className="flex mx-auto w-full lg:w-2/3 p-2 bg-gray-400 font-bold text-white rounded-lg mt-4"
                 >
                   <p className="mx-auto">Skip</p>

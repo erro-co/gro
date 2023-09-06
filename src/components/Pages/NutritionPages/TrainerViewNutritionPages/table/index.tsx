@@ -135,7 +135,7 @@ const Table: FC = () => {
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         placeholder="Search for food..."
-        button={<AddButton link="/dashboard/nutrition/add" text="Add Food" />}
+        button={<AddButton link="/app/nutrition/add" text="Add Food" />}
       />
 
       <div className="mt-2">

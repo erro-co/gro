@@ -4,8 +4,7 @@ import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-import { SelectTrainer } from "../MealPlanPages/TrainerViewMealPlanPages/SelectTrainer";
-import ClientsList from "./TrainerViewClientsPages/ClientsList";
+import ClientsList from "../ClientPages/TrainerViewClientsPages/ClientsList";
 
 export enum ClientStatus {
   Complete = "Active",
@@ -18,12 +17,12 @@ const statuses: Record<ClientStatus, string> = {
   [ClientStatus.Archived]: "text-yellow-800 bg-yellow-50 ring-yellow-600/20",
 };
 
-const ClientPage: FC = () => {
+const TrainerPage: FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [clients, setClients] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTrainer, setSelectedTrainer] = useState<User | "All">("All");
-  const [trainers, setTrainers] = useState<User[] | null>(null);
+  const [trainers, setTrainers] = useState<User[]>([]);
   const supabase = createClientComponentClient<Database>();
 
   const handleUserTypes = (users: User[]) => {
@@ -64,13 +63,8 @@ const ClientPage: FC = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-12">My Clients</h1>
+      <h1 className="text-3xl font-bold mb-12">Trainers</h1>
       <div className="w-full flex flex-col-reverse lg:flex-row mb-8">
-        <SelectTrainer
-          selectedTrainer={selectedTrainer}
-          setSelectedTrainer={setSelectedTrainer}
-          trainers={trainers}
-        />
         <SearchBarWithAddButton
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -78,9 +72,9 @@ const ClientPage: FC = () => {
           // button={<AddButton link="/app/clients/add" text="New Client" />}
         />
       </div>
-      <ClientsList clients={clients} />
+      <ClientsList clients={trainers} />
     </div>
   );
 };
 
-export default ClientPage;
+export default TrainerPage;

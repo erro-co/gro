@@ -8,6 +8,7 @@ import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { FoodWithNutrientsAndServingSchema, Serving } from "@/lib/schemas";
 import { BoltIcon } from "@heroicons/react/20/solid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
@@ -108,7 +109,7 @@ const AddNewFoodForm: FC = () => {
       typeof window !== "undefined" &&
       localStorage.getItem("role") === "client"
     ) {
-      redirect("/dashboard/plans");
+      redirect("/app/plans");
     }
     fetchFoodCategories();
   }, []);
@@ -226,12 +227,12 @@ const AddNewFoodForm: FC = () => {
         </div>
       </div>
       <div className="mt-6 flex items-center justify-end gap-x-6 pb-12">
-        <button
-          type="button"
+        <Link
+          href={"/app/nutrition"}
           className="text-sm font-semibold leading-6 text-gray-900"
         >
           Cancel
-        </button>
+        </Link>
         <button
           type="submit"
           className="disabled:bg-gray-500 inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

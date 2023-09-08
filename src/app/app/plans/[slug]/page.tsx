@@ -57,7 +57,6 @@ function sortMealFoodServing(mealFoodServings: MealFoodServing[]) {
 }
 
 const DisplayMealPage: FC = () => {
-  const [mealPlan, setMealPlan] = useState<MealFoodServing[]>();
   const [mealPlanName, setMealPlanName] = useState<string>("");
   const [meals, setMeals] = useState<MealFoodServing[][]>();
   const [loading, setLoading] = useState(true);
@@ -85,7 +84,6 @@ const DisplayMealPage: FC = () => {
 
     const grouped = sortMealFoodServing(formattedMeals as MealFoodServing[]);
     console.log("grouped", grouped);
-    setMealPlan(formattedMeals);
     setMeals(grouped);
     setLoading(false);
   };
@@ -105,8 +103,10 @@ const DisplayMealPage: FC = () => {
   }
 
   return (
-    <div className="-mt-8">
-      <h2 className="text-3xl text-center font-semibold">{mealPlanName}</h2>
+    <div className="-mt-8 lg:mt-0">
+      <h2 className="text-3xl text-center font-semibold mb-6 lg:mb-12">
+        {mealPlanName}
+      </h2>
       {meals?.map((meal: MealFoodServing[], index: number) => (
         <DisplayTable key={index} foods={meal} />
       ))}

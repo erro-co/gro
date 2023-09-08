@@ -25,7 +25,7 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
   const isMobile = useMediaQuery("(max-width: 640px)");
   return (
     <div className="pb-12">
-      <h2 className="font-semibold mb-2 text-xl">
+      <h2 className="font-semibold mb-2 lg:text-xl">
         {capitalizeFirstLetter(foods[0].meal.name)}
       </h2>
       <div className="border border-gro-pink rounded-lg">

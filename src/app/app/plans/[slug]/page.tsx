@@ -104,7 +104,7 @@ const DisplayMealPage: FC = () => {
 
   return (
     <div className="-mt-8 lg:mt-0">
-      <h2 className="text-3xl text-center font-semibold lg:mb-12">
+      <h2 className="text-3xl text-center font-semibold mb-6 lg:mb-12">
         {mealPlanName}
       </h2>
       {meals?.map((meal: MealFoodServing[], index: number) => (

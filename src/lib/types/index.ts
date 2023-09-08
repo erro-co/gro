@@ -1,156 +1,48 @@
-export type FoodItem = Database["public"]["Tables"]["food"]["Row"];
+import type { Database as DB } from "./database.types";
 
-export type MealPlanFoodITem =
-  Database["public"]["Tables"]["meal_food_item"]["Row"];
+declare global {
+  type Database = DB;
+  export type Food = DB["public"]["Tables"]["food"]["Row"];
+  export type FoodUpdate = DB["public"]["Tables"]["food"]["Update"];
+  export type FoodInsert = DB["public"]["Tables"]["food"]["Insert"];
 
-export type Meal = Database["public"]["Tables"]["meal"]["Row"];
+  export type FoodCategory = DB["public"]["Tables"]["food_category"]["Row"];
+  export type FoodCategoryUpdate =
+    DB["public"]["Tables"]["food_category"]["Update"];
+  export type FoodCategoryInsert =
+    DB["public"]["Tables"]["food_category"]["Insert"];
 
-export type MealPlan = Database["public"]["Tables"]["meal_plan"]["Row"];
+  export type Meal = DB["public"]["Tables"]["meal"]["Row"];
+  export type MealUpdate = DB["public"]["Tables"]["meal"]["Update"];
+  export type MealInsert = DB["public"]["Tables"]["meal"]["Insert"];
 
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json }
-  | Json[];
+  export type MealFoodServing =
+    DB["public"]["Tables"]["meal_food_serving"]["Row"];
+  export type MealFoodServingUpdate =
+    DB["public"]["Tables"]["meal_food_serving"]["Update"];
+  export type MealFoodServingInsert =
+    DB["public"]["Tables"]["meal_food_serving"]["Insert"];
 
-export interface Database {
-  public: {
-    Tables: {
-      food: {
-        Row: {
-          brand: string | null;
-          calories: number;
-          carbs: number;
-          category: number | null;
-          created_at: string | null;
-          fats: number;
-          id: number;
-          name: string;
-          protein: number;
-        };
-        Insert: {
-          brand?: string | null;
-          calories: number;
-          carbs: number;
-          category?: number | null;
-          created_at?: string | null;
-          fats: number;
-          id?: number;
-          name: string;
-          protein: number;
-        };
-        Update: {
-          brand?: string | null;
-          calories?: number;
-          carbs?: number;
-          category?: number | null;
-          created_at?: string | null;
-          fats?: number;
-          id?: number;
-          name?: string;
-          protein?: number;
-        };
-      };
-      meal: {
-        Row: {
-          created_at: string | null;
-          description: string | null;
-          id: number;
-          name: string;
-        };
-        Insert: {
-          created_at?: string | null;
-          description?: string | null;
-          id?: number;
-          name: string;
-        };
-        Update: {
-          created_at?: string | null;
-          description?: string | null;
-          id?: number;
-          name?: string;
-        };
-      };
-      meal_food_item: {
-        Row: {
-          created_at: string | null;
-          food_id: number;
-          id: number;
-          meal_id: number;
-        };
-        Insert: {
-          created_at?: string | null;
-          food_id: number;
-          id?: number;
-          meal_id: number;
-        };
-        Update: {
-          created_at?: string | null;
-          food_id?: number;
-          id?: number;
-          meal_id?: number;
-        };
-      };
-      meal_plan: {
-        Row: {
-          client_id: number | null;
-          created_at: string | null;
-          description: string | null;
-          id: number;
-          name: string;
-          trainer_id: number | null;
-        };
-        Insert: {
-          client_id?: number | null;
-          created_at?: string | null;
-          description?: string | null;
-          id?: number;
-          name: string;
-          trainer_id?: number | null;
-        };
-        Update: {
-          client_id?: number | null;
-          created_at?: string | null;
-          description?: string | null;
-          id?: number;
-          name?: string;
-          trainer_id?: number | null;
-        };
-      };
-      meal_plan_meal: {
-        Row: {
-          created_at: string | null;
-          id: number;
-          meal_id: number;
-          meal_plan_id: number;
-        };
-        Insert: {
-          created_at?: string | null;
-          id?: number;
-          meal_id: number;
-          meal_plan_id: number;
-        };
-        Update: {
-          created_at?: string | null;
-          id?: number;
-          meal_id?: number;
-          meal_plan_id?: number;
-        };
-      };
-    };
-    Views: {
-      [_ in never]: never;
-    };
-    Functions: {
-      [_ in never]: never;
-    };
-    Enums: {
-      [_ in never]: never;
-    };
-    CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
+  export type MealPlan = DB["public"]["Tables"]["meal_plan"]["Row"];
+  export type MealPlanUpdate = DB["public"]["Tables"]["meal_plan"]["Update"];
+  export type MealPlanInsert = DB["public"]["Tables"]["meal_plan"]["Insert"];
+
+  export type MealPlanFoodServingUser =
+    DB["public"]["Tables"]["meal_plan_food_serving_user"]["Row"];
+  export type MealPlanFoodServingUserUpdate =
+    DB["public"]["Tables"]["meal_plan_food_serving_user"]["Update"];
+  export type MealPlanFoodServingUserInsert =
+    DB["public"]["Tables"]["meal_plan_food_serving_user"]["Insert"];
+
+  export type Nutrients = DB["public"]["Tables"]["nutrients"]["Row"];
+  export type NutrientsUpdate = DB["public"]["Tables"]["nutrients"]["Update"];
+  export type NutrientsInsert = DB["public"]["Tables"]["nutrients"]["Insert"];
+
+  export type Serving = DB["public"]["Tables"]["serving"]["Row"];
+  export type ServingUpdate = DB["public"]["Tables"]["serving"]["Update"];
+  export type ServingInsert = DB["public"]["Tables"]["serving"]["Insert"];
+
+  export type User = DB["public"]["Tables"]["profiles"]["Row"];
+  export type UserUpdate = DB["public"]["Tables"]["profiles"]["Update"];
+  export type UserInsert = DB["public"]["Tables"]["profiles"]["Insert"];
 }

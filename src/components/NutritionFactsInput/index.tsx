@@ -1,6 +1,6 @@
+import clsx from "clsx";
 import { FC } from "react";
 import { useFormContext } from "react-hook-form";
-import clsx from "clsx";
 
 const NutritionFactsInput: FC = () => {
   const { register, watch } = useFormContext();
@@ -9,7 +9,7 @@ const NutritionFactsInput: FC = () => {
   const servingName = watch("servings.0.name");
 
   return (
-    <div className="p-1 border-2 border-black font-sans w-72">
+    <div className="p-4 border w-full sm:max-w-xs rounded-lg shadow-sm">
       <div className="text-4xl font-extrabold leading-none">
         Nutrition Facts
       </div>
@@ -188,7 +188,7 @@ const NutritionFactsInput: FC = () => {
           </div>
         </div>
       </div>
-      <div className="border-t-8 border-black pt-1 text-sm">
+      {/* <div className="border-t-8 border-black pt-1 text-sm">
         <div className="flex justify-between">
           <div>
             Vitamin D{" "}
@@ -245,7 +245,7 @@ const NutritionFactsInput: FC = () => {
           </div>
         </div>
         <div className="border-t-4 border-black flex leading-none text-xs pt-2 pb-1"></div>
-      </div>
+      </div> */}
 
       {/* <div className="flex w-full">
         <div className="flex mx-auto space-x-2">

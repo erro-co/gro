@@ -1,9 +1,8 @@
-import { FC, Fragment } from "react";
+import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
-import { Meal } from "@/lib/schemas";
-import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
+import { FC, Fragment } from "react";
 
 export interface ISelectMealInput {
   meals: Meal[];

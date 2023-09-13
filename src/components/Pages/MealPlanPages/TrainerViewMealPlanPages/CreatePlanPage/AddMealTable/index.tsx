@@ -1,7 +1,6 @@
 "use client";
 import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { MealPlanFoodItem } from "@/lib/schemas";
 import { PencilIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
@@ -124,7 +123,7 @@ const AddMealTable: FC<IAddMealTable> = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {foodList?.map((f: MealPlanFoodItem, idx: number) => (
+                  {foodList?.map((f: any, idx: number) => (
                     <tr key={idx} className="font-light">
                       <td className="lg:w-[500px] whitespace-nowrap py-1 px-3 text-sm text-gray-900">
                         <p>{f.food.name}</p>
@@ -146,16 +145,28 @@ const AddMealTable: FC<IAddMealTable> = ({
                       {isMobile ? null : (
                         <>
                           <td className="whitespace-nowrap py-1 text-sm text-gray-500">
-                            {f.nutrients.protein * f.serving_quantity}
+                            {Number(
+                              (f.food.protein * f.serving_quantity) /
+                                f.serving.weight,
+                            )}
                           </td>
                           <td className="whitespace-nowrap py-1 text-sm text-gray-500">
-                            {f.nutrients.total_fat * f.serving_quantity}
+                            {Number(
+                              (f.food.total_fat * f.serving_quantity) /
+                                f.serving.weight,
+                            )}
                           </td>
                           <td className="whitespace-nowrap py-1 text-sm text-gray-500">
-                            {f.nutrients.total_carbs * f.serving_quantity}
+                            {Number(
+                              (f.food.total_carbohydrate * f.serving_quantity) /
+                                f.serving.weight,
+                            )}
                           </td>
                           <td className="whitespace-nowrap py-1 text-sm text-gray-500">
-                            {f.nutrients.calories * f.serving_quantity}
+                            {Number(
+                              (f.food.total_carbohydrate * f.serving_quantity) /
+                                f.serving.weight,
+                            )}
                           </td>
                           <td className="whitespace-nowrap py-1 text-sm text-gray-500">
                             {f.serving_quantity} x {f.serving.name} {"("}

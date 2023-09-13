@@ -4,11 +4,10 @@ import NutritionFactsInput from "../../../../NutritionFactsInput";
 import AddServingInput from "../AddNewFood/AddServingInput";
 import ComboboxInput from "../AddNewFood/ComboBoxInput";
 
-import type { CompleteFood } from "@/lib/schemas";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export interface IEditFood {
-  food: CompleteFood;
+  food: FoodWithServing;
 }
 
 const EditFood: FC<IEditFood> = ({ food }) => {
@@ -48,7 +47,10 @@ const EditFood: FC<IEditFood> = ({ food }) => {
     setValue("brand", food?.brand);
     setValue("food_category", food?.food_category);
     setValue("serving", food?.serving);
-    setValue("nutrients", food?.nutrients);
+    setValue("calories", food?.calories);
+    setValue("total_carbohydrate", food?.total_carbohydrate);
+    setValue("total_fat", food?.total_fat);
+    setValue("protein", food?.protein);
   }, [food]);
 
   const updatefood = async (updateFood: any) => {

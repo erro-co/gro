@@ -6,39 +6,10 @@ import { FC, useEffect, useState } from "react";
 import DisplayTable from "./DisplayTable";
 
 export interface MealFoodServing {
-  meal: {
-    id: number;
-    name: string;
-    notes: string;
-  };
+  meal: Meal;
   quantity: number;
-  serving: {
-    name: string;
-    weight: number;
-  };
-  food: {
-    brand: string;
-    name: string;
-    food_category: {
-      name: string;
-    };
-    nutrients: {
-      calories: number;
-      protein: number;
-      total_fat: number;
-      total_carbs: number;
-      fiber: number;
-      sugar: number;
-      potassium: number;
-      sodium: number;
-      cholesterol: number;
-      saturated_fat: number;
-      vitamin_d: number;
-      calcium: number;
-      iron: number;
-      trans_fat: number;
-    };
-  };
+  serving: Serving;
+  food: Food;
 }
 
 function sortMealFoodServing(mealFoodServings: MealFoodServing[]) {
@@ -68,7 +39,7 @@ const DisplayMealPage: FC = () => {
     const { data: meal_plan, error } = await supabase
       .from("meal_plan_food_serving_user")
       .select(
-        "meal_plan(*), meal_food_serving(meal(id, name, notes), quantity, serving(name, weight), food(brand, name, food_category(name), nutrients(*)))",
+        "meal_plan(*), meal_food_serving(meal(id, name, notes), quantity, serving(name, weight), food(*, food_category(name)))",
       )
       .eq("meal_plan", mealPlanId);
     if (error) {

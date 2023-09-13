@@ -12,24 +12,54 @@ export interface Database {
       food: {
         Row: {
           brand: string | null;
+          calories: number;
+          cholesterol: number;
           created_at: string | null;
+          fibre: number;
           food_category: number;
           id: number;
           name: string;
+          protein: number;
+          saturated_fat: number;
+          sodium: number;
+          sugar: number;
+          total_carbohydrate: number;
+          total_fat: number;
+          trans_fat: number;
         };
         Insert: {
           brand?: string | null;
+          calories: number;
+          cholesterol: number;
           created_at?: string | null;
+          fibre: number;
           food_category: number;
           id?: number;
           name: string;
+          protein: number;
+          saturated_fat: number;
+          sodium: number;
+          sugar: number;
+          total_carbohydrate: number;
+          total_fat: number;
+          trans_fat: number;
         };
         Update: {
           brand?: string | null;
+          calories?: number;
+          cholesterol?: number;
           created_at?: string | null;
+          fibre?: number;
           food_category?: number;
           id?: number;
           name?: string;
+          protein?: number;
+          saturated_fat?: number;
+          sodium?: number;
+          sugar?: number;
+          total_carbohydrate?: number;
+          total_fat?: number;
+          trans_fat?: number;
         };
         Relationships: [
           {
@@ -207,70 +237,6 @@ export interface Database {
             foreignKeyName: "meal_plan_food_serving_user_meal_plan_fkey";
             columns: ["meal_plan"];
             referencedRelation: "meal_plan";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      nutrients: {
-        Row: {
-          calcium: number;
-          calories: number;
-          cholesterol: number;
-          created_at: string | null;
-          fiber: number;
-          food: number;
-          iron: number;
-          potassium: number;
-          protein: number;
-          saturated_fat: number;
-          sodium: number;
-          sugar: number;
-          total_carbs: number;
-          total_fat: number;
-          trans_fat: number;
-          vitamin_d: number;
-        };
-        Insert: {
-          calcium: number;
-          calories: number;
-          cholesterol: number;
-          created_at?: string | null;
-          fiber: number;
-          food?: number;
-          iron: number;
-          potassium: number;
-          protein: number;
-          saturated_fat: number;
-          sodium: number;
-          sugar: number;
-          total_carbs: number;
-          total_fat: number;
-          trans_fat: number;
-          vitamin_d: number;
-        };
-        Update: {
-          calcium?: number;
-          calories?: number;
-          cholesterol?: number;
-          created_at?: string | null;
-          fiber?: number;
-          food?: number;
-          iron?: number;
-          potassium?: number;
-          protein?: number;
-          saturated_fat?: number;
-          sodium?: number;
-          sugar?: number;
-          total_carbs?: number;
-          total_fat?: number;
-          trans_fat?: number;
-          vitamin_d?: number;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "nutrients_food_fkey";
-            columns: ["food"];
-            referencedRelation: "food";
             referencedColumns: ["id"];
           },
         ];

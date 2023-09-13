@@ -1,7 +1,7 @@
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import clsx from "clsx";
 import Link from "next/link";
 import { FC } from "react";
-import clsx from "clsx";
 
 export interface IAddbutton {
   link: string;

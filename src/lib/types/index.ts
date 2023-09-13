@@ -34,10 +34,6 @@ declare global {
   export type MealPlanFoodServingUserInsert =
     DB["public"]["Tables"]["meal_plan_food_serving_user"]["Insert"];
 
-  export type Nutrients = DB["public"]["Tables"]["nutrients"]["Row"];
-  export type NutrientsUpdate = DB["public"]["Tables"]["nutrients"]["Update"];
-  export type NutrientsInsert = DB["public"]["Tables"]["nutrients"]["Insert"];
-
   export type Serving = DB["public"]["Tables"]["serving"]["Row"];
   export type ServingUpdate = DB["public"]["Tables"]["serving"]["Update"];
   export type ServingInsert = DB["public"]["Tables"]["serving"]["Insert"];
@@ -45,4 +41,12 @@ declare global {
   export type User = DB["public"]["Tables"]["profiles"]["Row"];
   export type UserUpdate = DB["public"]["Tables"]["profiles"]["Update"];
   export type UserInsert = DB["public"]["Tables"]["profiles"]["Insert"];
+
+  // Combined Types
+
+  export type FoodWithServing = Food & { serving: Serving[] };
+  export type FoodWithServingUpdate = FoodUpdate & { serving: ServingUpdate[] };
+  export type FoodWithServingInsert = FoodInsert & { serving: ServingInsert[] };
+
+  export type CompleteFood = FoodWithServing & { food_category: FoodCategory };
 }

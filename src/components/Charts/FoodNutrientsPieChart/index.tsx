@@ -1,11 +1,10 @@
-import { Nutrition } from "@/lib/schemas";
 import { FC } from "react";
 import { Cell, Label, Pie, PieChart } from "recharts";
 
 const COLORS = ["#F695A0", "#DC7CDE", "#A351FA"];
 
 export interface IFoodNutrientsPieChart {
-  nutrients: Nutrition | null;
+  food: Food | null;
   width?: number;
   height?: number;
   innerRadius?: number;
@@ -14,28 +13,28 @@ export interface IFoodNutrientsPieChart {
 }
 
 const FoodNutrientsPieChart: FC<IFoodNutrientsPieChart> = ({
-  nutrients,
+  food,
   width,
   height,
   innerRadius,
   outerRadius,
   text,
 }) => {
-  if (!nutrients) {
+  if (!food) {
     return null;
   }
   const data = [
     {
       name: "Protein",
-      value: nutrients.protein,
+      value: food.protein,
     },
     {
       name: "Fat",
-      value: nutrients.total_fat,
+      value: food.total_fat,
     },
     {
       name: "Carbs",
-      value: nutrients.total_carbs,
+      value: food.total_carbohydrate,
     },
   ];
 

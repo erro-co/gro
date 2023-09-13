@@ -10,18 +10,19 @@ interface IDisplayTable {
   foods: MealFoodServing[];
 }
 
-function getTotalMacro(
-  foods: MealFoodServing[],
-  macro: keyof (typeof foods)[0]["food"]["nutrients"],
-): number {
-  const total = foods.reduce(
-    (total, food) => total + food.food.nutrients[macro] * food.quantity,
-    0,
-  );
-  return parseFloat(total.toFixed(1));
-}
+// function getTotalMacro(
+//   foods: MealFoodServing[],
+//   macro: keyof (typeof foods)[0]["food"],
+// ): number {
+//   const total = foods.reduce(
+//     (total, food) => total + food.food[macro] * food.quantity,
+//     0,
+//   );
+//   return parseFloat(total.toFixed(1));
+// }
 
 const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
+  console.log(foods);
   const isMobile = useMediaQuery("(max-width: 640px)");
   return (
     <div className="pb-12">
@@ -86,20 +87,20 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
                   {"g)"}
                 </td>
                 <td className="whitespace-nowrap px-3 py-1 text-gray-500 sm:table-cell">
-                  {food.food.nutrients.calories * food.quantity}
+                  {food.food.calories * food.quantity}
                 </td>
                 <td className="hidden whitespace-nowrap px-3 py-1  text-gray-500 lg:table-cell">
-                  {food.food.nutrients.protein * food.quantity}
+                  {food.food.protein * food.quantity}
                 </td>
                 <td className="hidden whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
-                  {food.food.nutrients.total_fat * food.quantity}
+                  {food.food.total_fat * food.quantity}
                 </td>
                 <td className="hidden whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
-                  {food.food.nutrients.total_carbs * food.quantity}
+                  {food.food.total_carbohydrate * food.quantity}
                 </td>
               </tr>
             ))}
-            <tr className="text-xs lg:text-sm rounded-b-lg">
+            {/* <tr className="text-xs lg:text-sm rounded-b-lg">
               <td
                 className="whitespace-nowrap pl-2 py-2 pr-3 font-bold text-gray-900 rounded-bl-lg"
                 colSpan={2}
@@ -116,9 +117,9 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
                 <p>{getTotalMacro(foods, "total_fat")}</p>
               </td>
               <td className="hidden lg:table-cell whitespace-nowrap px-3 py-2 font-bold rounded-br-lg">
-                <p>{getTotalMacro(foods, "total_carbs")}</p>
+                <p>{getTotalMacro(foods, "total_carbohydrate")}</p>
               </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>

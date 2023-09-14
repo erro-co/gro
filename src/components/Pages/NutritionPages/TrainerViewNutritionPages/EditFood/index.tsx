@@ -51,6 +51,9 @@ const EditFood: FC<IEditFood> = ({ food }) => {
     setValue("total_carbohydrate", food?.total_carbohydrate);
     setValue("total_fat", food?.total_fat);
     setValue("protein", food?.protein);
+    setValue("trans_fat", food?.trans_fat);
+    setValue("sugar", food?.sugar);
+    setValue("fibre", food?.fibre);
   }, [food]);
 
   const updatefood = async (updateFood: any) => {
@@ -60,6 +63,13 @@ const EditFood: FC<IEditFood> = ({ food }) => {
         name: updateFood.name,
         brand: updateFood.brand,
         food_category: updateFood.food_category,
+        protein: updateFood.protein,
+        total_carbohydrate: updateFood.total_carbohydrate,
+        total_fat: updateFood.total_fat,
+        trans_fat: updateFood.trans_fat,
+        sodium: updateFood.sodium,
+        sugar: updateFood.sugar,
+        fibre: updateFood.fibre,
       })
       .eq("id", updateFood.id)
       .select();
@@ -73,23 +83,14 @@ const EditFood: FC<IEditFood> = ({ food }) => {
         .from("serving")
         .update({
           name: updateFood.serving.name,
-          serving_size: updateFood.serving.serving_size,
+          weight: updateFood.weight,
         })
-        .eq("id", updateFood.id)
+        .eq("food", updateFood.id)
         .select();
 
     console.log("data", updated_serving);
     if (updated_serving_error) {
       console.log("Failed to update food:", updated_serving_error);
-    }
-    const { data: updated_nutrients, error: updated_nutrients_error } =
-      await supabase
-        .from("nutrients")
-        .update(updateFood.nutrients)
-        .eq("food", updateFood.id)
-        .select();
-    if (updated_nutrients_error) {
-      console.log("Failed to update food:", updated_nutrients_error);
     }
   };
 

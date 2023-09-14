@@ -135,7 +135,7 @@ const AddNewFoodForm: FC = () => {
               />
               <button
                 onClick={() => setShowQuickAddFoodModal(true)}
-                className="bg-gray-500 p-2 text-white rounded-lg"
+                className="bg-gro-pink p-2 text-white rounded-lg"
               >
                 {isMobile ? (
                   <div className="w-8">
@@ -230,7 +230,7 @@ const AddNewFoodForm: FC = () => {
         </Link>
         <button
           type="submit"
-          className="disabled:bg-gray-500 inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="disabled:bg-gray-500 inline-flex justify-center rounded-md bg-gro-pink px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Add
         </button>

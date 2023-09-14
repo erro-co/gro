@@ -29,7 +29,7 @@ export default async function Index() {
           ) : (
             <Link
               href="/login"
-              className="py-2 px-5 rounded-md no-underline bg-gro-indigo text-white"
+              className="py-2 px-5 rounded-md no-underline bg-gro-pink text-white"
             >
               Login
             </Link>

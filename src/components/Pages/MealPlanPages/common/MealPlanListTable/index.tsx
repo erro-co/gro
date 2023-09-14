@@ -30,7 +30,7 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
     useState<boolean>(false);
   const supabase = createClientComponentClient<Database>();
 
-  const handleDeleteMealPlan = async (id: number) => {
+  const handleDeleteMealPlan = async (id: string) => {
     const { error } = await supabase
       .from("meal_plan")
       .delete()
@@ -151,7 +151,7 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                         "hidden px-3 py-2 text-sm text-gray-500 lg:table-cell",
                       )}
                     >
-                      {plan.template ? "Yes" : "No"}
+                      yes
                     </td>
                   )}
                   <td

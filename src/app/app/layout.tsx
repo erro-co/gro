@@ -9,9 +9,9 @@ import {
   FireIcon,
   HomeIcon,
   TableCellsIcon,
+  UserIcon,
   UsersIcon,
   XMarkIcon,
-  UserIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";

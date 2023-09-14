@@ -1,8 +1,8 @@
 "use client";
-import { useForm, FormProvider } from "react-hook-form";
 import AddNewMealPlan from "@/components/Pages/MealPlanPages/TrainerViewMealPlanPages/CreatePlanPage";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { newMealPlanSchema } from "@/lib/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 export type FormSchemaType = z.infer<typeof newMealPlanSchema>;

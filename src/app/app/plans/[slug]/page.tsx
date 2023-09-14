@@ -13,7 +13,7 @@ export interface MealFoodServing {
 }
 
 function sortMealFoodServing(mealFoodServings: MealFoodServing[]) {
-  const sortedMealFoodServings: { [key: number]: MealFoodServing[] } = {};
+  const sortedMealFoodServings: { [key: string]: MealFoodServing[] } = {};
 
   mealFoodServings.forEach((mealFoodServing: MealFoodServing) => {
     const mealId = mealFoodServing.meal.id;

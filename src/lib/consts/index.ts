@@ -10,10 +10,9 @@ export const foodCategories: string[] = [
 ];
 
 export const emptyPlaceholderFood: FoodWithServing = {
-  id: 0,
+  id: "",
   name: "",
-  created_at: null,
-  food_category: 0,
+  category: "",
   brand: "",
   calories: 0,
   cholesterol: 0,
@@ -27,9 +26,8 @@ export const emptyPlaceholderFood: FoodWithServing = {
   trans_fat: 0,
   serving: [
     {
-      food: 0,
-      created_at: null,
-      id: 0,
+      food: "",
+      id: "",
       name: "",
       weight: 0,
     },
@@ -37,10 +35,9 @@ export const emptyPlaceholderFood: FoodWithServing = {
 };
 
 export const emptyPlaceholderMealPlan: MealPlan = {
-  id: 0,
+  id: "",
   name: "",
-  created_at: null,
+  created_at: "",
   client: "",
-  template: false,
   trainer: "",
 };

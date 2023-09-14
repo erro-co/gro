@@ -12,7 +12,6 @@ import {
   UserPlusIcon,
 } from "@heroicons/react/24/outline";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import axios from "axios";
 import Link from "next/link";
 import { FC } from "react";
 
@@ -33,14 +32,14 @@ const MealPlanItemMenu: FC<IMealPlanItemMenu> = ({
     console.log("sent");
 
     try {
-      axios.post("/app/api/send", {
-        data: {
-          planId: 0,
-          firstName: "Lachlan",
-          clientEmail: "all4trash@pm.me",
-          trainerFirstName: "Wayne",
-        },
-      });
+      // axios.post("/app/api/send", {
+      //   data: {
+      //     planId: 0,
+      //     firstName: "Lachlan",
+      //     clientEmail: "all4trash@pm.me",
+      //     trainerFirstName: "Wayne",
+      //   },
+      // });
     } catch (error) {
       console.log(error);
     }

@@ -9,7 +9,7 @@ export interface ISuccessfulAddNewFoodModal {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   selectedClient: User | null;
-  planId: number | null;
+  planId: string | null;
 }
 
 const AssignClientModal: FC<ISuccessfulAddNewFoodModal> = ({

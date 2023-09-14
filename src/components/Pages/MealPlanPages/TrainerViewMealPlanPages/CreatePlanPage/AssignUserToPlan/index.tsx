@@ -9,7 +9,7 @@ import AssignClientModal from "./AssignClientModal";
 import SelectClientList from "./SelectClientTable";
 
 export interface IAssignUserToPlan {
-  planId: number | null;
+  planId: string | null;
 }
 
 const AssignUserToPlan: FC<IAssignUserToPlan> = ({ planId }) => {

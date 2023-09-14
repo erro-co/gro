@@ -18,7 +18,7 @@ export const convertToBase100 = (
   const scale = Number(100 / weight);
   return {
     id: food.id,
-    created_at: null,
+
     calories: Number((food.calories * scale).toFixed(1)),
     saturated_fat: Number((food.saturated_fat * scale).toFixed(1)),
     trans_fat: Number((food.trans_fat * scale).toFixed(1)),
@@ -32,7 +32,7 @@ export const convertToBase100 = (
     serving: food.serving,
     name: food.name,
     brand: food.brand,
-    food_category: food.food_category,
+    category: food.category,
   };
 };
 

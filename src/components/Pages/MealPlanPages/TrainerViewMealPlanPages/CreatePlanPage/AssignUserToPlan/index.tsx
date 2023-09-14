@@ -49,6 +49,7 @@ const AssignUserToPlan: FC<IAssignUserToPlan> = ({ planId }) => {
         isOpen={showModal}
         setIsOpen={setShowModal}
         selectedClient={selectedClient}
+        planId={planId}
       />
       <h2 className="text-3xl font-bold text-center mt-12 lg:mt-24">
         Assign to a Client:

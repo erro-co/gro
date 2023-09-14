@@ -1,19 +1,51 @@
 import { capitalizeFirstLetter } from "@/lib/helpers";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import axios from "axios";
 import Link from "next/link";
-import { FC, Fragment } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 export interface ISuccessfulAddNewFoodModal {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   selectedClient: User | null;
+  planId: number | null;
 }
 
 const AssignClientModal: FC<ISuccessfulAddNewFoodModal> = ({
   isOpen,
   setIsOpen,
   selectedClient,
+  planId,
 }) => {
+  const supabase = createClientComponentClient<Database>();
+  const [trainer, setTrainer] = useState<User | null>(null);
+  const getTrainerFirstName = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const { data } = await supabase
+      .from("profiles")
+      .select()
+      .eq("id", user?.id || "");
+
+    data && setTrainer(data[0] as User);
+  };
+  const sendNotification = () => {
+    axios.post("/app/api/send", {
+      data: {
+        planId: planId,
+        firstName: selectedClient?.first_name,
+        clientEmail: selectedClient?.email,
+        trainerFirstName: trainer?.first_name,
+      },
+    });
+  };
+
+  useEffect(() => {
+    getTrainerFirstName();
+  }, []);
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={setIsOpen}>
@@ -73,7 +105,9 @@ const AssignClientModal: FC<ISuccessfulAddNewFoodModal> = ({
                 <div className="mt-5 sm:mt-6">
                   <Link
                     href={"/app/nutrition"}
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                      sendNotification();
+                    }}
                     className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     Email Plan to{" "}

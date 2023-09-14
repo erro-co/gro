@@ -5,12 +5,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+  EnvelopeIcon,
   PencilSquareIcon,
   TrashIcon,
   UserMinusIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/outline";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
 import Link from "next/link";
 import { FC } from "react";
 
@@ -27,12 +29,34 @@ const MealPlanItemMenu: FC<IMealPlanItemMenu> = ({
   setOpenConfirmDeleteActionModal,
   setOpenAssignClientModal,
 }) => {
+  const SendEmail = () => {
+    console.log("sent");
+
+    try {
+      axios.post("/app/api/send", {
+        data: {
+          planId: 0,
+          firstName: "Lachlan",
+          clientEmail: "all4trash@pm.me",
+          trainerFirstName: "Wayne",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="">
         <EllipsisVerticalIcon className="w-5" aria-hidden="true" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
+        <DropdownMenuItem>
+          <button onClick={SendEmail} className="flex">
+            <EnvelopeIcon className="w-5 mr-2" />
+            Send
+          </button>
+        </DropdownMenuItem>
         <DropdownMenuItem>
           <Link href={`/app/plans/edit/${plan.id}`} className="flex">
             <PencilSquareIcon className="w-5 mr-2" />

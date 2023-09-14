@@ -24,7 +24,6 @@ const AddNewMealPlan: FC = () => {
     useState<boolean>(false);
   const {
     control,
-    watch,
     register,
     handleSubmit,
     reset,
@@ -35,8 +34,6 @@ const AddNewMealPlan: FC = () => {
   const [view, setView] = useState<views>("createPlan");
   const [planId, setPlanId] = useState<number | null>(null);
   const supabase = createClientComponentClient<Database>();
-
-  const mealPlan = watch();
 
   console.log({ errors });
 
@@ -78,6 +75,8 @@ const AddNewMealPlan: FC = () => {
       return;
     }
     console.log("New meal plan:", new_meal_plan);
+    // @ts-ignore
+    setPlanId(new_meal_plan.id);
 
     const { data: new_meals, error: new_meals_error } = await supabase
       .from("meal")

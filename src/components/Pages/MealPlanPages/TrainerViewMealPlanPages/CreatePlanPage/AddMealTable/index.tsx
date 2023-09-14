@@ -1,7 +1,6 @@
 "use client";
 import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { MealPlanFoodItem } from "@/lib/schemas";
 import { PencilIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
@@ -81,6 +80,18 @@ const AddMealTable: FC<IAddMealTable> = ({
                           scope="col"
                           className="py-2 text-left text-sm font-semibold text-gray-900"
                         >
+                          Serving
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-2 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Calories
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-2 text-left text-sm font-semibold text-gray-900"
+                        >
                           Protein
                         </th>
                         <th
@@ -94,18 +105,6 @@ const AddMealTable: FC<IAddMealTable> = ({
                           className="py-2 text-left text-sm font-semibold text-gray-900"
                         >
                           Carbs
-                        </th>
-                        <th
-                          scope="col"
-                          className="py-2 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Calories
-                        </th>
-                        <th
-                          scope="col"
-                          className="py-2 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Serving
                         </th>
                       </>
                     )}
@@ -124,7 +123,7 @@ const AddMealTable: FC<IAddMealTable> = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {foodList?.map((f: MealPlanFoodItem, idx: number) => (
+                  {foodList?.map((f: any, idx: number) => (
                     <tr key={idx} className="font-light">
                       <td className="lg:w-[500px] whitespace-nowrap py-1 px-3 text-sm text-gray-900">
                         <p>{f.food.name}</p>
@@ -146,27 +145,43 @@ const AddMealTable: FC<IAddMealTable> = ({
                       {isMobile ? null : (
                         <>
                           <td className="whitespace-nowrap py-1 text-sm text-gray-500">
-                            {f.nutrients.protein * f.serving_quantity}
-                          </td>
-                          <td className="whitespace-nowrap py-1 text-sm text-gray-500">
-                            {f.nutrients.total_fat * f.serving_quantity}
-                          </td>
-                          <td className="whitespace-nowrap py-1 text-sm text-gray-500">
-                            {f.nutrients.total_carbs * f.serving_quantity}
-                          </td>
-                          <td className="whitespace-nowrap py-1 text-sm text-gray-500">
-                            {f.nutrients.calories * f.serving_quantity}
-                          </td>
-                          <td className="whitespace-nowrap py-1 text-sm text-gray-500">
                             {f.serving_quantity} x {f.serving.name} {"("}
                             {Number(
                               f.serving.weight * f.serving_quantity,
                             ).toFixed()}
                             {"g)"}
                           </td>
+                          <td className="whitespace-nowrap py-1 text-sm text-gray-500">
+                            {Number(
+                              f.serving_quantity *
+                                (f.serving.weight / 100) *
+                                f.food.calories,
+                            ).toFixed(1)}
+                          </td>
+                          <td className="whitespace-nowrap py-1 text-sm text-gray-500">
+                            {Number(
+                              f.serving_quantity *
+                                (f.serving.weight / 100) *
+                                f.food.protein,
+                            ).toFixed(1)}
+                          </td>
+                          <td className="whitespace-nowrap py-1 text-sm text-gray-500">
+                            {Number(
+                              f.serving_quantity *
+                                (f.serving.weight / 100) *
+                                f.food.total_fat,
+                            ).toFixed(1)}
+                          </td>
+                          <td className="whitespace-nowrap py-1 text-sm text-gray-500 rounded-br-lg">
+                            {Number(
+                              f.serving_quantity *
+                                (f.serving.weight / 100) *
+                                f.food.total_carbohydrate,
+                            ).toFixed(1)}
+                          </td>
                         </>
                       )}
-                      <td className="relative whitespace-nowrap py-1 pr-2 text-right text-sm font-medium">
+                      <td className="relative whitespace-nowrap pt-1 pr-2 text-right text-sm font-medium">
                         <button
                           onClick={() => remove(idx)}
                           className="text-red-500 rounded-md"

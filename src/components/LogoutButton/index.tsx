@@ -18,7 +18,7 @@ export default function LogoutButton() {
 
   return (
     <button
-      className="flex ml-auto rounded-md no-underline bg-btn-background hover:bg-btn-background-hover bg-gro-indigo px-4 py-2 text-white"
+      className="flex ml-auto rounded-md no-underline bg-btn-background hover:bg-btn-background-hover bg-gro-pink px-4 py-2 text-white"
       onClick={signOut}
     >
       Logout

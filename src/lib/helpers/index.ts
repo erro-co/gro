@@ -1,5 +1,4 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { Nutrition } from "../schemas";
 
 export const joinClassNames = (
   ...classes: (string | boolean | undefined)[]
@@ -11,25 +10,29 @@ export const isValueEmpty = (value: any) =>
   value === undefined || value === null || value === "";
 
 export const convertToBase100 = (
-  nutrition: Nutrition,
+  food: FoodWithServing,
   weight: number,
-): Nutrition => {
+): FoodWithServing => {
+  console.log("food", food);
+  console.log("weight", weight);
   const scale = Number(100 / weight);
   return {
-    calories: Number((nutrition.calories * scale).toFixed(1)),
-    saturated_fat: Number((nutrition.saturated_fat * scale).toFixed(1)),
-    trans_fat: Number((nutrition.trans_fat * scale).toFixed(1)),
-    cholesterol: Number((nutrition.cholesterol * scale).toFixed(1)),
-    sodium: Number((nutrition.sodium * scale).toFixed(1)),
-    fiber: Number((nutrition.fiber * scale).toFixed(1)),
-    sugar: Number((nutrition.sugar * scale).toFixed(1)),
-    protein: Number((nutrition.protein * scale).toFixed(1)),
-    vitamin_d: Number((nutrition.vitamin_d * scale).toFixed(1)),
-    calcium: Number((nutrition.calcium * scale).toFixed(1)),
-    iron: Number((nutrition.iron * scale).toFixed(1)),
-    potassium: Number((nutrition.potassium * scale).toFixed(1)),
-    total_fat: Number((nutrition.total_fat * scale).toFixed(1)),
-    total_carbs: Number((nutrition.total_carbs * scale).toFixed(1)),
+    id: food.id,
+    created_at: null,
+    calories: Number((food.calories * scale).toFixed(1)),
+    saturated_fat: Number((food.saturated_fat * scale).toFixed(1)),
+    trans_fat: Number((food.trans_fat * scale).toFixed(1)),
+    cholesterol: Number((food.cholesterol * scale).toFixed(1)),
+    sodium: Number((food.sodium * scale).toFixed(1)),
+    fibre: Number((food.fibre * scale).toFixed(1)),
+    sugar: Number((food.sugar * scale).toFixed(1)),
+    protein: Number((food.protein * scale).toFixed(1)),
+    total_fat: Number((food.total_fat * scale).toFixed(1)),
+    total_carbohydrate: Number((food.total_carbohydrate * scale).toFixed(1)),
+    serving: food.serving,
+    name: food.name,
+    brand: food.brand,
+    food_category: food.food_category,
   };
 };
 

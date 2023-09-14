@@ -16,8 +16,6 @@ import EditFoodModal from "../../../../Modals/EditFoodModal";
 import SearchBarWithAddButton from "../../../../SearchBarWithAddButton";
 import AddButton from "../../../../SearchBarWithAddButton/AddButton";
 
-import type { FoodWithNutrientsAndServing } from "@/lib/schemas";
-
 type SortDirection = "ASC" | "DESC" | null;
 
 const PAGE_SIZE = 10;
@@ -41,18 +39,14 @@ const SortIcon = (sortDirection: SortDirection) => {
   }
 };
 
-type ReturnedFood = FoodWithNutrientsAndServing & {
-  id: number;
-};
-
 const Table: FC = () => {
-  const [foods, setFoods] = useState<ReturnedFood[]>([]);
+  const [foods, setFoods] = useState<FoodWithServing[]>([]);
   const [dataFetched, setDataFetched] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [openEditFoodModal, setOpenEditFoodModal] = useState<boolean>(false);
   const [selectedFood, setSelectedFood] =
-    useState<ReturnedFood>(emptyPlaceholderFood);
+    useState<FoodWithServing>(emptyPlaceholderFood);
   const [openConfirmDeleteActionModal, setOpenConfirmDeleteActionModal] =
     useState<boolean>(false);
   const supabase = createClientComponentClient<Database>();
@@ -65,7 +59,7 @@ const Table: FC = () => {
     const offset = (page - 1) * PAGE_SIZE;
     const { data, error } = await supabase
       .from("food")
-      .select(`*, nutrients(*, food), serving(*, food)`)
+      .select(`*, serving(*, food)`)
       .ilike("name", `%${searchTerm}%`)
       .range(offset, offset + PAGE_SIZE - 1)
       .order(sortColumn || "name", {
@@ -102,7 +96,7 @@ const Table: FC = () => {
     setCurrentPage(currentPage - 1);
   };
 
-  const editFood = (food: ReturnedFood) => {
+  const editFood = (food: FoodWithServing) => {
     setOpenEditFoodModal(true);
     setSelectedFood(food);
   };
@@ -220,7 +214,7 @@ const Table: FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {foods?.map((f: ReturnedFood, idx) => (
+                  {foods?.map((f: FoodWithServing, idx) => (
                     <tr
                       key={idx}
                       className={clsx(
@@ -240,20 +234,19 @@ const Table: FC = () => {
                             <p>{f.brand}</p>
                           </td>
                           <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
-                            {f.nutrients?.protein}
+                            {f.protein}
                           </td>
                           <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
-                            {f.nutrients?.saturated_fat +
-                              f.nutrients?.trans_fat}
+                            {f.total_fat}
                           </td>
                           <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
-                            {f.nutrients?.fiber + f.nutrients?.sugar}
+                            {f.total_carbohydrate}
                           </td>
                         </>
                       ) : null}
 
                       <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
-                        {f.nutrients?.calories}
+                        {f.calories}
                       </td>
 
                       {!isMobile ? (

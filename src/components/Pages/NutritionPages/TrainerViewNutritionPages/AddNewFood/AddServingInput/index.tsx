@@ -35,8 +35,8 @@ const AddServingInput: FC = () => {
   };
 
   return (
-    <div className="w-full lg:max-w-xs">
-      <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
+    <div className="w-full sm:max-w-xs">
+      <div className="shadow ring-1 ring-black ring-opacity-5 rounded-lg">
         <table className="divide-y divide-gray-300">
           <thead className="">
             <tr>
@@ -73,7 +73,7 @@ const AddServingInput: FC = () => {
                   <input
                     id="serving-name"
                     {...register(`serving.${index}.name`)}
-                    className="pl-2"
+                    className="pl-2 w-full"
                     type="text"
                     placeholder="Serving"
                   />

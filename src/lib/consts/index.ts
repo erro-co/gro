@@ -1,5 +1,3 @@
-import { CompleteFood } from "../schemas";
-
 export const foodCategories: string[] = [
   "fruits",
   "vegetables",
@@ -11,33 +9,31 @@ export const foodCategories: string[] = [
   "beverages",
 ];
 
-export const emptyPlaceholderFood: CompleteFood = {
+export const emptyPlaceholderFood: FoodWithServing = {
   id: 0,
   name: "",
+  created_at: null,
   food_category: 0,
-  nutrients: {
-    calories: 0,
-    saturated_fat: 0,
-    trans_fat: 0,
-    cholesterol: 0,
-    sodium: 0,
-    fiber: 0,
-    sugar: 0,
-    protein: 0,
-    calcium: 0,
-    iron: 0,
-    potassium: 0,
-    total_carbs: 0,
-    total_fat: 0,
-    vitamin_d: 0,
-  },
+  brand: "",
+  calories: 0,
+  cholesterol: 0,
+  fibre: 0,
+  protein: 0,
+  saturated_fat: 0,
+  sodium: 0,
+  sugar: 0,
+  total_carbohydrate: 0,
+  total_fat: 0,
+  trans_fat: 0,
   serving: [
     {
+      food: 0,
+      created_at: null,
+      id: 0,
       name: "",
       weight: 0,
     },
   ],
-  brand: "",
 };
 
 export const emptyPlaceholderMealPlan: MealPlan = {

@@ -1,15 +1,15 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Cell, Label, Pie, PieChart } from "recharts";
 
 export interface IMacroSummaryPieChart {
   macros: any;
-  totalCals: number;
+  totalCalories: number;
 }
 
 const COLORS = ["#F695A0", "#DC7CDE", "#A351FA"];
 const MacroSummaryPieChart: FC<IMacroSummaryPieChart> = ({
   macros,
-  totalCals,
+  totalCalories,
 }) => {
   return (
     <PieChart width={120} height={120}>
@@ -25,7 +25,7 @@ const MacroSummaryPieChart: FC<IMacroSummaryPieChart> = ({
           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
         <Label
-          value={`${totalCals.toString()} Cals`}
+          value={`${totalCalories.toString()} Cals`}
           position="center"
           fill="#000000"
           fontSize={15}

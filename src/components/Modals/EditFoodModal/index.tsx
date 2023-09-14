@@ -1,23 +1,19 @@
 import EditFood from "@/components/Pages/NutritionPages/TrainerViewNutritionPages/EditFood";
+import { FoodWithServingAndId } from "@/lib/schemas";
 import { Dialog, Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProvider, useForm } from "react-hook-form";
-
-import {
-  CompleteFood,
-  FoodWithNutrientsAndServingAndIdSchema,
-} from "@/lib/schemas";
 import { FC, Fragment } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 
 export interface IEditFoodModal {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  food: CompleteFood;
+  food: FoodWithServing;
 }
 
 const EditFoodModal: FC<IEditFoodModal> = ({ isOpen, setIsOpen, food }) => {
-  const methods = useForm<CompleteFood>({
-    resolver: zodResolver(FoodWithNutrientsAndServingAndIdSchema),
+  const methods = useForm<FoodWithServing>({
+    resolver: zodResolver(FoodWithServingAndId),
   });
 
   return (

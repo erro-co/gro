@@ -5,7 +5,7 @@ import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodM
 import NutritionLabelInput from "@/components/NutritionFactsInput";
 import { convertToBase100 } from "@/lib/helpers";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { FoodWithNutrientsAndServingSchema, Serving } from "@/lib/schemas";
+import { FoodSchema } from "@/lib/schemas";
 import { BoltIcon } from "@heroicons/react/20/solid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
@@ -16,12 +16,7 @@ import AddServingInput from "./AddServingInput";
 import ComboboxInput from "./ComboBoxInput";
 
 const AddNewFoodForm: FC = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useFormContext();
+  const { register, handleSubmit, reset, watch } = useFormContext();
   const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [showSuccessfulAddNewFoodModal, setShowSuccessfulAddNewFoodModal] =
@@ -44,10 +39,12 @@ const AddNewFoodForm: FC = () => {
     setLoading(false);
   };
 
-  //TODO: Add delete on error, base 100 values, and serving type toggle
+  const form = watch();
+  console.log({ form });
+
   const validateForm = (data: any) => {
     try {
-      FoodWithNutrientsAndServingSchema.parse(data);
+      FoodSchema.parse(data);
       return true;
     } catch (error) {
       console.log(error);
@@ -59,6 +56,9 @@ const AddNewFoodForm: FC = () => {
     if (validateForm(data) === false) {
       return;
     }
+    const base100NutrientsWithId = {
+      ...convertToBase100(data, data.serving[0].weight),
+    };
 
     const { data: new_food, error } = await supabase
       .from("food")
@@ -67,6 +67,16 @@ const AddNewFoodForm: FC = () => {
           name: data.name,
           brand: data.brand,
           food_category: data.food_category,
+          protein: base100NutrientsWithId.protein,
+          total_fat: base100NutrientsWithId.total_fat,
+          total_carbohydrate: base100NutrientsWithId.total_carbohydrate,
+          sugar: base100NutrientsWithId.sugar,
+          sodium: base100NutrientsWithId.sodium,
+          fibre: base100NutrientsWithId.fibre,
+          cholesterol: base100NutrientsWithId.cholesterol,
+          saturated_fat: base100NutrientsWithId.saturated_fat,
+          trans_fat: base100NutrientsWithId.trans_fat,
+          calories: base100NutrientsWithId.calories,
         },
       ])
       .select();
@@ -87,19 +97,6 @@ const AddNewFoodForm: FC = () => {
       return;
     }
 
-    const base100NutrientsWithId = {
-      ...convertToBase100(data.nutrients, data.serving[0].weight),
-      food: new_food[0].id,
-    };
-
-    const { error: nutrients_error } = await supabase
-      .from("nutrients")
-      .insert(base100NutrientsWithId);
-
-    if (nutrients_error) {
-      console.error("Error inserting nutrients:", nutrients_error);
-      return;
-    }
     reset();
     setShowSuccessfulAddNewFoodModal(true);
   };
@@ -113,8 +110,6 @@ const AddNewFoodForm: FC = () => {
     }
     fetchFoodCategories();
   }, []);
-
-  console.log({ errors });
 
   if (loading) {
     return <Loading />;
@@ -140,7 +135,7 @@ const AddNewFoodForm: FC = () => {
               />
               <button
                 onClick={() => setShowQuickAddFoodModal(true)}
-                className="bg-gray-500 p-2 text-white rounded-lg"
+                className="bg-gro-pink p-2 text-white rounded-lg"
               >
                 {isMobile ? (
                   <div className="w-8">
@@ -235,7 +230,7 @@ const AddNewFoodForm: FC = () => {
         </Link>
         <button
           type="submit"
-          className="disabled:bg-gray-500 inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="disabled:bg-gray-500 inline-flex justify-center rounded-md bg-gro-pink px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Add
         </button>

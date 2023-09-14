@@ -22,7 +22,14 @@ type views = "createPlan" | "loading" | "assignPlan" | "success";
 const AddNewMealPlan: FC = () => {
   const [showFoodSearchModal, setShowFoodSearchModal] =
     useState<boolean>(false);
-  const { control, watch, register, handleSubmit, reset } = useFormContext();
+  const {
+    control,
+    watch,
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useFormContext();
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [showLoading, setShowLoading] = useState(false);
   const [view, setView] = useState<views>("createPlan");
@@ -30,6 +37,8 @@ const AddNewMealPlan: FC = () => {
   const supabase = createClientComponentClient<Database>();
 
   const mealPlan = watch();
+
+  console.log({ errors });
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -202,18 +211,16 @@ const AddNewMealPlan: FC = () => {
                 </div>
               </div>
               <div className="mt-auto flex w-full mb-4">
-                {validateForm(mealPlan) ? (
-                  <button
-                    type="submit"
-                    className="mx-auto flex border px-4 py-2 lg:py-4 rounded-md  text-white bg-green-500 disabled:opacity-70"
-                  >
-                    {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
+                <button
+                  type="submit"
+                  className="mx-auto flex border px-4 py-2 lg:py-4 rounded-md  text-white bg-green-500 disabled:opacity-70"
+                >
+                  {isMobile ? <p>Create</p> : <p> Create Meal Plan</p>}
 
-                    <div className="ml-2">
-                      <CheckIcon className="w-6" />
-                    </div>
-                  </button>
-                ) : null}
+                  <div className="ml-2">
+                    <CheckIcon className="w-6" />
+                  </div>
+                </button>
               </div>
             </MealIndexProvider>
           </form>

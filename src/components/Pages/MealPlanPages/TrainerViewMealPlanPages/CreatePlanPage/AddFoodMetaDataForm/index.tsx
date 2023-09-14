@@ -1,7 +1,6 @@
 import FoodNutrientsPieChart from "@/components/Charts/FoodNutrientsPieChart";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
-import { Meal, Nutrition, Serving } from "@/lib/schemas";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
@@ -17,13 +16,16 @@ export interface IAddFoodMetaDataForm {
 
 export type ServingWithId = Serving & { id: number };
 
-const nutrientsPercentages = (nutrients: Nutrition) => {
-  const { calories, total_carbs, total_fat, protein } = nutrients;
-  const total = calories + total_carbs + total_fat + protein;
+const nutrientsPercentages = (food: Food | null) => {
+  if (!food) {
+    return null;
+  }
+  const { calories, total_carbohydrate, total_fat, protein } = food;
+  const total = calories + total_carbohydrate + total_fat + protein;
   return {
     calories: (calories / total) * 100,
-    carbs: (total_carbs / total) * 100,
-    fat: (total_fat / total) * 100,
+    carbs: (total_carbohydrate / total) * 100,
+    total_fat: (total_fat / total) * 100,
     protein: (protein / total) * 100,
   };
 };
@@ -34,7 +36,6 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
   setOpen,
   setSelectedFood,
 }) => {
-  const [nutrients, setNutrients] = useState<Nutrition | null>(null);
   const [servings, setServings] = useState<Serving[]>([]);
   const [selectedServing, setSelectedServing] = useState<ServingWithId>();
   const [loaded, setLoaded] = useState(false);
@@ -52,25 +53,13 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
   const getSelectedFoodMacros = async () => {
     setLoaded(false);
     if (selectedFood) {
-      const { data: macros, error } = await supabase
-        .from("nutrients")
-        .select("*")
-        .eq("food", selectedFood.id);
-
-      if (error) {
-        console.log("Failed to fetch error:", error);
-        return;
-      } else if (macros && macros.length > 0) {
-        setNutrients(macros[0] as Nutrition);
-      }
-
       const { data: servings, error: servingsError } = await supabase
         .from("serving")
         .select("*")
         .eq("food", selectedFood.id);
 
       if (servingsError) {
-        console.log("Failed to fetch error:", error);
+        console.log("Failed to fetch error:", servingsError);
         return;
       }
       setServings(servings as Serving[]);
@@ -88,7 +77,6 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
       food: selectedFood,
       serving: selectedServing,
       serving_quantity: servingQuantity,
-      nutrients: nutrients,
     });
     setSelectedFood(null);
     setOpen(false);
@@ -113,42 +101,80 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
         <div className="w-full min-h-full hidden p-2 border border-gray-100 shadow-md rounded-lg lg:flex">
           <div className="flex mx-auto">
             <FoodNutrientsPieChart
-              nutrients={nutrients}
+              food={selectedFood}
               width={150}
               height={150}
               innerRadius={40}
-              text={`${nutrients?.calories}kcal`}
+              text={`${
+                selectedFood?.calories &&
+                selectedServing?.weight &&
+                Number(
+                  servingQuantity *
+                    (selectedServing.weight / 100) *
+                    selectedFood.calories,
+                ).toFixed(0)
+              }kcal`}
             />
             <div className="ml-12 my-auto text-xl font-light space-y-2">
               <div className="flex">
                 <div className="w-6 h-6 rounded-full bg-gro-pink" />
-                <p className="mx-4">Protein: {nutrients?.protein}g</p>
+                <p className="mx-4">
+                  Protein:{" "}
+                  {selectedFood?.protein &&
+                    selectedServing?.weight &&
+                    Number(
+                      servingQuantity *
+                        (selectedServing.weight / 100) *
+                        selectedFood.protein,
+                    ).toFixed(1)}
+                  g
+                </p>
                 <p>
                   (
-                  {nutrients
-                    ? nutrientsPercentages(nutrients)?.protein.toFixed(0)
+                  {selectedFood
+                    ? nutrientsPercentages(selectedFood)?.protein.toFixed(0)
                     : 0}
                   %)
                 </p>
               </div>
               <div className="flex">
                 <div className="w-6 h-6 rounded-full bg-gro-purple" />
-                <p className="mx-4">Fats: {nutrients?.total_fat}g</p>{" "}
+                <p className="mx-4">
+                  Fats:{" "}
+                  {selectedFood?.total_fat &&
+                    selectedServing?.weight &&
+                    Number(
+                      servingQuantity *
+                        (selectedServing.weight / 100) *
+                        selectedFood.total_fat,
+                    ).toFixed(1)}
+                  g
+                </p>{" "}
                 <p>
                   (
-                  {nutrients
-                    ? nutrientsPercentages(nutrients)?.fat.toFixed(0)
+                  {selectedFood
+                    ? nutrientsPercentages(selectedFood)?.total_fat.toFixed(0)
                     : 0}
                   %)
                 </p>
               </div>
               <div className="flex">
                 <div className="w-6 h-6 rounded-full bg-gro-indigo" />
-                <p className="mx-4">Carbs: {nutrients?.total_carbs}g</p>{" "}
+                <p className="mx-4">
+                  Carbs:{" "}
+                  {selectedFood?.total_carbohydrate &&
+                    selectedServing?.weight &&
+                    Number(
+                      servingQuantity *
+                        (selectedServing.weight / 100) *
+                        selectedFood.total_carbohydrate,
+                    ).toFixed(1)}
+                  g
+                </p>{" "}
                 <p>
                   (
-                  {nutrients
-                    ? nutrientsPercentages(nutrients)?.carbs.toFixed(0)
+                  {selectedFood
+                    ? nutrientsPercentages(selectedFood)?.carbs.toFixed(0)
                     : 0}
                   %)
                 </p>
@@ -160,24 +186,62 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
         <div className="w-full min-h-full rounded-lg border border-gray-100 shadow-md px-2">
           <div className="lg:hidden flex border rounded-lg border-gro-indigo justify-around mt-2">
             <FoodNutrientsPieChart
-              nutrients={nutrients}
+              food={selectedFood}
               width={120}
               height={120}
               innerRadius={35}
-              text={`${nutrients?.calories}kcal`}
+              text={`${
+                selectedFood?.calories &&
+                selectedServing?.weight &&
+                Number(
+                  servingQuantity *
+                    (selectedServing.weight / 100) *
+                    selectedFood.calories,
+                ).toFixed(0)
+              }kcal`}
             />
             <div className="space-y-2 text-xs my-auto">
               <div className="flex">
                 <div className="w-3 h-3 mt-0.5 rounded-full bg-gro-pink" />
-                <p className="mx-4">Protein {nutrients?.protein}g</p>
+                <p className="mx-4">
+                  Protein{" "}
+                  {selectedFood?.protein &&
+                    selectedServing?.weight &&
+                    Number(
+                      servingQuantity *
+                        (selectedServing.weight / 100) *
+                        selectedFood.protein,
+                    ).toFixed(1)}
+                  g
+                </p>
               </div>
               <div className="flex">
                 <div className="w-3 h-3 mt-0.5 rounded-full bg-gro-purple" />
-                <p className="mx-4">Fats {nutrients?.total_fat}g</p>
+                <p className="mx-4">
+                  Fats{" "}
+                  {selectedFood?.total_fat &&
+                    selectedServing?.weight &&
+                    Number(
+                      servingQuantity *
+                        (selectedServing.weight / 100) *
+                        selectedFood.total_fat,
+                    ).toFixed(1)}
+                  g
+                </p>
               </div>
               <div className="flex">
                 <div className="w-3 h-3 mt-0.5 rounded-full bg-gro-indigo" />
-                <p className="mx-4">Carbs {nutrients?.total_carbs}g</p>
+                <p className="mx-4">
+                  Carbs{" "}
+                  {selectedFood?.total_carbohydrate &&
+                    selectedServing?.weight &&
+                    Number(
+                      servingQuantity *
+                        (selectedServing.weight / 100) *
+                        selectedFood.total_carbohydrate,
+                    ).toFixed(1)}
+                  g
+                </p>
               </div>
             </div>
           </div>

@@ -10,18 +10,31 @@ interface IDisplayTable {
   foods: MealFoodServing[];
 }
 
-function getTotalMacro(
-  foods: MealFoodServing[],
-  macro: keyof (typeof foods)[0]["food"]["nutrients"],
-): number {
-  const total = foods.reduce(
-    (total, food) => total + food.food.nutrients[macro] * food.quantity,
-    0,
-  );
-  return parseFloat(total.toFixed(1));
+function calculateTotalNutrients(mealArray: MealFoodServing[]): {
+  protein: number;
+  total_fat: number;
+  total_carbohydrate: number;
+  calories: number;
+} {
+  let protein = 0;
+  let total_fat = 0;
+  let total_carbohydrate = 0;
+  let calories = 0;
+
+  for (const mealElement of mealArray) {
+    const { food, quantity, serving } = mealElement;
+    protein += quantity * (serving.weight / 100) * food.protein;
+    total_fat += quantity * (serving.weight / 100) * food.total_fat;
+    total_carbohydrate +=
+      quantity * (serving.weight / 100) * food.total_carbohydrate;
+    calories += quantity * (serving.weight / 100) * food.calories;
+  }
+
+  return { protein, total_fat, total_carbohydrate, calories };
 }
 
 const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
+  const totals = calculateTotalNutrients(foods);
   const isMobile = useMediaQuery("(max-width: 640px)");
   return (
     <div className="pb-12">
@@ -86,16 +99,32 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
                   {"g)"}
                 </td>
                 <td className="whitespace-nowrap px-3 py-1 text-gray-500 sm:table-cell">
-                  {food.food.nutrients.calories * food.quantity}
+                  {Number(
+                    food.quantity *
+                      (food.serving.weight / 100) *
+                      food.food.calories,
+                  ).toFixed(1)}
                 </td>
                 <td className="hidden whitespace-nowrap px-3 py-1  text-gray-500 lg:table-cell">
-                  {food.food.nutrients.protein * food.quantity}
+                  {Number(
+                    food.quantity *
+                      (food.serving.weight / 100) *
+                      food.food.protein,
+                  ).toFixed(1)}
                 </td>
                 <td className="hidden whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
-                  {food.food.nutrients.total_fat * food.quantity}
+                  {Number(
+                    food.quantity *
+                      (food.serving.weight / 100) *
+                      food.food.total_fat,
+                  ).toFixed(1)}
                 </td>
                 <td className="hidden whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
-                  {food.food.nutrients.total_carbs * food.quantity}
+                  {Number(
+                    food.quantity *
+                      (food.serving.weight / 100) *
+                      food.food.total_carbohydrate,
+                  ).toFixed(1)}
                 </td>
               </tr>
             ))}
@@ -107,16 +136,16 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
                 Totals:
               </td>
               <td className="whitespace-nowrap px-3 py-1 font-bold rounded-br-lg">
-                <p>{getTotalMacro(foods, "calories")}</p>
+                <p>{Number(totals.calories).toFixed(1)}</p>
               </td>
               <td className="hidden whitespace-nowrap px-3 py-1  font-bold lg:table-cell">
-                <p>{getTotalMacro(foods, "protein")}</p>
+                <p>{Number(totals.protein).toFixed(1)}</p>
               </td>
               <td className="hidden lg:table-cell whitespace-nowrap px-3 py-1 font-bold">
-                <p>{getTotalMacro(foods, "total_fat")}</p>
+                <p>{totals.total_fat}</p>
               </td>
               <td className="hidden lg:table-cell whitespace-nowrap px-3 py-2 font-bold rounded-br-lg">
-                <p>{getTotalMacro(foods, "total_carbs")}</p>
+                <p>{totals.total_carbohydrate}</p>
               </td>
             </tr>
           </tbody>

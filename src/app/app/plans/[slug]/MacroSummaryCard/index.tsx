@@ -1,10 +1,10 @@
-import { FC } from "react";
-import { motion } from "framer-motion";
 import { Disclosure } from "@headlessui/react";
-import MacroSummaryPieChart from "../MacroSummaryPieChart";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
-import { MealFoodServing } from "../page";
 import clsx from "clsx";
+import { motion } from "framer-motion";
+import { FC } from "react";
+import MacroSummaryPieChart from "../MacroSummaryPieChart";
+import { MealFoodServing } from "../page";
 
 export interface IMacroSummaryCard {
   mealPlan: MealFoodServing[];
@@ -14,31 +14,31 @@ function calculateNutritionTotals(mealPlan: MealFoodServing[]): {
   totalProtein: number;
   totalFat: number;
   totalCarbs: number;
-  totalCals: number;
+  totalCalories: number;
 } {
   let totalProtein = 0;
   let totalFat = 0;
   let totalCarbs = 0;
-  let totalCals = 0;
+  let totalCalories = 0;
 
   mealPlan.forEach((item: MealFoodServing) => {
     const food = item.food;
     const quantity = item.quantity;
-    totalProtein += food.nutrients.protein * quantity;
-    totalFat += food.nutrients.total_fat * quantity;
-    totalCarbs += food.nutrients.total_carbs * quantity;
-    totalCals += food.nutrients.calories * quantity;
+    totalProtein += food.protein * quantity;
+    totalFat += food.total_fat * quantity;
+    totalCarbs += food.total_carbohydrate * quantity;
+    totalCalories += food.calories * quantity;
   });
   return {
     totalProtein: Number(totalProtein.toFixed(1)),
     totalFat: Number(totalFat.toFixed(1)),
     totalCarbs: Number(totalCarbs.toFixed(1)),
-    totalCals: Number(totalCals.toFixed(1)),
+    totalCalories: Number(totalCalories.toFixed(1)),
   };
 }
 
 const MacroSummaryCard: FC<IMacroSummaryCard> = ({ mealPlan }) => {
-  const { totalProtein, totalFat, totalCarbs, totalCals } =
+  const { totalProtein, totalFat, totalCarbs, totalCalories } =
     calculateNutritionTotals(mealPlan);
 
   const pieChartData = [
@@ -61,7 +61,10 @@ const MacroSummaryCard: FC<IMacroSummaryCard> = ({ mealPlan }) => {
         {mealPlan?.name || "Meal Plan"}
       </h2> */}
       <div className="flex mx-auto">
-        <MacroSummaryPieChart macros={pieChartData} totalCals={totalCals} />
+        <MacroSummaryPieChart
+          macros={pieChartData}
+          totalCalories={totalCalories}
+        />
         <div className="w-full mx-auto lg:mx-0 lg:ml-4 flex">
           <div className="flex flex-col my-auto ml-4 mt-4 w-full lg:w-[500px] space-y-2">
             <motion.div

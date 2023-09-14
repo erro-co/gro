@@ -44,20 +44,16 @@ const QuickAddFoodModal: FC<IQuickAddFoodModal> = ({ isOpen, setIsOpen }) => {
 
   const setVals = (newFood: NewFood) => {
     setValue("name", newFood.name);
-    setValue("nutrients.calories", newFood.nutritionFacts[1].calories);
-    setValue("nutrients.total_fat", newFood.nutritionFacts[1].totalFat);
-    setValue("nutrients.saturated_fat", newFood.nutritionFacts[1].saturatedFat);
-    setValue("nutrients.trans_fat", 0);
-    setValue("nutrients.cholesterol", 0);
-    setValue("nutrients.sodium", newFood.nutritionFacts[1].sodium);
-    setValue("nutrients.total_carbs", newFood.nutritionFacts[1].carbohydrate);
-    setValue("nutrients.fiber", newFood.nutritionFacts[1].dietaryFibre);
-    setValue("nutrients.sugar", newFood.nutritionFacts[1].sugars);
-    setValue("nutrients.protein", newFood.nutritionFacts[1].protein);
-    setValue("nutrients.vitamin_d", 0);
-    setValue("nutrients.calcium", 0);
-    setValue("nutrients.iron", 0);
-    setValue("nutrients.potassium", 0);
+    setValue("calories", newFood.nutritionFacts[1].calories);
+    setValue("total_fat", newFood.nutritionFacts[1].totalFat);
+    setValue("saturated_fat", newFood.nutritionFacts[1].saturatedFat);
+    setValue("trans_fat", 0);
+    setValue("cholesterol", 0);
+    setValue("sodium", newFood.nutritionFacts[1].sodium);
+    setValue("total_carbs", newFood.nutritionFacts[1].carbohydrate);
+    setValue("fibre", newFood.nutritionFacts[1].dietaryFibre);
+    setValue("sugar", newFood.nutritionFacts[1].sugars);
+    setValue("protein", newFood.nutritionFacts[1].protein);
   };
 
   const handleClose = () => {

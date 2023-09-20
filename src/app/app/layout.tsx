@@ -67,6 +67,12 @@ const clientNavigation = [
     icon: TableCellsIcon,
     current: false,
   },
+  {
+    name: "Schedule",
+    href: "/app/schedule",
+    icon: CalendarIcon,
+    current: false,
+  },
 ];
 
 let navigation: any[];

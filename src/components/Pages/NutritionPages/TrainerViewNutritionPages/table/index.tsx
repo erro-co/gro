@@ -101,7 +101,7 @@ const Table: FC = () => {
     setSelectedFood(food);
   };
 
-  const handleDeleteFood = async (id: number) => {
+  const handleDeleteFood = async (id: string) => {
     const { error } = await supabase.from("food").delete().match({ id: id });
     if (error) {
       console.error("Failed to delete food:", error);

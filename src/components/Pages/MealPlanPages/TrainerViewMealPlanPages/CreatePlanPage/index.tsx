@@ -32,7 +32,7 @@ const AddNewMealPlan: FC = () => {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [showLoading, setShowLoading] = useState(false);
   const [view, setView] = useState<views>("createPlan");
-  const [planId, setPlanId] = useState<number | null>(null);
+  const [planId, setPlanId] = useState<string | null>(null);
   const supabase = createClientComponentClient<Database>();
 
   console.log({ errors });

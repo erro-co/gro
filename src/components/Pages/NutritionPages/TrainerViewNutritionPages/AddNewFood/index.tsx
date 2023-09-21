@@ -66,7 +66,7 @@ const AddNewFoodForm: FC = () => {
         {
           name: data.name,
           brand: data.brand,
-          food_category: data.food_category,
+          category: data.category,
           protein: base100NutrientsWithId.protein,
           total_fat: base100NutrientsWithId.total_fat,
           total_carbohydrate: base100NutrientsWithId.total_carbohydrate,

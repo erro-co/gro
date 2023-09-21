@@ -15,7 +15,7 @@ import SelectClientList from "../CreatePlanPage/AssignUserToPlan/SelectClientTab
 export interface IAddFoodModal {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  planId: number;
+  planId: string;
 }
 
 const AssignPlanModal: FC<IAddFoodModal> = ({ open, setOpen, planId }) => {

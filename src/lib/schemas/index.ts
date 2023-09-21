@@ -8,18 +8,18 @@ export const servingSchema = z.object({
 });
 
 export const servingWithIdSchema = servingSchema.extend({
-  id: z.number().nonnegative(),
+  id: z.string(),
 });
 
 export const categoriesSchema = z.object({
-  id: z.number().nonnegative(),
+  id: z.string(),
   name: z.string().nonempty({ message: "Category name is required" }),
 });
 
 export const FoodSchema = z.object({
   name: z.string().nonempty(),
   brand: z.string().optional(),
-  food_category: z.number().nonnegative(),
+  category: z.number().nonnegative(),
   calories: z.number().nonnegative(),
   saturated_fat: z.number().nonnegative(),
   trans_fat: z.number().nonnegative(),
@@ -37,7 +37,7 @@ export const FoodWithServingSchema = FoodSchema.extend({
 });
 
 export const FoodWithServingAndId = FoodWithServingSchema.extend({
-  id: z.number().nonnegative(),
+  id: z.string(),
 });
 
 export const newMealPlanFoodSchema = z.object({

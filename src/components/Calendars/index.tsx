@@ -1,274 +1,120 @@
 "use client";
-import { Menu, Transition } from "@headlessui/react";
-import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  EllipsisHorizontalIcon,
-} from "@heroicons/react/20/solid";
-import clsx from "clsx";
-import React, { Fragment } from "react";
-import MonthViewCalendar from "./MonthViewCalendar";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import CalendarHeader from "./CalendarHeader";
+import WeekViewCalendar from "./WeekViewCalendar";
 
-export type CalendarViews = "month" | "week" | "day";
-
-const CalendarPage = () => {
-  const [currentDate, setCurrentDate] = React.useState(new Date());
-  const [calendarView, setCalendarView] =
-    React.useState<CalendarViews>("month");
-
-  return (
-    <div className="lg:flex lg:h-full lg:flex-col">
-      <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
-        <h1 className="text-base font-semibold leading-6 text-gray-900">
-          <time dateTime="2022-01">January 2022</time>
-        </h1>
-        <div className="flex items-center">
-          <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
-            <div
-              className="pointer-events-none absolute inset-0 rounded-md ring-1 ring-inset ring-gray-300"
-              aria-hidden="true"
-            />
-            <button
-              type="button"
-              className="flex items-center justify-center rounded-l-md py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
-            >
-              <span className="sr-only">Previous month</span>
-              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="hidden px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block"
-            >
-              Today
-            </button>
-            <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
-            <button
-              type="button"
-              className="flex items-center justify-center rounded-r-md py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
-            >
-              <span className="sr-only">Next month</span>
-              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
-          <div className="hidden md:ml-4 md:flex md:items-center">
-            <Menu as="div" className="relative">
-              <Menu.Button
-                type="button"
-                className="flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              >
-                Month view
-                <ChevronDownIcon
-                  className="-mr-1 h-5 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
-              </Menu.Button>
-
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items className="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="py-1">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          className={clsx(
-                            active
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-700",
-                            "block px-4 py-2 text-sm",
-                          )}
-                        >
-                          Day view
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          className={clsx(
-                            active
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-700",
-                            "block px-4 py-2 text-sm",
-                          )}
-                        >
-                          Week view
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          className={clsx(
-                            active
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-700",
-                            "block px-4 py-2 text-sm",
-                          )}
-                        >
-                          Month view
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          className={clsx(
-                            active
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-700",
-                            "block px-4 py-2 text-sm",
-                          )}
-                        >
-                          Year view
-                        </a>
-                      )}
-                    </Menu.Item>
-                  </div>
-                </Menu.Items>
-              </Transition>
-            </Menu>
-            <div className="ml-6 h-6 w-px bg-gray-300" />
-            <button
-              type="button"
-              className="ml-6 rounded-md  bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Add event
-            </button>
-          </div>
-          <Menu as="div" className="relative ml-6 md:hidden">
-            <Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
-              <span className="sr-only">Open menu</span>
-              <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
-            </Menu.Button>
-
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-100"
-              enterFrom="transform opacity-0 scale-95"
-              enterTo="transform opacity-100 scale-100"
-              leave="transition ease-in duration-75"
-              leaveFrom="transform opacity-100 scale-100"
-              leaveTo="transform opacity-0 scale-95"
-            >
-              <Menu.Items className="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div className="py-1">
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href="#"
-                        className={clsx(
-                          active
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-700",
-                          "block px-4 py-2 text-sm",
-                        )}
-                      >
-                        Create event
-                      </a>
-                    )}
-                  </Menu.Item>
-                </div>
-                <div className="py-1">
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href="#"
-                        className={clsx(
-                          active
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-700",
-                          "block px-4 py-2 text-sm",
-                        )}
-                      >
-                        Go to today
-                      </a>
-                    )}
-                  </Menu.Item>
-                </div>
-                <div className="py-1">
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href="#"
-                        className={clsx(
-                          active
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-700",
-                          "block px-4 py-2 text-sm",
-                        )}
-                      >
-                        Day view
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href="#"
-                        className={clsx(
-                          active
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-700",
-                          "block px-4 py-2 text-sm",
-                        )}
-                      >
-                        Week view
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href="#"
-                        className={clsx(
-                          active
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-700",
-                          "block px-4 py-2 text-sm",
-                        )}
-                      >
-                        Month view
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href="#"
-                        className={clsx(
-                          active
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-700",
-                          "block px-4 py-2 text-sm",
-                        )}
-                      >
-                        Year view
-                      </a>
-                    )}
-                  </Menu.Item>
-                </div>
-              </Menu.Items>
-            </Transition>
-          </Menu>
-        </div>
-      </header>
-      {calendarView === "day" && <></>}
-      {calendarView === "week" && <></>}
-      {calendarView === "month" ? <MonthViewCalendar /> : null}
-    </div>
-  );
+export type CalendarViews = "day" | "week" | "month" | "year";
+export type SquareAppointmentResponse = {
+  id: string;
+  version: number;
+  status: "CANCELLED_BY_SELLER" | "ACCEPTED"; // Add other statuses if available
+  createdAt: string; // Consider using Date if you'll parse the string
+  updatedAt: string; // Consider using Date if you'll parse the string
+  startAt: string; // Consider using Date if you'll parse the string
+  locationId: string;
+  customerId: string;
+  appointmentSegments: AppointmentSegment[];
+  transitionTimeMinutes: number;
+  allDay: boolean;
+  locationType: "BUSINESS_LOCATION"; // Add other types if available
+  creatorDetails: CreatorDetails;
+  source: "FIRST_PARTY_MERCHANT"; // Add other sources if available
 };
 
-export default CalendarPage;
+type AppointmentSegment = {
+  durationMinutes: number;
+  serviceVariationId: string;
+  teamMemberId: string;
+  serviceVariationVersion: string;
+  intermissionMinutes: number;
+  anyTeamMember: boolean;
+};
+
+type CreatorDetails = {
+  creatorType: "TEAM_MEMBER"; // Add other types if available
+  teamMemberId: string;
+};
+
+export type Appointment = {
+  id: string;
+  status: "CANCELLED_BY_SELLER" | "ACCEPTED";
+  startAt: string;
+  endAt: string;
+  durationMinutes: number;
+};
+
+function mapAppointments(
+  appointments: SquareAppointmentResponse[],
+): Appointment[] {
+  return appointments.map((appointment) => {
+    // Sum the duration from each segment
+    const totalDuration = appointment.appointmentSegments.reduce(
+      (sum, segment) => sum + segment.durationMinutes,
+      0,
+    );
+
+    // Convert startAt to Date and add totalDuration
+    const startDate = new Date(appointment.startAt);
+    const endDate = new Date(startDate.getTime() + totalDuration * 60000); // 60000ms = 1 minute
+
+    // Convert endDate back to string format
+    const endAt = endDate.toISOString(); // Assuming you want ISO string format
+
+    return {
+      id: appointment.id,
+      status: appointment.status,
+      startAt: appointment.startAt,
+      endAt: endAt,
+      durationMinutes: totalDuration,
+    };
+  });
+}
+
+export default function Calendar() {
+  const [calendarView, setCalendarView] = useState<CalendarViews>("week");
+  const [date, setDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+
+  const supabase = createClientComponentClient<Database>();
+
+  const fetchAppointments = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const data = await axios.get(
+      `https://gro-api.vercel.app/bookings?q=${user?.email}`,
+    );
+    const mappedAppointments = mapAppointments(data.data.bookings);
+    console.log(mappedAppointments);
+    setAppointments(mappedAppointments);
+  };
+
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
+
+  return (
+    <>
+      <h2 className="my-4">My total bookings left: {appointments.length}</h2>
+      <div className="p-2 border rounded-lg">
+        <CalendarHeader />
+
+        <div>
+          {calendarView === "day" && <div>Day view</div>}
+          {calendarView === "week" && (
+            <WeekViewCalendar
+              currentDate={date}
+              selectedDate={selectedDate}
+              appointments={appointments}
+            />
+          )}
+          {calendarView === "month" && <div>Month view</div>}
+          {calendarView === "year" && <div>Year view</div>}
+        </div>
+      </div>
+    </>
+  );
+}

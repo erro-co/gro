@@ -9,7 +9,7 @@ export interface ISelectClientList {
   clients: User[];
   setSelectedClient: (client: User) => void;
   setShowModal: (showModal: boolean) => void;
-  planId: number | null;
+  planId: string | null;
   supabase: SupabaseClient;
 }
 

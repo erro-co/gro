@@ -45,7 +45,7 @@ const EditFood: FC<IEditFood> = ({ food }) => {
     setValue("id", food?.id);
     setValue("name", food?.name);
     setValue("brand", food?.brand);
-    setValue("food_category", food?.food_category);
+    setValue("food_category", food?.category);
     setValue("serving", food?.serving);
     setValue("calories", food?.calories);
     setValue("total_carbohydrate", food?.total_carbohydrate);

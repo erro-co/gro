@@ -9,9 +9,9 @@ import {
   FireIcon,
   HomeIcon,
   TableCellsIcon,
+  UserIcon,
   UsersIcon,
   XMarkIcon,
-  UserIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
@@ -65,6 +65,12 @@ const clientNavigation = [
     name: " My Plans",
     href: "/app/plans",
     icon: TableCellsIcon,
+    current: false,
+  },
+  {
+    name: "Schedule",
+    href: "/app/schedule",
+    icon: CalendarIcon,
     current: false,
   },
 ];

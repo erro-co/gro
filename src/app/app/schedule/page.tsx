@@ -1,4 +1,4 @@
-import CalendarPage from "@/components/Calendars";
+import BookingPage from "@/components/Pages/BookingPages";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -12,7 +12,7 @@ export const metadata = {
   },
 };
 
-const ScheduleIndexPage = async () => {
+const BookingIndexPage = async () => {
   const supabase = createServerComponentClient({ cookies });
 
   const {
@@ -24,7 +24,7 @@ const ScheduleIndexPage = async () => {
     // Unauthenticated users will be redirected to the `/login` route.
     redirect("/login");
   }
-  return <CalendarPage />;
+  return <BookingPage />;
 };
 
-export default ScheduleIndexPage;
+export default BookingIndexPage;

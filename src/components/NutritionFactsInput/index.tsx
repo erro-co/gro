@@ -65,7 +65,6 @@ const NutritionFactsInput: FC = () => {
               type="number"
               id="saturated-fat"
               className="w-8 text-right pr-1 focus:placeholder:opacity-0"
-              value={0}
               step={0.1}
             />
             g
@@ -82,7 +81,6 @@ const NutritionFactsInput: FC = () => {
               type="number"
               id="trans-fat"
               className="w-8 text-right pr-1 focus:placeholder:opacity-0"
-              value={0}
               step={0.1}
             />
             g
@@ -99,7 +97,6 @@ const NutritionFactsInput: FC = () => {
               type="number"
               id="cholesterol"
               className="w-8 text-right pr-1 focus:placeholder:opacity-0"
-              value={0}
               step={0.1}
             />
             mg
@@ -116,7 +113,6 @@ const NutritionFactsInput: FC = () => {
               type="number"
               id="sodium"
               className="w-8 text-right pr-1 focus:placeholder:opacity-0"
-              value={0}
               step={0.1}
             />
             mg
@@ -150,7 +146,6 @@ const NutritionFactsInput: FC = () => {
               id="fibre"
               className="w-8 text-right pr-1"
               placeholder={"0"}
-              value={0}
               step={0.1}
             />
             g
@@ -165,7 +160,6 @@ const NutritionFactsInput: FC = () => {
               type="number"
               id="sugar"
               className="w-8 text-right pr-1"
-              value={0}
               step={0.1}
             />
             g

@@ -13,6 +13,12 @@ const AddNewFoodPage: FC = () => {
         { name: "Serving", weight: 100 },
         { name: "g", weight: 1 },
       ],
+      fibre: 0,
+      sugar: 0,
+      cholesterol: 0,
+      saturated_fat: 0,
+      trans_fat: 0,
+      sodium: 0,
     },
   });
   return (

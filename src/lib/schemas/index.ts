@@ -19,7 +19,7 @@ export const categoriesSchema = z.object({
 export const FoodSchema = z.object({
   name: z.string().nonempty(),
   brand: z.string().optional(),
-  category: z.number().nonnegative(),
+  category: z.string(),
   calories: z.number().nonnegative(),
   saturated_fat: z.number().nonnegative(),
   trans_fat: z.number().nonnegative(),

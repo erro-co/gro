@@ -16,7 +16,7 @@ import AddServingInput from "./AddServingInput";
 import ComboboxInput from "./ComboBoxInput";
 
 const AddNewFoodForm: FC = () => {
-  const { register, handleSubmit, reset, watch } = useFormContext();
+  const { register, handleSubmit, reset } = useFormContext();
   const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [showSuccessfulAddNewFoodModal, setShowSuccessfulAddNewFoodModal] =
@@ -38,9 +38,6 @@ const AddNewFoodForm: FC = () => {
     setFoodCategories((food_category as FoodCategory[]) || []);
     setLoading(false);
   };
-
-  const form = watch();
-  console.log({ form });
 
   const validateForm = (data: any) => {
     try {
@@ -154,7 +151,7 @@ const AddNewFoodForm: FC = () => {
                 htmlFor="food-name"
                 className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
               >
-                Food name
+                Food name<span className="text-red-500 font-bold">*</span>
               </label>
               <div className="mt-2 sm:col-span-2 sm:mt-0">
                 <input
@@ -188,7 +185,7 @@ const AddNewFoodForm: FC = () => {
                 htmlFor="food-name"
                 className=" text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
               >
-                Category
+                Category<span className="text-red-500 font-bold">*</span>
               </label>
               <ComboboxInput
                 categories={foodCategories}
@@ -202,7 +199,7 @@ const AddNewFoodForm: FC = () => {
                 htmlFor="serving"
                 className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
               >
-                Serving
+                Serving<span className="text-red-500 font-bold">*</span>
               </label>
               <AddServingInput />
             </div>
@@ -212,7 +209,7 @@ const AddNewFoodForm: FC = () => {
                 htmlFor="nutrition"
                 className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
               >
-                Nutrition
+                Nutrition<span className="text-red-500 font-bold">*</span>
               </label>
               <div className="mt-2 sm:col-span-2 sm:mt-0">
                 <NutritionLabelInput />

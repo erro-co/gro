@@ -26,9 +26,9 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
   const supabase = createClientComponentClient<Database>();
 
-  const { watch } = useFormContext();
+  const methods = useFormContext();
 
-  const meals = watch("meals");
+  const meals = methods.watch("meals");
 
   const fetchAllFoods = async () => {
     const query = supabase

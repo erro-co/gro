@@ -49,4 +49,45 @@ declare global {
   export type FoodWithServingInsert = FoodInsert & { serving: ServingInsert[] };
 
   export type CompleteFood = FoodWithServing & { food_category: FoodCategory };
+
+  export type MealWithFoods = Meal & { food: FoodWithServing[] }[];
 }
+
+export type SquareAppointmentResponse = {
+  id: string;
+  version: number;
+  status: "CANCELLED_BY_SELLER" | "ACCEPTED"; // Add other statuses if available
+  createdAt: string; // Consider using Date if you'll parse the string
+  updatedAt: string; // Consider using Date if you'll parse the string
+  startAt: string; // Consider using Date if you'll parse the string
+  locationId: string;
+  customerId: string;
+  appointmentSegments: AppointmentSegment[];
+  transitionTimeMinutes: number;
+  allDay: boolean;
+  locationType: "BUSINESS_LOCATION"; // Add other types if available
+  creatorDetails: CreatorDetails;
+  source: "FIRST_PARTY_MERCHANT"; // Add other sources if available
+};
+
+type AppointmentSegment = {
+  durationMinutes: number;
+  serviceVariationId: string;
+  teamMemberId: string;
+  serviceVariationVersion: string;
+  intermissionMinutes: number;
+  anyTeamMember: boolean;
+};
+
+type CreatorDetails = {
+  creatorType: "TEAM_MEMBER"; // Add other types if available
+  teamMemberId: string;
+};
+
+export type Appointment = {
+  id: string;
+  status: "CANCELLED_BY_SELLER" | "ACCEPTED";
+  startAt: string;
+  endAt: string;
+  durationMinutes: number;
+};

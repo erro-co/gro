@@ -33,7 +33,7 @@ const DisplayMealPage: FC = () => {
   const [loading, setLoading] = useState(true);
 
   const path = usePathname();
-  const mealPlanId = path.split("/")[3];
+  const mealPlanId = path?.split("/")[3];
 
   const selectPlan = async () => {
     const { data: meal_plan, error } = await supabase

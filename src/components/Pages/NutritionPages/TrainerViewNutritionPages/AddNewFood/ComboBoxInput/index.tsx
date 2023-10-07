@@ -4,20 +4,20 @@ import clsx from "clsx";
 import { FC, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-export interface IComboboxInput {
+export interface IComboBoxInput {
   categories: FoodCategory[];
   setSelectedFoodCategory: React.Dispatch<
     React.SetStateAction<FoodCategory | null>
   >;
   selectedCategory: FoodCategory | null;
 }
-const ComboboxInput: FC<IComboboxInput> = ({
+const ComboBoxInput: FC<IComboBoxInput> = ({
   categories,
   selectedCategory,
   setSelectedFoodCategory,
 }) => {
   const [query, setQuery] = useState<string>("");
-  const { setValue } = useFormContext();
+  const formcontext = useFormContext();
 
   const filteredSuperFunds: FoodCategory[] =
     query === ""
@@ -32,7 +32,7 @@ const ComboboxInput: FC<IComboboxInput> = ({
       value={selectedCategory}
       onChange={(value) => {
         setSelectedFoodCategory(value);
-        setValue("category", value?.id);
+        formcontext.setValue("category", value?.id);
       }}
     >
       <div className="relative sm:max-w-xs">
@@ -96,4 +96,4 @@ const ComboboxInput: FC<IComboboxInput> = ({
   );
 };
 
-export default ComboboxInput;
+export default ComboBoxInput;

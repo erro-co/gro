@@ -1,20 +1,13 @@
 "use client";
-import { emptyPlaceholderFood } from "@/lib/consts";
-import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import {
   ChevronDownIcon,
   ChevronUpDownIcon,
   ChevronUpIcon,
 } from "@heroicons/react/20/solid";
 import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
-import { FC, useEffect, useState } from "react";
-import Loading from "../../../../Loading";
+import { Dispatch, FC, SetStateAction } from "react";
 import ConfirmDeleteActionModal from "../../../../Modals/ConfirmDeleteActionModal";
-import EditFoodModal from "../../../../Modals/EditFoodModal";
-import SearchBarWithAddButton from "../../../../SearchBarWithAddButton";
-import AddButton from "../../../../SearchBarWithAddButton/AddButton";
 
 type SortDirection = "ASC" | "DESC" | null;
 
@@ -39,97 +32,49 @@ const SortIcon = (sortDirection: SortDirection) => {
   }
 };
 
-const Table: FC = () => {
-  const [foods, setFoods] = useState<FoodWithServing[]>([]);
-  const [dataFetched, setDataFetched] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [openEditFoodModal, setOpenEditFoodModal] = useState<boolean>(false);
-  const [selectedFood, setSelectedFood] =
-    useState<FoodWithServing>(emptyPlaceholderFood);
-  const [openConfirmDeleteActionModal, setOpenConfirmDeleteActionModal] =
-    useState<boolean>(false);
-  const supabase = createClientComponentClient<Database>();
+export interface INutritionTable {
+  meals: Food[];
+  selectedFood: Food;
+  setSelectedFood: Dispatch<SetStateAction<Food>>;
+  currentPage: number;
+  handleSortClick: (column: string) => void;
+  handleNextPage: () => void;
+  handlePreviousPage: () => void;
+  handleDeleteFood: (id: string) => void;
+  sortColumn: string;
+  sortDirection: SortDirection;
+  openEditFoodModal: boolean;
+  setOpenEditFoodModal: Dispatch<SetStateAction<boolean>>;
+  editFood: (food: Food) => void;
+  isMobile: boolean;
+  openConfirmDeleteActionModal: boolean;
+  setOpenConfirmDeleteActionModal: Dispatch<SetStateAction<boolean>>;
+}
 
-  const isMobile = useMediaQuery("(max-width: 640px)");
-  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
-  const [sortColumn, setSortColumn] = useState<string | null>(null);
-
-  const getAllFoods = async (page: number) => {
-    const offset = (page - 1) * PAGE_SIZE;
-    const { data, error } = await supabase
-      .from("food")
-      .select(`*, serving(*, food)`)
-      .ilike("name", `%${searchTerm}%`)
-      .range(offset, offset + PAGE_SIZE - 1)
-      .order(sortColumn || "name", {
-        ascending: sortDirection !== "DESC",
-      });
-
-    if (error) {
-      console.error("Failed to fetch error:", error);
-    }
-
-    setFoods(data as any);
-    setDataFetched(true);
-  };
-  const handleSortClick = async (column: string) => {
-    let newSortDirection: SortDirection = null;
-    if (sortDirection === null) {
-      newSortDirection = "ASC";
-    } else if (sortDirection === "ASC") {
-      newSortDirection = "DESC";
-    }
-    setSortDirection(newSortDirection);
-    setSortColumn(column);
-  };
-
-  useEffect(() => {
-    getAllFoods(currentPage);
-  }, [currentPage, searchTerm, sortDirection, sortColumn]);
-
-  const handleNextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
-
-  const handlePreviousPage = () => {
-    setCurrentPage(currentPage - 1);
-  };
-
-  const editFood = (food: FoodWithServing) => {
-    setOpenEditFoodModal(true);
-    setSelectedFood(food);
-  };
-
-  const handleDeleteFood = async (id: string) => {
-    const { error } = await supabase.from("food").delete().match({ id: id });
-    if (error) {
-      console.error("Failed to delete food:", error);
-    }
-    setSelectedFood(emptyPlaceholderFood);
-    setOpenConfirmDeleteActionModal(false);
-    getAllFoods(currentPage);
-  };
-
-  if (!dataFetched) return <Loading />;
-
+const TemplateMealTable: FC<INutritionTable> = ({
+  meals,
+  selectedFood,
+  setSelectedFood,
+  currentPage,
+  handleSortClick,
+  handleNextPage,
+  handlePreviousPage,
+  handleDeleteFood,
+  sortColumn,
+  sortDirection,
+  openEditFoodModal,
+  setOpenEditFoodModal,
+  editFood,
+  isMobile,
+  openConfirmDeleteActionModal,
+  setOpenConfirmDeleteActionModal,
+}) => {
   return (
     <>
-      <EditFoodModal
-        isOpen={openEditFoodModal}
-        setIsOpen={setOpenEditFoodModal}
-        food={selectedFood}
-      />
       <ConfirmDeleteActionModal
         open={openConfirmDeleteActionModal}
         setOpen={setOpenConfirmDeleteActionModal}
         deleteFunction={() => handleDeleteFood(selectedFood.id)}
-      />
-      <SearchBarWithAddButton
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        placeholder="Search for food..."
-        button={<AddButton link="/app/nutrition/add" text="Add Food" />}
       />
 
       <div className="mt-2">
@@ -147,7 +92,7 @@ const Table: FC = () => {
                         onClick={() => handleSortClick("name")}
                         className="group inline-flex"
                       >
-                        Food Name
+                        Meal Name
                         <span className="ml-1 flex-none rounded text-gray-400">
                           {sortColumn === "name"
                             ? SortIcon(sortDirection)
@@ -163,10 +108,10 @@ const Table: FC = () => {
                         >
                           <button
                             onClick={() => handleSortClick("brand")}
-                            className="group inline-flex"
+                            className="group inline-flex text-white"
                           >
                             Brand
-                            <span className="ml-1 flex-none rounded text-gray-400">
+                            <span className="ml-1 flex-none rounded text-white">
                               {sortColumn === "brand"
                                 ? SortIcon(sortDirection)
                                 : SortIcon(null)}
@@ -214,7 +159,7 @@ const Table: FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {foods?.map((f: FoodWithServing, idx) => (
+                  {meals?.map((f: Food, idx) => (
                     <tr
                       key={idx}
                       className={clsx(
@@ -231,7 +176,7 @@ const Table: FC = () => {
                       {!isMobile ? (
                         <>
                           <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
-                            <p>{f.brand}</p>
+                            {/* <p>{f.brand}</p> */}
                           </td>
                           <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
                             {f.protein}
@@ -278,7 +223,7 @@ const Table: FC = () => {
           </div>
         </div>
 
-        {foods?.length > PAGE_SIZE ? (
+        {meals?.length > PAGE_SIZE ? (
           <div className="w-full mt-3 pb-4">
             <div className="lg:ml-auto flex justify-between lg:justify-center lg:space-x-10">
               <button
@@ -292,7 +237,7 @@ const Table: FC = () => {
               </button>
               <button
                 onClick={handleNextPage}
-                disabled={foods.length < PAGE_SIZE}
+                disabled={meals.length < PAGE_SIZE}
                 className="bg-gro-indigo text-white font-bold p-2 rounded flex cursor-pointer"
               >
                 <span className="mx-auto flex">
@@ -307,4 +252,4 @@ const Table: FC = () => {
   );
 };
 
-export default Table;
+export default TemplateMealTable;

@@ -26,16 +26,15 @@ const AddMealTable: FC<IAddMealTable> = ({
   removeMeal,
 }) => {
   const [showNotesModal, setShowNotesModal] = useState(false);
-  const { control, watch, register } = useFormContext();
+  const methods = useFormContext();
   const { updateValue: setSelectMealIndex } = useMealIndexContext();
 
   const { remove } = useFieldArray({
-    control,
     name: `meals[${mealIndex}].foods`,
   });
 
-  const meals = watch("meals");
-  const foodList = watch(`meals[${mealIndex}].foods`);
+  const meals = methods.watch("meals");
+  const foodList = methods.watch(`meals[${mealIndex}].foods`);
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   const handleAddFood = (mealIndex: number) => {
@@ -54,7 +53,7 @@ const AddMealTable: FC<IAddMealTable> = ({
           <input
             type="text"
             defaultValue={`Meal ${mealIndex + 1}`}
-            {...register(`meals[${mealIndex}].name`)}
+            {...methods.register(`meals[${mealIndex}].name`)}
             className="focus:outline-none w-14 lg:w-56 text-sm lg:text-sm rounded-lg"
           />
           <PencilIcon className="w-4 ml-2 text-gray-400" />

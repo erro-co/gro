@@ -2,15 +2,12 @@ import LoadingIcon from "@/components/icons/LoadingIcon";
 import { Dialog, Transition } from "@headlessui/react";
 import { FC, Fragment } from "react";
 
-export interface ISuccessfulAddNewFoodModal {
+export interface IConfirmationModal {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 
-const ConfirmationModal: FC<ISuccessfulAddNewFoodModal> = ({
-  isOpen,
-  setIsOpen,
-}) => {
+const ConfirmationModal: FC<IConfirmationModal> = ({ isOpen, setIsOpen }) => {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog

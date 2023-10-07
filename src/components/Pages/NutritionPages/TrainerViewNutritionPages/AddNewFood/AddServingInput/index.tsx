@@ -4,16 +4,16 @@ import { FC } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 const AddServingInput: FC = () => {
-  const { control, watch, register } = useFormContext();
+  const formcontext = useFormContext();
 
   const { fields, append, remove, update } = useFieldArray({
-    control,
     name: "serving",
+    control: formcontext.control,
   });
 
   const checkIfServingEmpty = (index: number, type: "and" | "or") => {
-    const weight: number = watch(`serving.${index}.name`);
-    const name: string = watch(`serving.${index}.weight`);
+    const weight: number = formcontext.watch(`serving.${index}.name`);
+    const name: string = formcontext.watch(`serving.${index}.weight`);
     if (type === "and" && !isValueEmpty(weight) && !isValueEmpty(name)) {
       return true;
     } else if (
@@ -72,7 +72,7 @@ const AddServingInput: FC = () => {
                 <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
                   <input
                     id="serving-name"
-                    {...register(`serving.${index}.name`)}
+                    {...formcontext.register(`serving.${index}.name`)}
                     className="pl-2 w-full"
                     type="text"
                     placeholder="Serving"
@@ -80,7 +80,7 @@ const AddServingInput: FC = () => {
                 </td>
                 <td className="py-2 whitespace-nowrap text-sm text-gray-500">
                   <input
-                    {...register(`serving.${index}.weight`, {
+                    {...formcontext.register(`serving.${index}.weight`, {
                       valueAsNumber: true,
                     })}
                     className="pl-2 w-16"

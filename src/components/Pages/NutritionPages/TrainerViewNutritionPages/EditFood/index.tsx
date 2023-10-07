@@ -1,13 +1,12 @@
 import { FC, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import NutritionFactsInput from "../../../../NutritionFactsInput";
-import AddServingInput from "../AddNewFood/AddServingInput";
-import ComboboxInput from "../AddNewFood/ComboBoxInput";
+import ComboBoxInput from "../AddNewFood/ComboBoxInput";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export interface IEditFood {
-  food: FoodWithServing;
+  food: Food;
 }
 
 const EditFood: FC<IEditFood> = ({ food }) => {
@@ -46,7 +45,7 @@ const EditFood: FC<IEditFood> = ({ food }) => {
     setValue("name", food?.name);
     setValue("brand", food?.brand);
     setValue("food_category", food?.category);
-    setValue("serving", food?.serving);
+    // setValue("serving", food?.serving);
     setValue("calories", food?.calories);
     setValue("total_carbohydrate", food?.total_carbohydrate);
     setValue("total_fat", food?.total_fat);
@@ -127,15 +126,15 @@ const EditFood: FC<IEditFood> = ({ food }) => {
 
           <div>
             <label htmlFor="category">Category</label>
-            <ComboboxInput
+            <ComboBoxInput
               categories={foodCategories}
               setSelectedFoodCategory={setSelectedFoodCategory}
               selectedCategory={selectedFoodCategory}
             />
           </div>
           <div>
-            <label htmlFor="serving">Serving</label>
-            <AddServingInput />
+            {/* <label htmlFor="serving">Serving</label>
+            <AddServingInput /> */}
           </div>
         </div>
         <NutritionFactsInput />

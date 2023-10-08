@@ -43,7 +43,7 @@ const ViewClientPage: FC = () => {
   const [inputError, setInputError] = useState<UpdateClientProfileErrors>(null);
 
   //ID of the client taken from the URL path
-  const clientId = usePathname().split("/")[3];
+  const clientId = usePathname()?.split("/")[3];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,7 +58,7 @@ const ViewClientPage: FC = () => {
         phone: phone,
         trainer: trainer, // or however you want to handle the trainer selection
       })
-      .eq("id", clientId);
+      .eq("id", clientId || "");
     if (error) {
       console.error("Error updating client:", error);
     } else {
@@ -83,7 +83,7 @@ const ViewClientPage: FC = () => {
     const { data: client, error: clientError } = await supabase
       .from("profiles")
       .select("*")
-      .eq("id", clientId)
+      .eq("id", clientId || "")
       .single();
     if (clientError) {
       console.log("Error getting client:", trainerError);

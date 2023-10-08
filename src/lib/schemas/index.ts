@@ -41,7 +41,7 @@ export const FoodWithServingAndId = FoodWithServingSchema.extend({
 });
 
 export const newMealPlanFoodSchema = z.object({
-  food: FoodSchema.extend({ id: z.number().nonnegative() }),
+  food: FoodSchema.extend({ id: z.string() }),
   serving: servingWithIdSchema,
   serving_quantity: z.number().min(1).nonnegative(),
 });

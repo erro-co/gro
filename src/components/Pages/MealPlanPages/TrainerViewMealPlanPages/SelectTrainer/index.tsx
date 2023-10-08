@@ -15,7 +15,7 @@ export interface ISelectTrainer {
   selectedTrainer: User | "All";
 }
 
-export const SelectTrainer: FC<ISelectTrainer> = ({
+const SelectTrainer: FC<ISelectTrainer> = ({
   trainers,
   setSelectedTrainer,
   selectedTrainer,
@@ -53,3 +53,5 @@ export const SelectTrainer: FC<ISelectTrainer> = ({
     </Select>
   );
 };
+
+export default SelectTrainer;

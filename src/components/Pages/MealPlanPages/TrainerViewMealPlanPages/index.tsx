@@ -5,7 +5,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { FC, useEffect, useState } from "react";
 import LoadingIcon from "../../../icons/LoadingIcon";
 import MealPlanListTable from "../common/MealPlanListTable";
-import { SelectTrainer } from "./SelectTrainer";
+import SelectTrainer from "./SelectTrainer";
 
 type MealPlanUser = MealPlan & { user: User };
 

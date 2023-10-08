@@ -14,8 +14,6 @@ export interface IAddFoodMetaDataForm {
   setSelectedFood: Dispatch<SetStateAction<Food | null>>;
 }
 
-export type ServingWithId = Serving & { id: number };
-
 const nutrientsPercentages = (food: Food | null) => {
   if (!food) {
     return null;
@@ -37,7 +35,7 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
   setSelectedFood,
 }) => {
   const [servings, setServings] = useState<Serving[]>([]);
-  const [selectedServing, setSelectedServing] = useState<ServingWithId>();
+  const [selectedServing, setSelectedServing] = useState<Serving>();
   const [loaded, setLoaded] = useState(false);
   const { control } = useFormContext();
   const [servingQuantity, setServingQuantity] = useState(1);
@@ -63,7 +61,7 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
         return;
       }
       setServings(servings as Serving[]);
-      setSelectedServing(servings[0] as ServingWithId);
+      setSelectedServing(servings[0] as Serving);
     }
     setLoaded(true);
   };
@@ -265,7 +263,7 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
           </div>
           <div className="flex-col my-4">
             <label className="font-semibold text-sm">Meal:</label>
-            <SelectMealInput meals={meals} />
+            {meals && <SelectMealInput meals={meals} />}
           </div>
         </div>
       </div>

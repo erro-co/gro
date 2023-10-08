@@ -1,7 +1,7 @@
-import BookingPage from "@/components/Pages/BookingPages";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import BookingPage from "../../../components/Pages/BookingPages";
 
 export const dynamic = "force-dynamic";
 

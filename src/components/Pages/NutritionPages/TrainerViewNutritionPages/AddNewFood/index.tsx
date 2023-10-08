@@ -3,101 +3,31 @@ import Loading from "@/components/Loading";
 import QuickAddFoodModal from "@/components/Modals/QuickAddFoodModal";
 import SuccessfulAddNewFoodModal from "@/components/Modals/SuccessfulAddNewFoodModal";
 import NutritionLabelInput from "@/components/NutritionFactsInput";
-import { convertToBase100 } from "@/lib/helpers";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { FoodSchema } from "@/lib/schemas";
 import { BoltIcon } from "@heroicons/react/20/solid";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { FC, useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { FC, useEffect } from "react";
 import AddServingInput from "./AddServingInput";
-import ComboboxInput from "./ComboBoxInput";
+import ComboBoxInput from "./ComboBoxInput";
+import useAddNewFoodForm from "./hooks/useAddNewFood";
 
 const AddNewFoodForm: FC = () => {
-  const { register, handleSubmit, reset } = useFormContext();
-  const [foodCategories, setFoodCategories] = useState<FoodCategory[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showSuccessfulAddNewFoodModal, setShowSuccessfulAddNewFoodModal] =
-    useState(false);
-  const [selectedFoodCategory, setSelectedFoodCategory] =
-    useState<FoodCategory | null>(null);
-  const [showQuickAddFoodModal, setShowQuickAddFoodModal] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    foodCategories,
+    loading,
+    showSuccessfulAddNewFoodModal,
+    setShowSuccessfulAddNewFoodModal,
+    selectedFoodCategory,
+    setSelectedFoodCategory,
+    onSubmit,
+    showQuickAddFoodModal,
+    setShowQuickAddFoodModal,
+  } = useAddNewFoodForm();
+
   const isMobile = useMediaQuery("(max-width: 640px)");
-  const supabase = createClientComponentClient<Database>();
-
-  const fetchFoodCategories = async () => {
-    const { data: food_category, error } = await supabase
-      .from("food_category")
-      .select("*");
-
-    if (error) {
-      console.log("Failed to fetch error:", error);
-    }
-    setFoodCategories((food_category as FoodCategory[]) || []);
-    setLoading(false);
-  };
-
-  const validateForm = (data: any) => {
-    try {
-      FoodSchema.parse(data);
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  };
-
-  const onSubmit = async (data: any) => {
-    if (validateForm(data) === false) {
-      return;
-    }
-    const base100NutrientsWithId = {
-      ...convertToBase100(data, data.serving[0].weight),
-    };
-
-    const { data: new_food, error } = await supabase
-      .from("food")
-      .insert([
-        {
-          name: data.name,
-          brand: data.brand,
-          category: data.category,
-          protein: base100NutrientsWithId.protein,
-          total_fat: base100NutrientsWithId.total_fat,
-          total_carbohydrate: base100NutrientsWithId.total_carbohydrate,
-          sugar: base100NutrientsWithId.sugar,
-          sodium: base100NutrientsWithId.sodium,
-          fibre: base100NutrientsWithId.fibre,
-          cholesterol: base100NutrientsWithId.cholesterol,
-          saturated_fat: base100NutrientsWithId.saturated_fat,
-          trans_fat: base100NutrientsWithId.trans_fat,
-          calories: base100NutrientsWithId.calories,
-        },
-      ])
-      .select();
-    if (error) {
-      console.error("Error inserting food:", error);
-      return;
-    }
-    const { error: food_serving_error } = await supabase.from("serving").insert(
-      data.serving.map((serving: Serving) => ({
-        food: new_food[0].id,
-        name: serving.name,
-        weight: serving.weight,
-      })),
-    );
-
-    if (food_serving_error) {
-      console.error("Error inserting food_serving:", food_serving_error);
-      return;
-    }
-
-    reset();
-    setShowSuccessfulAddNewFoodModal(true);
-  };
-
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
@@ -105,7 +35,6 @@ const AddNewFoodForm: FC = () => {
     ) {
       redirect("/app/plans");
     }
-    fetchFoodCategories();
   }, []);
 
   if (loading) {
@@ -187,7 +116,7 @@ const AddNewFoodForm: FC = () => {
               >
                 Category<span className="text-red-500 font-bold">*</span>
               </label>
-              <ComboboxInput
+              <ComboBoxInput
                 categories={foodCategories}
                 setSelectedFoodCategory={setSelectedFoodCategory}
                 selectedCategory={selectedFoodCategory}

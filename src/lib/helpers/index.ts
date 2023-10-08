@@ -1,4 +1,9 @@
 import { SupabaseClient } from "@supabase/supabase-js";
+import { z } from "zod";
+import { FoodWithServingSchema } from "../schemas";
+import { Appointment, SquareAppointmentResponse } from "../types";
+
+type FoodWithServingSchemaType = z.infer<typeof FoodWithServingSchema>;
 
 export const joinClassNames = (
   ...classes: (string | boolean | undefined)[]
@@ -10,15 +15,13 @@ export const isValueEmpty = (value: any) =>
   value === undefined || value === null || value === "";
 
 export const convertToBase100 = (
-  food: FoodWithServing,
+  food: FoodWithServingSchemaType,
   weight: number,
-): FoodWithServing => {
+): Partial<FoodWithServingSchemaType> => {
   console.log("food", food);
   console.log("weight", weight);
   const scale = Number(100 / weight);
   return {
-    id: food.id,
-
     calories: Number((food.calories * scale).toFixed(1)),
     saturated_fat: Number((food.saturated_fat * scale).toFixed(1)),
     trans_fat: Number((food.trans_fat * scale).toFixed(1)),
@@ -121,4 +124,31 @@ export const getUserRole = async (email: string, supabase: SupabaseClient) => {
 export const isValidAustralianPhoneNumber = (phoneNumber: string): boolean => {
   const pattern = /^(?:\+61|0)[2-9]\d{8}$/;
   return pattern.test(phoneNumber);
+};
+
+export const MapSquareAppointments = (
+  appointments: SquareAppointmentResponse[],
+): Appointment[] => {
+  return appointments?.map((appointment) => {
+    // Sum the duration from each segment
+    const totalDuration = appointment.appointmentSegments.reduce(
+      (sum, segment) => sum + segment.durationMinutes,
+      0,
+    );
+
+    // Convert startAt to Date and add totalDuration
+    const startDate = new Date(appointment.startAt);
+    const endDate = new Date(startDate.getTime() + totalDuration * 60000); // 60000ms = 1 minute
+
+    // Convert endDate back to string format
+    const endAt = endDate.toISOString(); // Assuming you want ISO string format
+
+    return {
+      id: appointment.id,
+      status: appointment.status,
+      startAt: appointment.startAt,
+      endAt: endAt,
+      durationMinutes: totalDuration,
+    };
+  });
 };

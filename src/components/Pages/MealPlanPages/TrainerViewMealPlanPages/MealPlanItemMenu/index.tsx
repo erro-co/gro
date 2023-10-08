@@ -6,13 +6,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   EnvelopeIcon,
-  PencilSquareIcon,
   TrashIcon,
   UserMinusIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/outline";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
 import { FC } from "react";
 
 export interface IMealPlanItemMenu {
@@ -57,10 +55,10 @@ const MealPlanItemMenu: FC<IMealPlanItemMenu> = ({
           </button>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link href={`/app/plans/edit/${plan.id}`} className="flex">
+          {/* <Link href={`/app/plans/edit/${plan.id}`} className="flex">
             <PencilSquareIcon className="w-5 mr-2" />
             Edit
-          </Link>
+          </Link> */}
         </DropdownMenuItem>
         {plan.client ? (
           <DropdownMenuItem>

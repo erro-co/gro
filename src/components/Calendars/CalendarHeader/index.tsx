@@ -7,13 +7,36 @@ import {
 } from "@radix-ui/react-icons";
 import clsx from "clsx";
 import { FC, Fragment } from "react";
+import { CalendarViews } from "..";
 
-const CalendarHeader: FC = () => {
+export interface ICalendarHeader {
+  currentDate: Date;
+  selectedDate: Date;
+  calendarView: CalendarViews;
+  setCalendarView: (calendarView: CalendarViews) => void;
+  appoitmentAmount: number;
+}
+
+const CalendarHeader: FC<ICalendarHeader> = ({
+  currentDate,
+  selectedDate,
+  calendarView,
+  setCalendarView,
+  appoitmentAmount,
+}) => {
   return (
     <header className="flex flex-none items-center justify-between border-b border-gray-200 px-6 py-4">
       <h1 className="text-base font-semibold leading-6 text-gray-900">
-        <time dateTime="2022-01">January 2022</time>
+        <time dateTime="2022-01">
+          {selectedDate.toLocaleDateString("default", {
+            month: "long",
+            year: "numeric",
+          })}
+        </time>
       </h1>
+      <div className="bg-gro-pink rounded-lg p-2 text-white font-bold">
+        <p>Total sessions scheduled: {appoitmentAmount}</p>
+      </div>
       <div className="flex items-center">
         <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
           <button
@@ -64,8 +87,8 @@ const CalendarHeader: FC = () => {
                 <div className="py-1">
                   <Menu.Item>
                     {({ active }) => (
-                      <a
-                        href="#"
+                      <button
+                        onClick={() => setCalendarView("day")}
                         className={clsx(
                           active
                             ? "bg-gray-100 text-gray-900"
@@ -74,13 +97,13 @@ const CalendarHeader: FC = () => {
                         )}
                       >
                         Day view
-                      </a>
+                      </button>
                     )}
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <a
-                        href="#"
+                      <button
+                        onClick={() => setCalendarView("week")}
                         className={clsx(
                           active
                             ? "bg-gray-100 text-gray-900"
@@ -89,13 +112,13 @@ const CalendarHeader: FC = () => {
                         )}
                       >
                         Week view
-                      </a>
+                      </button>
                     )}
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <a
-                        href="#"
+                      <button
+                        onClick={() => setCalendarView("month")}
                         className={clsx(
                           active
                             ? "bg-gray-100 text-gray-900"
@@ -104,13 +127,13 @@ const CalendarHeader: FC = () => {
                         )}
                       >
                         Month view
-                      </a>
+                      </button>
                     )}
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <a
-                        href="#"
+                      <button
+                        onClick={() => setCalendarView("year")}
                         className={clsx(
                           active
                             ? "bg-gray-100 text-gray-900"
@@ -119,20 +142,20 @@ const CalendarHeader: FC = () => {
                         )}
                       >
                         Year view
-                      </a>
+                      </button>
                     )}
                   </Menu.Item>
                 </div>
               </Menu.Items>
             </Transition>
           </Menu>
-          <div className="ml-6 h-6 w-px bg-gray-300" />
+          {/* <div className="ml-6 h-6 w-px bg-gray-300" />
           <button
             type="button"
             className="ml-6 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Add event
-          </button>
+          </button> */}
         </div>
         <Menu as="div" className="relative ml-6 md:hidden">
           <Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">

@@ -1,7 +1,7 @@
-import TrainerPage from "@/components/Pages/TrainerPages";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import TrainerPage from "../../../components/Pages/TrainerPages";
 
 export const metadata = {
   title: "Gro - My Clients",

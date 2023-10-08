@@ -50,7 +50,7 @@ export type FormSchemaType = z.infer<typeof newMealPlanSchema>;
 // };
 
 const EditPlanPage: FC = () => {
-  const pathId = usePathname().split("/")[4];
+  const pathId = usePathname()?.split("/")[4];
   const [loading, setLoading] = useState(true);
   const [selectedMealPlan, setSelectedMealPlan] = useState<MealPlan | null>();
   const supabase = createClientComponentClient<Database>();
@@ -67,7 +67,7 @@ const EditPlanPage: FC = () => {
       .select(
         "meal_plan(*), meal_food_serving(meal(*), quantity, serving(*), food(*, food_category(id, name)))",
       )
-      .eq("meal_plan", pathId);
+      .eq("meal_plan", pathId || "");
     if (error) {
       console.error("Error getting meal plan from supabase:", error);
       return;

@@ -28,6 +28,7 @@ const AddNewMealPlan: FC = () => {
     handleSubmit,
     reset,
     formState: { errors },
+    watch,
   } = useFormContext();
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [showLoading, setShowLoading] = useState(false);
@@ -36,6 +37,8 @@ const AddNewMealPlan: FC = () => {
   const supabase = createClientComponentClient<Database>();
 
   console.log({ errors });
+  const plan = watch();
+  console.log({ plan });
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -65,7 +68,6 @@ const AddNewMealPlan: FC = () => {
       .insert([
         {
           name: data.name,
-          template: false,
           trainer: user?.id ?? null,
         },
       ])
@@ -112,7 +114,6 @@ const AddNewMealPlan: FC = () => {
               food: food.food.id,
               serving: food.serving.id,
               quantity: food.serving_quantity,
-              template: false,
             })
             .select("*");
 

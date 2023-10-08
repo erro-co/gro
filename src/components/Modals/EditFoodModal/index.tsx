@@ -1,14 +1,14 @@
-import EditFood from "@/components/Pages/NutritionPages/TrainerViewNutritionPages/EditFood";
 import { FoodWithServingAndId } from "@/lib/schemas";
 import { Dialog, Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, Fragment } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import EditFood from "../../Pages/NutritionPages/TrainerViewNutritionPages/EditFood";
 
 export interface IEditFoodModal {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  food: FoodWithServing;
+  food: Food;
 }
 
 const EditFoodModal: FC<IEditFoodModal> = ({ isOpen, setIsOpen, food }) => {

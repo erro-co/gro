@@ -1,6 +1,6 @@
 "use client";
+import { Appointment } from "@/lib/types";
 import { FC, Fragment, useEffect, useRef, useState } from "react";
-import { Appointment } from "..";
 
 export interface IWeekViewCalendar {
   currentDate?: Date;
@@ -27,7 +27,6 @@ const Event: FC<{ appointment: Appointment }> = ({ appointment }) => {
     return 2 + parseInt(hours, 10) * 12 + Math.floor(parseInt(minutes, 10) / 5);
   };
   const appointmentDay = new Date(appointment.startAt).getDay();
-  console.log(appointmentDay);
   const startTimeAEST = convertToAEST(appointment.startAt);
   const gridRowStart = getGridRowStart(startTimeAEST);
   const gridRowSpan = Math.ceil(appointment.durationMinutes / 2);

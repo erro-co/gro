@@ -4,7 +4,7 @@ import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-import { SelectTrainer } from "../MealPlanPages/TrainerViewMealPlanPages/SelectTrainer";
+import SelectTrainer from "../MealPlanPages/TrainerViewMealPlanPages/SelectTrainer";
 import ClientsList from "./TrainerViewClientsPages/ClientsList";
 
 export enum ClientStatus {

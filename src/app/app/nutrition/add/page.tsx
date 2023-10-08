@@ -1,9 +1,11 @@
 "use client";
-import AddNewFoodForm from "@/components/Pages/NutritionPages/TrainerViewNutritionPages/AddNewFood";
 import { FoodWithServingSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import AddNewFoodForm from "../../../../components/Pages/NutritionPages/TrainerViewNutritionPages/AddNewFood";
+
+export const dynamic = "force-dynamic";
 
 const AddNewFoodPage: FC = () => {
   const methods = useForm({

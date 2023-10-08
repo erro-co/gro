@@ -19,7 +19,7 @@ function formatDate(input: string): string {
 const ClientsList: FC<IClientList> = ({ clients }) => {
   return (
     <ul role="list" className="divide-y divide-gray-100">
-      {clients.map((client, idx) => (
+      {clients?.map((client, idx) => (
         <li
           key={idx}
           className="flex items-center justify-between gap-x-6 py-5"

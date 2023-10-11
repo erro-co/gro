@@ -152,3 +152,79 @@ export const MapSquareAppointments = (
     };
   });
 };
+
+export const groupAndSummarizeMealsByNutrition = (
+  data: any[],
+): MealFormattedWithSummary[] => {
+  const mealMap: { [key: string]: MealFormattedWithSummary } = {};
+
+  data.forEach((item) => {
+    const mealId = item.meal.id;
+    if (!mealMap[mealId]) {
+      mealMap[mealId] = {
+        id: item.meal.id,
+        name: item.meal.name,
+        notes: item.meal.notes,
+        foods: [],
+        totalCalories: 0,
+        totalFat: 0,
+        totalProtein: 0,
+        totalCarbs: 0,
+      };
+    }
+
+    const serving: Serving = {
+      id: item.serving.id,
+      name: item.serving.name,
+      weight: item.serving.weight,
+      food: item.food.id,
+    };
+
+    const food: Food = {
+      id: item.food.id,
+      name: item.food.name,
+      brand: item.food.brand,
+      calories: item.food.calories,
+      total_fat: item.food.total_fat,
+      saturated_fat: item.food.saturated_fat,
+      trans_fat: item.food.trans_fat,
+      cholesterol: item.food.cholesterol,
+      sodium: item.food.sodium,
+      total_carbohydrate: item.food.total_carbohydrate,
+      fibre: item.food.fibre,
+      sugar: item.food.sugar,
+      protein: item.food.protein,
+      category: item.food.food_category.name,
+    };
+
+    // Calculate based on quantity, serving weight, and 100g food values
+    const multiplier = (item.quantity * serving.weight) / 100;
+    mealMap[mealId].totalCalories! += food.calories * multiplier;
+    mealMap[mealId].totalFat! += food.total_fat * multiplier;
+    mealMap[mealId].totalProtein! += food.protein * multiplier;
+    mealMap[mealId].totalCarbs! += food.total_carbohydrate * multiplier;
+
+    mealMap[mealId].foods!.push({
+      quantity: item.quantity,
+      serving: serving,
+      food: food,
+    });
+  });
+
+  return Object.values(mealMap);
+};
+
+export function sortMealFoodServing(mealFoodServings: MealFoodServing[]) {
+  const sortedMealFoodServings: { [key: string]: MealFoodServing[] } = {};
+
+  mealFoodServings.forEach((mealFoodServing: MealFoodServing) => {
+    const mealId = mealFoodServing.id;
+    if (sortedMealFoodServings[mealId]) {
+      sortedMealFoodServings[mealId].push(mealFoodServing);
+    } else {
+      sortedMealFoodServings[mealId] = [mealFoodServing];
+    }
+  });
+
+  return Object.values(sortedMealFoodServings);
+}

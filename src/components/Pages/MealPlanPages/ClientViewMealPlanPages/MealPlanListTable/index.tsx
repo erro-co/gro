@@ -37,7 +37,7 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
     if (error) {
       console.error("Failed to delete food:", error);
     }
-    setSelectedMealPlan(undefined);
+    setSelectedMealPlan(null);
     setOpenConfirmDeleteActionModal(false);
     getAllMealPlans();
   };
@@ -128,18 +128,6 @@ const MealPlanListTable: FC<IMealPlanListTable> = ({
                     <div className="font-light text-gray-900">{plan.name}</div>
                   </td>
 
-                  {clientView ? null : (
-                    <td
-                      className={clsx(
-                        "hidden px-3 py-2 text-sm text-gray-500 lg:table-cell",
-                      )}
-                    >
-                      <p>
-                        {plan.client?.first_name} {plan.client?.last_name}
-                      </p>
-                      <p className="text-xs font-bold">{plan.client?.email}</p>
-                    </td>
-                  )}
                   <td
                     className={clsx(
                       "hidden px-3 py-2 text-sm text-gray-500 lg:table-cell",

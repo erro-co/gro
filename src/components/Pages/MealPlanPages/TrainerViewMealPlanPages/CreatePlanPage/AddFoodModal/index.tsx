@@ -1,3 +1,4 @@
+import { groupAndSummarizeMealsByNutrition } from "@/lib/helpers";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -21,6 +22,9 @@ export interface IAddFoodModal {
 
 const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
   const [foods, setFoods] = useState<Food[]>([]);
+  const [templateMeals, setTemplateMeals] = useState<
+    MealFormattedWithSummary[]
+  >([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dataFetched, setDataFetched] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
@@ -29,6 +33,23 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
   const methods = useFormContext();
 
   const meals = methods.watch("meals");
+
+  const fetchTemplateMealsWithFoods = async () => {
+    try {
+      const { data: template_meals, error: template_meals_error } =
+        await supabase
+          .from("template_meal_food_serving")
+          .select("meal(*), quantity, serving(*), food(*, food_category(*))");
+      if (template_meals_error) {
+        console.error("Failed to fetch template meals:", template_meals_error);
+      }
+      setTemplateMeals(
+        groupAndSummarizeMealsByNutrition(template_meals as any),
+      );
+    } catch (error) {
+      console.error("Failed to fetch template meals:", error);
+    }
+  };
 
   const fetchAllFoods = async () => {
     const query = supabase

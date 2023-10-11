@@ -12,10 +12,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { FC } from "react";
+import { MealPlanUserFull } from "..";
 
 export interface IMealPlanItemMenu {
-  plan: MealPlan;
-  setSelectedMealPlan: (plan: MealPlan) => void;
+  plan: MealPlanUserFull;
+  setSelectedMealPlan: (plan: MealPlanUserFull) => void;
   setOpenConfirmDeleteActionModal: (show: boolean) => void;
   setOpenAssignClientModal: (show: boolean) => void;
 }
@@ -28,19 +29,6 @@ const MealPlanItemMenu: FC<IMealPlanItemMenu> = ({
 }) => {
   const SendEmail = () => {
     console.log("sent");
-
-    try {
-      // axios.post("/app/api/send", {
-      //   data: {
-      //     planId: 0,
-      //     firstName: "Lachlan",
-      //     clientEmail: "all4trash@pm.me",
-      //     trainerFirstName: "Wayne",
-      //   },
-      // });
-    } catch (error) {
-      console.log(error);
-    }
   };
   return (
     <DropdownMenu>

@@ -1,7 +1,6 @@
 "use client";
 import Loading from "@/components/Loading";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
-import Addbutton from "@/components/SearchBarWithAddButton/AddButton";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { FC, useEffect, useState } from "react";
@@ -51,17 +50,16 @@ const AssignUserToPlan: FC<IAssignUserToPlan> = ({ planId }) => {
         selectedClient={selectedClient}
         planId={planId}
       />
-      <h2 className="text-3xl font-bold text-center mt-12 lg:mt-24">
+      <h2 className="text-3xl font-bold text-center my-12">
         Assign to a Client:
       </h2>
-      <div className="mt-12 w-full lg:w-2/3 mx-auto">
-        <SearchBarWithAddButton
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          placeholder="Search for a client..."
-          button={<Addbutton text="Add Client" link="/app/client/add" />}
-        />
-      </div>
+
+      <SearchBarWithAddButton
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        placeholder="Search for a client..."
+      />
+
       <SelectClientList
         clients={clients}
         setSelectedClient={setSelectedClient}

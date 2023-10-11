@@ -4,42 +4,17 @@ import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { FC } from "react";
-import { MealFoodServing } from "../page";
 
 interface IDisplayTable {
-  foods: MealFoodServing[];
+  meal: MealFormattedWithSummary;
 }
 
-function calculateTotalNutrients(mealArray: MealFoodServing[]): {
-  protein: number;
-  total_fat: number;
-  total_carbohydrate: number;
-  calories: number;
-} {
-  let protein = 0;
-  let total_fat = 0;
-  let total_carbohydrate = 0;
-  let calories = 0;
-
-  for (const mealElement of mealArray) {
-    const { food, quantity, serving } = mealElement;
-    protein += quantity * (serving.weight / 100) * food.protein;
-    total_fat += quantity * (serving.weight / 100) * food.total_fat;
-    total_carbohydrate +=
-      quantity * (serving.weight / 100) * food.total_carbohydrate;
-    calories += quantity * (serving.weight / 100) * food.calories;
-  }
-
-  return { protein, total_fat, total_carbohydrate, calories };
-}
-
-const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
-  const totals = calculateTotalNutrients(foods);
+const DisplayTable: FC<IDisplayTable> = ({ meal }) => {
   const isMobile = useMediaQuery("(max-width: 640px)");
   return (
     <div className="pb-12">
       <h2 className="font-semibold mb-2 lg:text-xl">
-        {capitalizeFirstLetter(foods[0].meal.name)}
+        {capitalizeFirstLetter(meal.name)}
       </h2>
       <div className="border border-gro-pink rounded-lg">
         <table className="min-w-full divide-y divide-gray-300">
@@ -87,47 +62,49 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {foods.map((food: MealFoodServing, idx) => (
-              <tr key={idx} className="font-light text-xs lg:text-sm">
-                <td className=" w-[600px] whitespace-nowrap py-2 pr-3 pl-2">
-                  <p>{food.food.name}</p>
-                  <p className="text-gray-400 text-xs">{food.food.brand}</p>
-                </td>
-                <td className="whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
-                  {food.quantity} x {food.serving.name} {"("}
-                  {Number(food.serving.weight * food.quantity).toFixed()}
-                  {"g)"}
-                </td>
-                <td className="whitespace-nowrap px-3 py-1 text-gray-500 sm:table-cell">
-                  {Number(
-                    food.quantity *
-                      (food.serving.weight / 100) *
-                      food.food.calories,
-                  ).toFixed(1)}
-                </td>
-                <td className="hidden whitespace-nowrap px-3 py-1  text-gray-500 lg:table-cell">
-                  {Number(
-                    food.quantity *
-                      (food.serving.weight / 100) *
-                      food.food.protein,
-                  ).toFixed(1)}
-                </td>
-                <td className="hidden whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
-                  {Number(
-                    food.quantity *
-                      (food.serving.weight / 100) *
-                      food.food.total_fat,
-                  ).toFixed(1)}
-                </td>
-                <td className="hidden whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
-                  {Number(
-                    food.quantity *
-                      (food.serving.weight / 100) *
-                      food.food.total_carbohydrate,
-                  ).toFixed(1)}
-                </td>
-              </tr>
-            ))}
+            {meal?.foods?.map(
+              (food: FoodWithServingWithQuantity, idx: number) => (
+                <tr key={idx} className="font-light text-xs lg:text-sm">
+                  <td className=" w-[600px] whitespace-nowrap py-2 pr-3 pl-2">
+                    <p>{food.food.name}</p>
+                    <p className="text-gray-400 text-xs">{food.food.brand}</p>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
+                    {food.quantity} x {food.serving.name} {"("}
+                    {Number(food.serving.weight * food.quantity).toFixed()}
+                    {"g)"}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-1 text-gray-500 sm:table-cell">
+                    {Number(
+                      food.quantity *
+                        (food.serving.weight / 100) *
+                        food.food.calories,
+                    ).toFixed(1)}
+                  </td>
+                  <td className="hidden whitespace-nowrap px-3 py-1  text-gray-500 lg:table-cell">
+                    {Number(
+                      food.quantity *
+                        (food.serving.weight / 100) *
+                        food.food.protein,
+                    ).toFixed(1)}
+                  </td>
+                  <td className="hidden whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
+                    {Number(
+                      food.quantity *
+                        (food.serving.weight / 100) *
+                        food.food.total_fat,
+                    ).toFixed(1)}
+                  </td>
+                  <td className="hidden whitespace-nowrap px-3 py-1 text-gray-500 lg:table-cell">
+                    {Number(
+                      food.quantity *
+                        (food.serving.weight / 100) *
+                        food.food.total_carbohydrate,
+                    ).toFixed(1)}
+                  </td>
+                </tr>
+              ),
+            )}
             <tr className="text-xs lg:text-sm rounded-b-lg">
               <td
                 className="whitespace-nowrap pl-2 py-2 pr-3 font-bold text-gray-900 rounded-bl-lg"
@@ -136,22 +113,22 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
                 Totals:
               </td>
               <td className="whitespace-nowrap px-3 py-1 font-bold rounded-br-lg">
-                <p>{Number(totals.calories).toFixed(1)}</p>
+                <p>{Number(meal.totalCalories).toFixed(1)}</p>
               </td>
               <td className="hidden whitespace-nowrap px-3 py-1  font-bold lg:table-cell">
-                <p>{Number(totals.protein).toFixed(1)}</p>
+                <p>{Number(meal.totalProtein).toFixed(1)}</p>
               </td>
               <td className="hidden lg:table-cell whitespace-nowrap px-3 py-1 font-bold">
-                <p>{totals.total_fat}</p>
+                <p>{meal.totalFat}</p>
               </td>
               <td className="hidden lg:table-cell whitespace-nowrap px-3 py-2 font-bold rounded-br-lg">
-                <p>{totals.total_carbohydrate}</p>
+                <p>{meal.totalCarbs}</p>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      {foods[0].meal.notes !== null ? (
+      {meal.notes !== null ? (
         <Disclosure as="div" className="mt-2">
           {({ open }) => (
             <>
@@ -164,7 +141,7 @@ const DisplayTable: FC<IDisplayTable> = ({ foods }) => {
                 />
               </Disclosure.Button>
               <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm">
-                {foods[0].meal.notes}
+                {meal.notes}
               </Disclosure.Panel>
             </>
           )}

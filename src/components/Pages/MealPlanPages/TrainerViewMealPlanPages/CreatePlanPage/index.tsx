@@ -37,8 +37,6 @@ const AddNewMealPlan: FC = () => {
   const supabase = createClientComponentClient<Database>();
 
   console.log({ errors });
-  const plan = watch();
-  console.log({ plan });
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -76,9 +74,10 @@ const AddNewMealPlan: FC = () => {
       console.error("Error inserting food:", new_meal_plan_error);
       return;
     }
-    console.log("New meal plan:", new_meal_plan);
+    console.log("New meal plan:", new_meal_plan[0]);
     // @ts-ignore
-    setPlanId(new_meal_plan.id);
+    setPlanId(new_meal_plan[0].id);
+    console.log("Plan ID:", planId);
 
     const { data: new_meals, error: new_meals_error } = await supabase
       .from("meal")

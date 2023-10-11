@@ -51,6 +51,31 @@ declare global {
   export type CompleteFood = FoodWithServing & { food_category: FoodCategory };
 
   export type MealWithFoods = Meal & { food: FoodWithServing[] }[];
+
+  export type FoodWithServingWithQuantity = {
+    quantity: number;
+    serving: Serving;
+    food: Food;
+  };
+  export type MealFormattedWithSummary = {
+    id: string;
+    name: string;
+    notes: string | null;
+    foods?: FoodWithServingWithQuantity[];
+    totalCalories?: number;
+    totalFat?: number;
+    totalProtein?: number;
+    totalCarbs?: number;
+  };
+
+  export type CompleteMealPlanJoined = {
+    meal_plan_id: string;
+    meal_plan_name: string;
+    meals: MealFormattedWithSummary[];
+    mealTotalCalories?: number;
+    mealTotalFat?: number;
+    mealTotalProtein?: number;
+  };
 }
 
 export type SquareAppointmentResponse = {

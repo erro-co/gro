@@ -3,6 +3,7 @@ import Loading from "@/components/Loading";
 import SearchBarWithAddButton from "@/components/SearchBarWithAddButton";
 import Addbutton from "@/components/SearchBarWithAddButton/AddButton";
 import { emptyPlaceholderFood } from "@/lib/consts";
+import { groupAndSummarizeMealsByNutrition } from "@/lib/helpers";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
@@ -12,13 +13,6 @@ import TemplateMealTable from "./TrainerViewNutritionPages/TemplateMealTable";
 type SortDirection = "ASC" | "DESC" | null;
 
 const PAGE_SIZE = 10;
-
-type TemplateMeal = {
-  id: string;
-  name: string;
-  notes: string | null;
-  foods?: Food[];
-};
 
 const NutritionPage: FC = () => {
   useEffect(() => {
@@ -34,7 +28,7 @@ const NutritionPage: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [foods, setFoods] = useState<FoodWithServing[]>([]);
-  const [meals, setMeals] = useState<MealWithFoods[]>([]);
+  const [meals, setMeals] = useState<MealFormattedWithSummary[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [openEditFoodModal, setOpenEditFoodModal] = useState<boolean>(false);
   const [selectedFood, setSelectedFood] =
@@ -73,7 +67,7 @@ const NutritionPage: FC = () => {
       if (template_meals_error) {
         console.error("Failed to fetch template meals:", template_meals_error);
       }
-      console.log("Template meals:", template_meals);
+      setMeals(groupAndSummarizeMealsByNutrition(template_meals as any));
     } catch (error) {
       console.error("Failed to fetch template meals:", error);
     }
@@ -161,24 +155,7 @@ const NutritionPage: FC = () => {
       </div>
 
       <div className="px-0 lg:px-6">
-        <TemplateMealTable
-          meals={foods}
-          editFood={() => handleEditFood}
-          currentPage={currentPage}
-          handleNextPage={handleNextPage}
-          handlePreviousPage={handlePreviousPage}
-          handleDeleteFood={() => handleDeleteFood}
-          handleSortClick={handleSortClick}
-          isMobile={isMobile}
-          openEditFoodModal={openEditFoodModal}
-          setOpenEditFoodModal={setOpenEditFoodModal}
-          sortColumn={sortColumn || ""}
-          sortDirection={sortDirection}
-          selectedFood={selectedFood}
-          setSelectedFood={() => setSelectedFood}
-          openConfirmDeleteActionModal={openConfirmDeleteActionModal}
-          setOpenConfirmDeleteActionModal={setOpenConfirmDeleteActionModal}
-        />
+        <TemplateMealTable meals={meals} isMobile={isMobile} />
       </div>
     </>
   );

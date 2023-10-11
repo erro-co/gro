@@ -7,10 +7,16 @@ import LoadingIcon from "../../../icons/LoadingIcon";
 import MealPlanListTable from "../common/MealPlanListTable";
 import SelectTrainer from "./SelectTrainer";
 
-type MealPlanUser = MealPlan & { user: User };
+export type MealPlanUserFull = {
+  client: User;
+  created_at: string;
+  id: string;
+  name: string;
+  trainer: string | null;
+};
 
 const TrainerViewMealPlanPage: FC = () => {
-  const [mealPlans, setMealPlans] = useState<MealPlan[]>([]);
+  const [mealPlans, setMealPlans] = useState<MealPlanUserFull[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedTrainer, setSelectedTrainer] = useState<User | "All">("All");
   const [trainers, setTrainers] = useState<User[] | null>(null);
@@ -56,7 +62,7 @@ const TrainerViewMealPlanPage: FC = () => {
 
     let query = supabase
       .from("meal_plan")
-      .select(`*`)
+      .select(`*, client(*)`)
       .range(0, 9)
       .ilike("name", `%${searchTerm}%`)
       .order("created_at", { ascending: false });
@@ -72,7 +78,7 @@ const TrainerViewMealPlanPage: FC = () => {
       return;
     }
     console.log("meal_plans", meal_plans);
-    setMealPlans(meal_plans as MealPlanUser[]);
+    setMealPlans(meal_plans as unknown as MealPlanUserFull[]);
     setLoading(false);
   };
 

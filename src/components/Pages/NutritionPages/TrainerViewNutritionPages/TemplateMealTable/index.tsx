@@ -1,254 +1,183 @@
-"use client";
-import {
-  ChevronDownIcon,
-  ChevronUpDownIcon,
-  ChevronUpIcon,
-} from "@heroicons/react/20/solid";
-import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { Dispatch, FC, SetStateAction } from "react";
-import ConfirmDeleteActionModal from "../../../../Modals/ConfirmDeleteActionModal";
-
-type SortDirection = "ASC" | "DESC" | null;
-
-const PAGE_SIZE = 10;
-
-const SortIcon = (sortDirection: SortDirection) => {
-  switch (sortDirection) {
-    case "ASC":
-      return (
-        <div className="bg-gray-100 rounded-lg">
-          <ChevronDownIcon className="w-5 m-0 my-auto" />
-        </div>
-      );
-    case "DESC":
-      return (
-        <div className="bg-gray-100 rounded-lg">
-          <ChevronUpIcon className="w-5 m-0 my-auto" />
-        </div>
-      );
-    default:
-      return <ChevronUpDownIcon className="w-5 m-0 my-auto" />;
-  }
-};
+import { FC, useState } from "react";
 
 export interface INutritionTable {
-  meals: Food[];
-  selectedFood: Food;
-  setSelectedFood: Dispatch<SetStateAction<Food>>;
-  currentPage: number;
-  handleSortClick: (column: string) => void;
-  handleNextPage: () => void;
-  handlePreviousPage: () => void;
-  handleDeleteFood: (id: string) => void;
-  sortColumn: string;
-  sortDirection: SortDirection;
-  openEditFoodModal: boolean;
-  setOpenEditFoodModal: Dispatch<SetStateAction<boolean>>;
-  editFood: (food: Food) => void;
+  meals: MealFormattedWithSummary[];
   isMobile: boolean;
-  openConfirmDeleteActionModal: boolean;
-  setOpenConfirmDeleteActionModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const TemplateMealTable: FC<INutritionTable> = ({
-  meals,
-  selectedFood,
-  setSelectedFood,
-  currentPage,
-  handleSortClick,
-  handleNextPage,
-  handlePreviousPage,
-  handleDeleteFood,
-  sortColumn,
-  sortDirection,
-  openEditFoodModal,
-  setOpenEditFoodModal,
-  editFood,
-  isMobile,
-  openConfirmDeleteActionModal,
-  setOpenConfirmDeleteActionModal,
-}) => {
+const TableHeader: FC<{ isMobile: boolean }> = ({ isMobile }) => {
   return (
-    <>
-      <ConfirmDeleteActionModal
-        open={openConfirmDeleteActionModal}
-        setOpen={setOpenConfirmDeleteActionModal}
-        deleteFunction={() => handleDeleteFood(selectedFood.id)}
-      />
+    <thead>
+      <tr>
+        <th
+          scope="col"
+          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
+        >
+          <button className="group inline-flex">Meal Name</button>
+        </th>
+        {!isMobile && (
+          <>
+            <th
+              scope="col"
+              className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
+            >
+              <button className="group inline-flex text-white">Brand</button>
+            </th>
+            <th
+              scope="col"
+              className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
+            >
+              Protein (g)
+            </th>
+            <th
+              scope="col"
+              className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
+            >
+              Fats (g)
+            </th>
+            <th
+              scope="col"
+              className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
+            >
+              Carbs (g)
+            </th>
+          </>
+        )}
+        <th
+          scope="col"
+          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
+        >
+          Calories (kcal)
+        </th>
+        <th scope="col" className="">
+          <span className="sr-only">Delete</span>
+        </th>
+        {!isMobile && (
+          <th scope="col" className="relative py-2 pl-3 pr-4 sm:pr-6">
+            <span className="sr-only">Edit</span>
+          </th>
+        )}
+      </tr>
+    </thead>
+  );
+};
 
-      <div className="mt-2">
-        <div className="flow-root">
-          <div className="inline-block min-w-full py-2 align-middle">
-            <div className="overflow-hidden ring-1 ring-black ring-opacity-5 rounded-lg">
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead>
-                  <tr>
-                    <th
-                      scope="col"
-                      className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
-                    >
-                      <button
-                        onClick={() => handleSortClick("name")}
-                        className="group inline-flex"
-                      >
-                        Meal Name
-                        <span className="ml-1 flex-none rounded text-gray-400">
-                          {sortColumn === "name"
-                            ? SortIcon(sortDirection)
-                            : SortIcon(null)}
-                        </span>
-                      </button>
-                    </th>
-                    {!isMobile ? (
-                      <>
-                        <th
-                          scope="col"
-                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
-                        >
-                          <button
-                            onClick={() => handleSortClick("brand")}
-                            className="group inline-flex text-white"
-                          >
-                            Brand
-                            <span className="ml-1 flex-none rounded text-white">
-                              {sortColumn === "brand"
-                                ? SortIcon(sortDirection)
-                                : SortIcon(null)}
-                            </span>
-                          </button>
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Protein (g)
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Fats (g)
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Carbs (g)
-                        </th>
-                      </>
-                    ) : null}
-                    <th
-                      scope="col"
-                      className="px-3 py-2 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Calories (kcal)
-                    </th>
-                    <th scope="col" className="">
-                      <span className="sr-only">Delete</span>
-                    </th>
+const TemplateMealTable: FC<INutritionTable> = ({ meals, isMobile }) => {
+  const [visibleMealId, setVisibleMealId] = useState<string | null>(null);
 
-                    {!isMobile ? (
-                      <th
-                        scope="col"
-                        className="relative py-2 pl-3 pr-4 sm:pr-6"
-                      >
-                        <span className="sr-only">Edit</span>
-                      </th>
-                    ) : null}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {meals?.map((f: Food, idx) => (
+  const toggleMealFoods = (mealId: string) => {
+    setVisibleMealId(visibleMealId === mealId ? null : mealId);
+  };
+
+  return (
+    <div className="mt-2">
+      <div className="flow-root">
+        <div className="inline-block min-w-full py-2 align-middle">
+          <div className="overflow-hidden ring-1 ring-black ring-opacity-5 rounded-lg">
+            <table className="min-w-full divide-y divide-gray-300">
+              <TableHeader isMobile={isMobile} />
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {meals?.map((meal: MealFormattedWithSummary, idx) => (
+                  <>
                     <tr
                       key={idx}
                       className={clsx(
-                        "font-light",
+                        "font-light cursor-pointer hover:bg-gray-100",
                         idx % 2 !== 0 ? "bg-gray-50" : "",
                       )}
+                      onClick={() => toggleMealFoods(meal.id)}
                     >
-                      <td className="whitespace-nowrap py-1 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
-                        {f.name}
-                        {isMobile ? (
-                          <p className="text-gray-400 font-light">{f.brand}</p>
-                        ) : null}
+                      <td className="whitespace-nowrap py-1 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 font-bold">
+                        {meal.name}
+                        {isMobile && (
+                          <p className="text-gray-400 font-light"></p>
+                        )}
                       </td>
-                      {!isMobile ? (
+                      {!isMobile && (
                         <>
+                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500"></td>
                           <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
-                            {/* <p>{f.brand}</p> */}
+                            {meal.totalProtein}
                           </td>
                           <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
-                            {f.protein}
+                            {meal.totalFat}
                           </td>
                           <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
-                            {f.total_fat}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
-                            {f.total_carbohydrate}
+                            {meal.totalCarbs}
                           </td>
                         </>
-                      ) : null}
-
+                      )}
                       <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
-                        {f.calories}
+                        {meal.totalCalories}
                       </td>
-
-                      {!isMobile ? (
+                      {!isMobile && (
                         <td className="relative whitespace-nowrap py-1 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                          <button
-                            onClick={() => editFood(f)}
-                            className="text-indigo-600 hover:text-indigo-900"
-                          >
+                          <button className="text-indigo-600 hover:text-indigo-900">
                             Edit
                           </button>
                         </td>
-                      ) : null}
+                      )}
                       <td className="relative whitespace-nowrap py-1 pr-2 text-right text-sm font-medium">
-                        <button
-                          onClick={() => {
-                            setSelectedFood(f);
-                            setOpenConfirmDeleteActionModal(true);
-                          }}
-                          className="text-red-500 pt-1"
-                        >
+                        <button className="text-red-500 pt-1">
                           <TrashIcon className="w-4" />
                         </button>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    {visibleMealId === meal.id &&
+                      meal.foods?.map((foodDetail, foodIdx) => (
+                        <tr
+                          key={foodIdx}
+                          className={clsx(
+                            "font-light bg-gray-200 pl-4",
+                            foodIdx % 2 !== 0 ? "bg-gray-250" : "",
+                          )}
+                        >
+                          {" "}
+                          {/* Indent and different bg color */}
+                          <td className="whitespace-nowrap py-1 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
+                            {foodDetail.food.name}
+                          </td>
+                          {!isMobile && (
+                            <>
+                              <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
+                                {foodDetail.food.brand}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
+                                {foodDetail.food.protein}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
+                                {foodDetail.food.total_fat}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
+                                {foodDetail.food.total_carbohydrate}
+                              </td>
+                            </>
+                          )}
+                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
+                            {foodDetail.food.calories}
+                          </td>
+                          {/* Assuming no edit/delete actions for individual foods */}
+                          <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
+                            {foodDetail.quantity} x {foodDetail.serving.name}{" "}
+                            {"("}
+                            {Number(
+                              foodDetail.serving.weight * foodDetail.quantity,
+                            ).toFixed()}
+                            {"g)"}
+                          </td>
+                          {!isMobile && <td></td>}
+                        </tr>
+                      ))}
+                  </>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-
-        {meals?.length > PAGE_SIZE ? (
-          <div className="w-full mt-3 pb-4">
-            <div className="lg:ml-auto flex justify-between lg:justify-center lg:space-x-10">
-              <button
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-                className="bg-gro-indigo disabled:bg-gray-500 text-white font-bold p-2 rounded flex cursor-pointer"
-              >
-                <span className="mx-auto flex">
-                  <ChevronLeftIcon className="w-6" />
-                </span>
-              </button>
-              <button
-                onClick={handleNextPage}
-                disabled={meals.length < PAGE_SIZE}
-                className="bg-gro-indigo text-white font-bold p-2 rounded flex cursor-pointer"
-              >
-                <span className="mx-auto flex">
-                  <ChevronLeftIcon className="w-6 rotate-180" />
-                </span>
-              </button>
-            </div>
-          </div>
-        ) : null}
       </div>
-    </>
+    </div>
   );
 };
 

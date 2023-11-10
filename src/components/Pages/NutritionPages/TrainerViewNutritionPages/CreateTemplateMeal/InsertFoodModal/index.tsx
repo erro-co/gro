@@ -1,5 +1,4 @@
 import FoodSearchBar from "@/components/Pages/MealPlanPages/TrainerViewMealPlanPages/CreatePlanPage/FoodSearchBar";
-import FoodSearchHitsTable from "@/components/Pages/MealPlanPages/TrainerViewMealPlanPages/CreatePlanPage/FoodSearchHitsTable";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -87,13 +86,13 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
                   setSearchTerm={setSearchTerm}
                 />
 
-                {dataFetched ? (
+                {/* {dataFetched ? (
                   <FoodSearchHitsTable
                     foods={foods}
-                    selectedFood={selectedFood}
-                    setSelectedFood={setSelectedFood}
+                    selectedItem={selectedFood}
+                    setSelectedItem={setSelectedFood}
                   />
-                ) : null}
+                ) : null} */}
                 {selectedFood ? (
                   <AddFoodMetaDataForm
                     selectedFood={selectedFood}

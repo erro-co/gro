@@ -1,4 +1,3 @@
-import FoodNutrientsPieChart from "@/components/Charts/FoodNutrientsPieChart";
 import LoadingIcon from "@/components/icons/LoadingIcon";
 import { useMealIndexContext } from "@/lib/context/SelectedMealIndexContext";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -8,10 +7,12 @@ import AddFoodServingInput from "../Inputs/AddFoodServingInput";
 import SelectMealInput from "../Inputs/SelectMealInput";
 
 export interface IAddFoodMetaDataForm {
-  selectedFood: Food | null;
+  selectedItem: Food | MealFormattedWithSummary | null;
   meals: Meal[];
   setOpen: Dispatch<SetStateAction<boolean>>;
-  setSelectedFood: Dispatch<SetStateAction<Food | null>>;
+  setSelectedItem: Dispatch<
+    SetStateAction<Food | MealFormattedWithSummary | null>
+  >;
 }
 
 const nutrientsPercentages = (food: Food | null) => {
@@ -29,10 +30,10 @@ const nutrientsPercentages = (food: Food | null) => {
 };
 
 const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
-  selectedFood,
+  selectedItem,
   meals,
   setOpen,
-  setSelectedFood,
+  setSelectedItem,
 }) => {
   const [servings, setServings] = useState<Serving[]>([]);
   const [selectedServing, setSelectedServing] = useState<Serving>();
@@ -48,13 +49,13 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
 
   const supabase = createClientComponentClient<Database>();
 
-  const getSelectedFoodMacros = async () => {
+  const getSelectedItemMacros = async () => {
     setLoaded(false);
-    if (selectedFood) {
+    if (selectedItem) {
       const { data: servings, error: servingsError } = await supabase
         .from("serving")
         .select("*")
-        .eq("food", selectedFood.id);
+        .eq("food", selectedItem.id);
 
       if (servingsError) {
         console.log("Failed to fetch error:", servingsError);
@@ -67,16 +68,16 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
   };
 
   useEffect(() => {
-    getSelectedFoodMacros();
-  }, [selectedFood]);
+    getSelectedItemMacros();
+  }, [selectedItem]);
 
   const handleAddfood = () => {
     append({
-      food: selectedFood,
+      food: selectedItem,
       serving: selectedServing,
       serving_quantity: servingQuantity,
     });
-    setSelectedFood(null);
+    setSelectedItem(null);
     setOpen(false);
   };
 
@@ -93,23 +94,23 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
   return (
     <div>
       <h1 className="text-lg lg:text-xl text-center font-light mt-2 mb-2">
-        {selectedFood?.name}
+        {selectedItem?.name}
       </h1>
       <div className="w-full flex flex-col items-stretch lg:flex-row mb-2 md:mb-6">
-        <div className="w-full min-h-full hidden p-2 border border-gray-100 shadow-md rounded-lg lg:flex">
+        {/* <div className="w-full min-h-full hidden p-2 border border-gray-100 shadow-md rounded-lg lg:flex">
           <div className="flex mx-auto">
             <FoodNutrientsPieChart
-              food={selectedFood}
+              food={selectedItem}
               width={150}
               height={150}
               innerRadius={40}
               text={`${
-                selectedFood?.calories &&
+                selectedItem?.calories &&
                 selectedServing?.weight &&
                 Number(
                   servingQuantity *
                     (selectedServing.weight / 100) *
-                    selectedFood.calories,
+                    selectedItem.calories,
                 ).toFixed(0)
               }kcal`}
             />
@@ -118,19 +119,19 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
                 <div className="w-6 h-6 rounded-full bg-gro-pink" />
                 <p className="mx-4">
                   Protein:{" "}
-                  {selectedFood?.protein &&
+                  {selectedItem?.protein &&
                     selectedServing?.weight &&
                     Number(
                       servingQuantity *
                         (selectedServing.weight / 100) *
-                        selectedFood.protein,
+                        selectedItem.protein,
                     ).toFixed(1)}
                   g
                 </p>
                 <p>
                   (
-                  {selectedFood
-                    ? nutrientsPercentages(selectedFood)?.protein.toFixed(0)
+                  {selectedItem
+                    ? nutrientsPercentages(selectedItem)?.protein.toFixed(0)
                     : 0}
                   %)
                 </p>
@@ -139,19 +140,19 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
                 <div className="w-6 h-6 rounded-full bg-gro-purple" />
                 <p className="mx-4">
                   Fats:{" "}
-                  {selectedFood?.total_fat &&
+                  {selectedItem?.total_fat &&
                     selectedServing?.weight &&
                     Number(
                       servingQuantity *
                         (selectedServing.weight / 100) *
-                        selectedFood.total_fat,
+                        selectedItem.total_fat,
                     ).toFixed(1)}
                   g
                 </p>{" "}
                 <p>
                   (
-                  {selectedFood
-                    ? nutrientsPercentages(selectedFood)?.total_fat.toFixed(0)
+                  {selectedItem
+                    ? nutrientsPercentages(selectedItem)?.total_fat.toFixed(0)
                     : 0}
                   %)
                 </p>
@@ -160,41 +161,41 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
                 <div className="w-6 h-6 rounded-full bg-gro-indigo" />
                 <p className="mx-4">
                   Carbs:{" "}
-                  {selectedFood?.total_carbohydrate &&
+                  {selectedItem?.total_carbohydrate &&
                     selectedServing?.weight &&
                     Number(
                       servingQuantity *
                         (selectedServing.weight / 100) *
-                        selectedFood.total_carbohydrate,
+                        selectedItem.total_carbohydrate,
                     ).toFixed(1)}
                   g
                 </p>{" "}
                 <p>
                   (
-                  {selectedFood
-                    ? nutrientsPercentages(selectedFood)?.carbs.toFixed(0)
+                  {selectedItem
+                    ? nutrientsPercentages(selectedItem)?.carbs.toFixed(0)
                     : 0}
                   %)
                 </p>
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="w-full min-h-full rounded-lg border border-gray-100 shadow-md px-2">
-          <div className="lg:hidden flex border rounded-lg border-gro-indigo justify-around mt-2">
+          {/* <div className="lg:hidden flex border rounded-lg border-gro-indigo justify-around mt-2">
             <FoodNutrientsPieChart
-              food={selectedFood}
+              food={selectedItem}
               width={120}
               height={120}
               innerRadius={35}
               text={`${
-                selectedFood?.calories &&
+                selectedItem?.calories &&
                 selectedServing?.weight &&
                 Number(
                   servingQuantity *
                     (selectedServing.weight / 100) *
-                    selectedFood.calories,
+                    selectedItem.calories,
                 ).toFixed(0)
               }kcal`}
             />
@@ -203,12 +204,12 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
                 <div className="w-3 h-3 mt-0.5 rounded-full bg-gro-pink" />
                 <p className="mx-4">
                   Protein{" "}
-                  {selectedFood?.protein &&
+                  {selectedItem?.protein &&
                     selectedServing?.weight &&
                     Number(
                       servingQuantity *
                         (selectedServing.weight / 100) *
-                        selectedFood.protein,
+                        selectedItem.protein,
                     ).toFixed(1)}
                   g
                 </p>
@@ -217,12 +218,12 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
                 <div className="w-3 h-3 mt-0.5 rounded-full bg-gro-purple" />
                 <p className="mx-4">
                   Fats{" "}
-                  {selectedFood?.total_fat &&
+                  {selectedItem?.total_fat &&
                     selectedServing?.weight &&
                     Number(
                       servingQuantity *
                         (selectedServing.weight / 100) *
-                        selectedFood.total_fat,
+                        selectedItem.total_fat,
                     ).toFixed(1)}
                   g
                 </p>
@@ -231,18 +232,18 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
                 <div className="w-3 h-3 mt-0.5 rounded-full bg-gro-indigo" />
                 <p className="mx-4">
                   Carbs{" "}
-                  {selectedFood?.total_carbohydrate &&
+                  {selectedItem?.total_carbohydrate &&
                     selectedServing?.weight &&
                     Number(
                       servingQuantity *
                         (selectedServing.weight / 100) *
-                        selectedFood.total_carbohydrate,
+                        selectedItem.total_carbohydrate,
                     ).toFixed(1)}
                   g
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="flex-col mt-4">
             <label className="font-semibold text-sm">Serving Size:</label>
             <div className="flex">
@@ -271,9 +272,9 @@ const AddFoodMetaDataForm: FC<IAddFoodMetaDataForm> = ({
       <div className="flex w-full">
         <button
           onClick={handleAddfood}
-          className=" text-white p-2 md:py-4 md:px-6 bg-pink-500 rounded-lg mx-auto w-full sm:w-fit text-normal lg:text-xl"
+          className=" text-white p-2 md:py-4 md:px-6 bg-gro-indigo rounded-lg mx-auto w-full sm:w-fit text-normal lg:text-xl"
         >
-          ADD FOOD
+          ADD ITEM
         </button>
       </div>
     </div>

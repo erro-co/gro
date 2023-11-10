@@ -14,7 +14,7 @@ export interface ICalendarHeader {
   selectedDate: Date;
   calendarView: CalendarViews;
   setCalendarView: (calendarView: CalendarViews) => void;
-  appoitmentAmount: number;
+  appointmentAmount: number;
 }
 
 const CalendarHeader: FC<ICalendarHeader> = ({
@@ -22,7 +22,7 @@ const CalendarHeader: FC<ICalendarHeader> = ({
   selectedDate,
   calendarView,
   setCalendarView,
-  appoitmentAmount,
+  appointmentAmount,
 }) => {
   return (
     <header className="flex flex-none items-center justify-between border-b border-gray-200 px-6 py-4">
@@ -34,8 +34,11 @@ const CalendarHeader: FC<ICalendarHeader> = ({
           })}
         </time>
       </h1>
+      <div className="bg-gro-indigo rounded-lg p-2 text-white font-bold">
+        <p>Total sessions paid: {appointmentAmount}</p>
+      </div>
       <div className="bg-gro-pink rounded-lg p-2 text-white font-bold">
-        <p>Total sessions scheduled: {appoitmentAmount}</p>
+        <p>Total sessions scheduled: {appointmentAmount - 2}</p>
       </div>
       <div className="flex items-center">
         <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">

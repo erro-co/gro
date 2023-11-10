@@ -54,7 +54,7 @@ export default function Calendar() {
           selectedDate={selectedDate}
           calendarView={calendarView}
           setCalendarView={setCalendarView}
-          appoitmentAmount={appointments.length}
+          appointmentAmount={appointments.length}
         />
         <div>
           {calendarView === "day" && <div>Day view</div>}

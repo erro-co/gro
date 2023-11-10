@@ -1,5 +1,4 @@
 import { FC } from "react";
-import ClientViewBookingPage from "./ClientViewBookingPages";
 import TrainerViewBookingPage from "./TrainerViewBookingPages";
 
 const BookingPage: FC = () => {
@@ -8,11 +7,11 @@ const BookingPage: FC = () => {
   console.log("role", role);
   switch (role) {
     case "client":
-      return <ClientViewBookingPage />;
+      return <TrainerViewBookingPage />;
     case "trainer":
       return <TrainerViewBookingPage />;
     default:
-      return <div>Invalid role or role not set</div>; // handle unexpected role
+      return <TrainerViewBookingPage />; // handle unexpected role
   }
 };
 

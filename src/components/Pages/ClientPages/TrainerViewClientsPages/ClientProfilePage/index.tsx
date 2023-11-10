@@ -12,7 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { capitalizeFirstLetter } from "@/lib/helpers";
-import { UserIcon } from "@heroicons/react/24/outline";
+import { Disclosure } from "@headlessui/react";
+import { ChevronUpIcon, UserIcon } from "@heroicons/react/24/outline";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
 import Head from "next/head";
@@ -25,6 +26,39 @@ type UpdateClientProfileErrors =
   | "Email must be of valid email format"
   | "Phone must be of valid phone format"
   | null;
+
+const SimpleTable: FC<{ headers: string[]; rows: string[][] }> = ({
+  headers,
+  rows,
+}) => {
+  return (
+    <div className="min-w-full divide-y divide-gray-200">
+      <div className="bg-gray-50">
+        <div className="px-4 py-2 grid grid-cols-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+          {headers.map((header, idx) => (
+            <span key={idx} className="text-left">
+              {header}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="bg-white divide-y divide-gray-200">
+        {rows.map((row, rowIndex) => (
+          <div
+            key={rowIndex}
+            className="px-4 py-2 grid grid-cols-3 text-sm font-medium text-gray-600"
+          >
+            {row.map((cell, cellIndex) => (
+              <span key={cellIndex} className="text-left">
+                {cell}
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const ViewClientPage: FC = () => {
   const [client, setClient] = useState<User>();
@@ -138,145 +172,260 @@ const ViewClientPage: FC = () => {
           Gro | {client?.first_name} {client?.last_name}
         </title>
       </Head>
-      <form onSubmit={handleSubmit}>
-        <SuccessfulAddNewClientModal
-          isOpen={openModal}
-          setIsOpen={setOpenModal}
-        />
-        <div className="space-y-12 sm:space-y-16">
-          <div>
-            <div className="flex w-full">
-              <div className="mx-auto text-gray-300">
-                <UserIcon className="w-32" />
-                <h2 className="text-center text-2xl font-semibold leading-7 text-gray-900">
-                  {capitalizeFirstLetter(client?.first_name || "")}{" "}
-                  {capitalizeFirstLetter(client?.last_name || "")}
-                </h2>
-              </div>
-            </div>
-            <div className="mt-10 space-y-8 border-b border-gray-900/15 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/15 sm:border-t sm:pb-0">
-              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                <label
-                  htmlFor="food-name"
-                  className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-                >
-                  First name<span className="text-red-500 font-bold">*</span>
-                </label>
-                <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
-                  <Input
-                    required
-                    type="text"
-                    name="first_name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value || "")} // Handle potential null/undefined
-                  />
-                </div>
-              </div>
-              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                <label
-                  htmlFor="food-brand"
-                  className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-                >
-                  Last Name<span className="text-red-500 font-bold">*</span>
-                </label>
-                <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
-                  <Input
-                    type="text"
-                    name="last_name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value || "")}
-                  />
-                </div>
-              </div>
-              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                <label
-                  htmlFor="food-brand"
-                  className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-                >
-                  Email<span className="text-red-500 font-bold">*</span>
-                </label>
-                <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
-                  <Input
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value || "")}
-                  />
-                </div>
-              </div>
-              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                <label
-                  htmlFor="food-brand"
-                  className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-                >
-                  Phone
-                </label>
-                <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
-                  <Input
-                    type="phone"
-                    name="phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value || "")}
-                  />
-                </div>
-              </div>
-              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                <label
-                  htmlFor="food-brand"
-                  className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-                >
-                  Trainer
-                </label>
-                <div className="mt-2 sm:col-span-2 sm:mt-0">
-                  <Select
-                    onValueChange={(value) => {
-                      setTrainer(value);
-                    }}
-                    defaultValue={client?.trainer || "no trainer"}
-                  >
-                    <SelectTrigger className="w-full max-w-sm">
-                      <SelectValue placeholder="Select a trainer" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Trainers</SelectLabel>
-                        <SelectItem value="no trainer">No trainer</SelectItem>
-                        {trainers?.map((trainer) => (
-                          <SelectItem key={trainer.id} value={trainer.id}>
-                            {capitalizeFirstLetter(trainer.first_name)}{" "}
-                            {trainer.last_name &&
-                              capitalizeFirstLetter(trainer.last_name)}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+
+      <div className="w-full">
+        <div className="mx-auto w-full rounded-2xl bg-white">
+          <div className="flex w-full">
+            <div className="mx-auto text-gray-300">
+              <UserIcon className="w-32" />
+              <h2 className="text-center text-2xl font-semibold leading-7 text-gray-900 mb-12">
+                {capitalizeFirstLetter(client?.first_name || "")}{" "}
+                {capitalizeFirstLetter(client?.last_name || "")}
+              </h2>
             </div>
           </div>
-        </div>
-        <div className="mt-6 flex items-center justify-end gap-x-6 pb-12">
-          <Link
-            href={"/app/clients"}
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Cancel
-          </Link>
-          <button
-            type="submit"
-            disabled={!isUpdated}
-            className={clsx(
-              isUpdated
-                ? "bg-indigo-600 hover:bg-indigo-500"
-                : "bg-gray-500 cursor-not-allowed",
-              "disabled:bg-gray-500 inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+
+          <Disclosure>
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="flex w-full justify-between rounded-lg bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                  <span>Profile Info</span>
+                  <ChevronUpIcon
+                    className={`${
+                      open ? "rotate-180 transform" : ""
+                    } h-5 w-5 text-purple-500`}
+                  />
+                </Disclosure.Button>
+
+                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                  {" "}
+                  <form onSubmit={handleSubmit}>
+                    <SuccessfulAddNewClientModal
+                      isOpen={openModal}
+                      setIsOpen={setOpenModal}
+                    />
+                    <div className="space-y-12 sm:space-y-16">
+                      <div>
+                        <div className="mt-10 space-y-8 border-b border-gray-900/15 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/15 sm:border-t sm:pb-0">
+                          <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label
+                              htmlFor="food-name"
+                              className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+                            >
+                              First name
+                              <span className="text-red-500 font-bold">*</span>
+                            </label>
+                            <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
+                              <Input
+                                required
+                                type="text"
+                                name="first_name"
+                                value={firstName}
+                                onChange={(e) =>
+                                  setFirstName(e.target.value || "")
+                                } // Handle potential null/undefined
+                              />
+                            </div>
+                          </div>
+                          <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label
+                              htmlFor="food-brand"
+                              className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+                            >
+                              Last Name
+                              <span className="text-red-500 font-bold">*</span>
+                            </label>
+                            <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
+                              <Input
+                                type="text"
+                                name="last_name"
+                                value={lastName}
+                                onChange={(e) =>
+                                  setLastName(e.target.value || "")
+                                }
+                              />
+                            </div>
+                          </div>
+                          <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label
+                              htmlFor="food-brand"
+                              className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+                            >
+                              Email
+                              <span className="text-red-500 font-bold">*</span>
+                            </label>
+                            <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
+                              <Input
+                                type="email"
+                                name="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value || "")}
+                              />
+                            </div>
+                          </div>
+                          <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label
+                              htmlFor="food-brand"
+                              className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+                            >
+                              Phone
+                            </label>
+                            <div className="mt-2 sm:col-span-2 sm:mt-0 max-w-sm">
+                              <Input
+                                type="phone"
+                                name="phone"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value || "")}
+                              />
+                            </div>
+                          </div>
+                          <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label
+                              htmlFor="food-brand"
+                              className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+                            >
+                              Trainer
+                            </label>
+                            <div className="mt-2 sm:col-span-2 sm:mt-0">
+                              <Select
+                                onValueChange={(value) => {
+                                  setTrainer(value);
+                                }}
+                                defaultValue={client?.trainer || "no trainer"}
+                              >
+                                <SelectTrigger className="w-full max-w-sm">
+                                  <SelectValue placeholder="Select a trainer" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    <SelectLabel>Trainers</SelectLabel>
+                                    <SelectItem value="no trainer">
+                                      No trainer
+                                    </SelectItem>
+                                    {trainers?.map((trainer) => (
+                                      <SelectItem
+                                        key={trainer.id}
+                                        value={trainer.id}
+                                      >
+                                        {capitalizeFirstLetter(
+                                          trainer.first_name,
+                                        )}{" "}
+                                        {trainer.last_name &&
+                                          capitalizeFirstLetter(
+                                            trainer.last_name,
+                                          )}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-6 flex items-center justify-end gap-x-6 pb-12">
+                      <Link
+                        href={"/app/clients"}
+                        className="text-sm font-semibold leading-6 text-gray-900"
+                      >
+                        Cancel
+                      </Link>
+                      <button
+                        type="submit"
+                        disabled={!isUpdated}
+                        className={clsx(
+                          isUpdated
+                            ? "bg-indigo-600 hover:bg-indigo-500"
+                            : "bg-gray-500 cursor-not-allowed",
+                          "disabled:bg-gray-500 inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+                        )}
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </form>
+                </Disclosure.Panel>
+              </>
             )}
-          >
-            Update
-          </button>
+          </Disclosure>
+          <Disclosure as="div" className="mt-2">
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="flex w-full justify-between rounded-lg bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                  <span>Memberships</span>
+                  <ChevronUpIcon
+                    className={`${
+                      open ? "rotate-180 transform" : ""
+                    } h-5 w-5 text-purple-500`}
+                  />
+                </Disclosure.Button>
+                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                  <SimpleTable
+                    headers={["Membership Type", "Start Date", "End Date"]}
+                    rows={[
+                      ["Gym Access", "01/01/2023", "12/31/2023"],
+                      ["Online Training", "01/01/2022", "12/31/2022"],
+                    ]}
+                  />
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+          <Disclosure as="div" className="mt-2">
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="flex w-full justify-between rounded-lg bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                  <span>Session History</span>
+                  <ChevronUpIcon
+                    className={`${
+                      open ? "rotate-180 transform" : ""
+                    } h-5 w-5 text-purple-500`}
+                  />
+                </Disclosure.Button>
+                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                  <SimpleTable
+                    headers={["Trainer", "Type", "Date"]}
+                    rows={[
+                      ["Wayne Marino", "Training", "1/01/2023"],
+                      ["Wayne Marino", "Training", "8/01/2023"],
+                      ["Wayne Marino", "Nutrition", "15/01/2023"],
+                      ["Wayne Marino", "Training", "22/01/2023"],
+                      ["Wayne Marino", "Training", "29/01/2023"],
+                    ]}
+                  />
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+          <Disclosure as="div" className="mt-2">
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="flex w-full justify-between rounded-lg bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                  <span>Payment History</span>
+                  <ChevronUpIcon
+                    className={`${
+                      open ? "rotate-180 transform" : ""
+                    } h-5 w-5 text-purple-500`}
+                  />
+                </Disclosure.Button>
+                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                  {/* <SimpleTable
+                    headers={["Trainer", "Type", "Date"]}
+                    rows={[
+                      ["Wayne Marino", "Training", "1/01/2023"],
+                      ["Wayne Marino", "Training", "8/01/2023"],
+                      ["Wayne Marino", "Nutrition", "15/01/2023"],
+                      ["Wayne Marino", "Training", "22/01/2023"],
+                      ["Wayne Marino", "Training", "29/01/2023"],
+                    ]}
+                  /> */}
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
         </div>
-      </form>
+      </div>
     </>
   );
 };

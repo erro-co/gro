@@ -32,7 +32,6 @@ export function useLogin() {
   const router = useRouter();
   const supabase = createClientComponentClient<Database>();
 
-  // ... All the other business logic and methods such as handleSignUp, handleSignIn, etc
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -47,6 +46,11 @@ export function useLogin() {
         setLoginError("Account already exists");
         return;
       }
+      const { error: signUpWithEmailError } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      if (signUpWithEmailError) throw signUpWithEmailError;
       setView("check-email");
     } catch (error) {
       console.error(error);
@@ -130,6 +134,5 @@ export function useLogin() {
     setLoading,
     handleSignUp,
     handleSignIn,
-    // ... other returned variables and methods
   };
 }

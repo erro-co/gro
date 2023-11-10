@@ -27,7 +27,9 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
   >([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dataFetched, setDataFetched] = useState(false);
-  const [selectedFood, setSelectedFood] = useState<Food | null>(null);
+  const [selectedItem, setSelectedItem] = useState<
+    Food | MealFormattedWithSummary | null
+  >(null);
   const supabase = createClientComponentClient<Database>();
 
   const methods = useFormContext();
@@ -40,6 +42,10 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
         await supabase
           .from("template_meal_food_serving")
           .select("meal(*), quantity, serving(*), food(*, food_category(*))");
+      console.log(
+        "template_meals",
+        groupAndSummarizeMealsByNutrition(template_meals as any),
+      );
       if (template_meals_error) {
         console.error("Failed to fetch template meals:", template_meals_error);
       }
@@ -67,6 +73,7 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
   };
 
   useEffect(() => {
+    fetchTemplateMealsWithFoods();
     fetchAllFoods();
   }, [searchTerm]);
 
@@ -116,16 +123,17 @@ const AddFoodModal: FC<IAddFoodModal> = ({ open, setOpen }) => {
                 {dataFetched ? (
                   <FoodSearchHitsTable
                     foods={foods}
-                    selectedFood={selectedFood}
-                    setSelectedFood={setSelectedFood}
+                    templateMeals={templateMeals}
+                    selectedItem={selectedItem}
+                    setSelectedItem={setSelectedItem}
                   />
                 ) : null}
-                {selectedFood ? (
+                {selectedItem ? (
                   <AddFoodMetaDataForm
-                    selectedFood={selectedFood}
+                    selectedItem={selectedItem}
                     meals={meals}
                     setOpen={setOpen}
-                    setSelectedFood={setSelectedFood}
+                    setSelectedItem={setSelectedItem}
                   />
                 ) : null}
               </Dialog.Panel>

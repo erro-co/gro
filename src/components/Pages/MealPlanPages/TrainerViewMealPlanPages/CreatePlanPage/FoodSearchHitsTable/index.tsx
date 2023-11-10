@@ -1,17 +1,36 @@
 import clsx from "clsx";
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction, useEffect } from "react";
 
 export interface IFoodSearchHitsTable {
   foods: Food[];
-  selectedFood: Food | null;
-  setSelectedFood: Dispatch<SetStateAction<Food | null>>;
+  templateMeals: MealFormattedWithSummary[];
+  selectedItem: Food | MealFormattedWithSummary | null;
+  setSelectedItem: Dispatch<
+    SetStateAction<Food | MealFormattedWithSummary | null>
+  >;
 }
 
 const FoodSearchHitsTable: FC<IFoodSearchHitsTable> = ({
   foods,
-  selectedFood,
-  setSelectedFood,
+  templateMeals,
+  selectedItem,
+  setSelectedItem,
 }) => {
+  const mergedData = [
+    ...foods.map((food) => ({ ...food, type: "food", id: food.id })),
+    ...templateMeals.map((meal) => ({
+      ...meal,
+      type: "meal",
+      brand: "MEAL TEMPLATE",
+      id: meal.id,
+    })),
+  ];
+
+  useEffect(() => {
+    console.log("Selected Item", selectedItem);
+    console.log("Merged Data", mergedData);
+  }, [selectedItem]);
+
   return (
     <div className="w-full">
       <div className="flow-root">
@@ -31,34 +50,44 @@ const FoodSearchHitsTable: FC<IFoodSearchHitsTable> = ({
                       scope="col"
                       className="pr-20 py-2 text-left text-sm font-semibold text-gray-900"
                     >
-                      Brand
+                      Brand/Type
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {foods?.map((food: Food, idx: number) => (
+                  {mergedData.map((item, idx) => (
                     <tr
                       key={idx}
                       className={clsx(
-                        selectedFood === food
+                        selectedItem?.id === item.id
                           ? "bg-pink-300 text-white"
                           : "hover:bg-gray-200 ",
-                        idx % 2 === 0 ? "bg-white" : "bg-gray-50",
                       )}
-                      onClick={() =>
-                        setSelectedFood(selectedFood === food ? null : food)
-                      }
+                      onClick={() => {
+                        setSelectedItem(
+                          selectedItem?.id === item.id ? null : item,
+                        );
+                      }}
                     >
                       <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-light text-gray-900 sm:pl-6">
-                        {food.name}
+                        {item.name}
                       </td>
                       <td
                         className={clsx(
-                          selectedFood === food ? " text-black" : "",
+                          selectedItem === item ? " text-black" : "",
                           "whitespace-nowrap py-2 text-sm text-gray-500",
                         )}
                       >
-                        {food.brand ? food.brand : "generic"}
+                        <div
+                          className={clsx(
+                            selectedItem?.id === item.id ? " bg-gray-300" : "",
+                            item.brand === "MEAL TEMPLATE"
+                              ? "font-semibold bg-gro-pink text-white p-1 w-32 rounded-md"
+                              : "",
+                          )}
+                        >
+                          {item.brand ? item.brand : "generic"}
+                        </div>
                       </td>
                     </tr>
                   ))}

@@ -1,9 +1,0 @@
-node_modules
-
-# Ignore artifacts
-out
-
-# Ignore generated typescript declaration files
-*.d.ts
-
-.next

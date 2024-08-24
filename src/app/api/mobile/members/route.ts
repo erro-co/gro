@@ -25,15 +25,15 @@ class UserFetchError extends Error {
 function mapUserToProfile(user: User): Profile {
   return {
     id: user.id,
+    createdAt: user.createdAt,
     firstName: user.firstName ?? "",
     lastName: user.lastName ?? "",
     email: user.emailAddresses[0]?.emailAddress ?? "",
     imageUrl: user.imageUrl,
-    trainer: user.unsafeMetadata.trainer as string | null,
-    profileType: user.unsafeMetadata.profileType as ProfileType,
-    createdAt: user.createdAt,
+    trainer: (user.unsafeMetadata.trainer as string) ?? null,
+    profileType: (user.unsafeMetadata.profileType as ProfileType) ?? "member",
     phoneNumber: user.phoneNumbers[0]?.phoneNumber ?? null,
-  } as const;
+  };
 }
 
 async function getAllUsers(): Promise<Array<Profile>> {
